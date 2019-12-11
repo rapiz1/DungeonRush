@@ -49,10 +49,10 @@ const char textsetPath[] = "res/text.txt";
 
 const int bgmNums = 4;
 const char bgmsPath[AUDIO_BGM_SIZE][PATH_LEN] = {
-  "res/audio/main_title.mp3",
-  "res/audio/bg1.mp3",
-  "res/audio/bg2.mp3",
-  "res/audio/bg3.mp3"
+  "res/audio/main_title.ogg",
+  "res/audio/bg1.ogg",
+  "res/audio/bg2.ogg",
+  "res/audio/bg3.ogg"
 };
 const char soundsPath[PATH_LEN] = "res/audio/sounds";
 const char soundsPathPrefix[PATH_LEN] = "res/audio/";
