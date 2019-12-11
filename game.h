@@ -9,7 +9,7 @@
 
 // Game
 // Spike
-#define SPIKE_TIME_MASK 300
+#define SPIKE_TIME_MASK 600
 #define SPIKE_OUT_INTERVAL 120
 #define SPIKE_ANI_DURATION 20
 #define SPRITE_EFFECT_DELTA 20
