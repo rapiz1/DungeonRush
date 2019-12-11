@@ -213,6 +213,7 @@ void mainUi() {
     case 3:
       break;
   }
+  if (opt == optsNum) return;
   if (opt != 3) {
     mainUi();
   }

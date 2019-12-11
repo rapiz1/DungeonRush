@@ -978,6 +978,7 @@ int gameLoop() {
     while (SDL_PollEvent(&e)) {
       if (e.type == SDL_QUIT) {
         quit = true;
+        setTerm(1);
       } else if (e.type == SDL_KEYDOWN) {
         int keyValue = e.key.keysym.sym;
         Snake* player = spriteSnake[0];
