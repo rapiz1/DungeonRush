@@ -39,10 +39,11 @@ void initWeapons() {
 
   initWeapon(now = &weapons[WEAPON_MONSTER_CLAW], -1, RES_CLAWFX2, -1);
   now->wp = WEAPON_SWORD_RANGE;
-  now->shootRange = 32 * 3;
-  now->damage = 20;
+  now->shootRange = 32 * 3 + 16;
+  now->damage = 24;
   now->deathAni->angle = -1;
   now->deathAni->at = AT_CENTER;
+  now->deathAudio = AUDIO_CLAW_HIT_HEAVY;
 
   initWeapon(now = &weapons[WEAPON_FIREBALL], RES_Shine, RES_HALO_EXPLOSION1,
              RES_FIREBALL);
@@ -79,7 +80,6 @@ void initWeapons() {
   now->deathAudio = AUDIO_ARROW_HIT;
 
   initWeapon(now = &weapons[WEAPON_MONSTER_CLAW2], -1, RES_CLAWFX, -1);
-  now->deathAudio = AUDIO_CLAW_HIT_HEAVY;
 
   initWeapon(now = &weapons[WEAPON_THROW_AXE], -1, RES_CROSS_HIT, RES_AXE);
   now->wp = WEAPON_GUN_POINT;
@@ -134,7 +134,7 @@ void initWeapons() {
   initWeapon(now = &weapons[WEAPON_HOLY_SWORD], -1, RES_GOLDEN_CROSS_HIT, -1);
   now->wp = WEAPON_SWORD_RANGE;
   now->damage = 50;
-  now->shootRange = 32 * 3;
+  now->shootRange = 32 * 3 + 16;
   now->deathAni->scaled = false;
   now->deathAni->angle = -1;
   now->effects[BUFF_DEFFENCE] = (WeaponBuff){0.6, 180};
@@ -142,7 +142,7 @@ void initWeapons() {
 
   initWeapon(now = &weapons[WEAPON_ICE_SWORD], -1, RES_ICESHATTER, -1);
   now->wp = WEAPON_SWORD_RANGE;
-  now->shootRange = 32*3;
+  now->shootRange = 32 * 3 + 16;
   now->damage = 80;
   now->gap = 30;
   now->deathAni->angle = -1;
