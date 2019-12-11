@@ -159,6 +159,8 @@
 #define AUDIO_LIGHT_SHOOT 13
 #define AUDIO_HUMAN_DEATH 14
 #define AUDIO_CLAW_HIT_HEAVY 15
+#define AUDIO_COIN 16
+#define AUDIO_MED 17
 
 bool init();
 void cleanup();

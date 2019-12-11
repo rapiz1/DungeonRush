@@ -679,12 +679,14 @@ bool makeSnakeCross(Snake* snake) {
             if (RectRectCross(&headBox, &block)) {
               Animation* ani = itemMap[i][j].ani;
               if (itemMap[i][j].type == ITEM_HERO) {
+                playAudio(AUDIO_COIN);
                 appendSpriteToSnake(snake, itemMap[i][j].id, 0, 0, RIGHT);
                 herosCount--;
                 removeAnimationFromLinkList(
                     &animationsList[RENDER_LIST_SPRITE_ID], ani);
               } else if (itemMap[i][j].type == ITEM_HP_MEDCINE ||
                          itemMap[i][j].type == ITEM_HP_EXTRA_MEDCINE) {
+                playAudio(AUDIO_MED);
                 takeHpMedcine(snake, GAME_HP_MEDICINE_DELTA,
                               itemMap[i][j].type == ITEM_HP_EXTRA_MEDCINE);
                 flasksCount -= itemMap[i][j].type == ITEM_HP_MEDCINE;
@@ -692,6 +694,7 @@ bool makeSnakeCross(Snake* snake) {
                 removeAnimationFromLinkList(
                     &animationsList[RENDER_LIST_MAP_ITEMS_ID], ani);
               } else if (itemMap[i][j].type == ITEM_WEAPON) {
+                playAudio(AUDIO_MED);
                 takeWeapon(snake, &itemMap[i][j]);
                 removeAnimationFromLinkList(
                     &animationsList[RENDER_LIST_MAP_ITEMS_ID], ani);
@@ -754,6 +757,7 @@ bool makeSnakeCross(Snake* snake) {
         sprite->y = prevSprite->y;
       }
       removeLinkNode(snake->sprites, p);
+      free(sprite);
     }
   }
   if (!snake->sprites->head) return false;
