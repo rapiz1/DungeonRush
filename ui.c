@@ -219,6 +219,7 @@ void mainUi() {
 }
 void rankListUi(int count, Score** scores) {
   baseUi(30, 12 + MAX(0, count - 4));
+  playBgm(0);
   Text** opts = malloc(sizeof(Text*) * count);
   char buf[1 << 8];
   for (int i = 0; i < count; i++) {
