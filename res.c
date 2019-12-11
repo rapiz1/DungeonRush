@@ -203,14 +203,16 @@ bool loadAudio() {
   for (int i = 0; i < bgmNums; i++) {
     bgms[i] = Mix_LoadMUS(bgmsPath[i]);
     success &= bgms[i] != NULL;
+    if (!bgms[i]) printf("Failed to load %s: SDL_mixer Error: %s\n", bgmsPath[i], Mix_GetError());
   }
   FILE* f = fopen(soundsPath,"r");
   char buf[PATH_LEN], path[PATH_LEN<<1];
   while (~fscanf(f, "%s", buf)) {
     sprintf(path, "%s%s", soundsPathPrefix, buf);
-    printf("Sound #%d: %s\n", soundsCount, path);
     sounds[soundsCount] = Mix_LoadWAV(path);
     success &= sounds[soundsCount] != NULL;
+    if (!sounds[soundsCount]) printf("Failed to load %s: : SDL_mixer Error: %s\n", path, Mix_GetError());
+    else printf("Sound #%d: %s\n", soundsCount, path);
     soundsCount++;
   }
   fclose(f);
