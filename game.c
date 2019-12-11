@@ -564,7 +564,10 @@ void destroyGame(int status) {
   char* msg; 
   if (status == 0) msg = "Stage Clear";
   else msg = "Game Over";
-  renderCstrCenteredText(msg, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 1);
+  extern SDL_Color WHITE;
+  Text* text = createText(msg, WHITE);
+  renderCenteredText(text, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 1);
+  destroyText(text);
   SDL_RenderPresent(renderer);
   sleep(RENDER_GAMEOVER_DURATION);
   clearRenderer();
