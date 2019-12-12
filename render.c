@@ -37,14 +37,20 @@ unsigned long long renderFrames;
 
 LinkList animationsList[ANIMATION_LINK_LIST_NUM];
 Animation* countDownBar;
-void blackout() {
+void blacken(int duration) {
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
   SDL_Rect rect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
   SDL_SetRenderDrawColor(renderer, RENDER_BG_COLOR, 85);
-  for (int i = 0; i < RENDER_BLACKOUT_DURATION; i++) {
+  for (int i = 0; i < duration; i++) {
     SDL_RenderFillRect(renderer, &rect);
     SDL_RenderPresent(renderer);
   }
+}
+void blackout() {
+  blacken(RENDER_BLACKOUT_DURATION);
+}
+void dim() {
+  blacken(RENDER_DIM_DURATION);
 }
 void initCountDownBar() {
   createAndPushAnimation(

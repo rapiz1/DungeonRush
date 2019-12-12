@@ -24,3 +24,11 @@ void playAudio(int id) {
   if (id >= 0)
     Mix_PlayChannel(-1, sounds[id], 0 );
 }
+void pauseSound() {
+  Mix_Pause(-1);
+  Mix_PauseMusic();
+}
+void resumeSound() {
+  Mix_Resume(-1);
+  Mix_ResumeMusic();
+}

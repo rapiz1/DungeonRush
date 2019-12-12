@@ -20,6 +20,7 @@
 #define SPRITE_ANIMATION_DURATION 30
 #define RENDER_BG_COLOR 25,17,23
 #define RENDER_BLACKOUT_DURATION 20
+#define RENDER_DIM_DURATION 8
 #define RENDER_TERM_COUNT 60
 #define RENDER_GAMEOVER_DURATION 1
 
@@ -51,4 +52,5 @@ void render();
 void renderUi();
 void pushAnimationToRender(int id, Animation* ani);
 void blackout();
+void dim();
 #endif

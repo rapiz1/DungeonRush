@@ -8,4 +8,6 @@ void playBgm(int);
 void playAudio(int);
 void randomBgm();
 void stopBgm();
+void pauseSound();
+void resumeSound();
 #endif
