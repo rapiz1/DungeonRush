@@ -133,8 +133,8 @@ void initWeapons() {
 
   initWeapon(now = &weapons[WEAPON_HOLY_SWORD], -1, RES_GOLDEN_CROSS_HIT, -1);
   now->wp = WEAPON_SWORD_RANGE;
-  now->damage = 50;
-  now->shootRange = 32 * 3 + 16;
+  now->damage = 30;
+  now->shootRange = 32 * 4;
   now->deathAni->scaled = false;
   now->deathAni->angle = -1;
   now->effects[BUFF_DEFFENCE] = (WeaponBuff){0.6, 180};
