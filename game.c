@@ -110,59 +110,6 @@ Score** startGame(int players) {
   } while (status == 0);
   return scores;
 }
-void testHarness() {
-  // animaiton test
-  // blink test
-  createAndPushAnimation(&animationsList[RENDER_LIST_SPRITE_ID], &textures[135],
-                         NULL, LOOP_INFI, SPRITE_ANIMATION_DURATION,
-                         SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SDL_FLIP_NONE, 0,
-                         AT_BOTTOM_CENTER);
-  createAndPushAnimation(&animationsList[RENDER_LIST_EFFECT_ID], &textures[135],
-                         &effects[1], LOOP_INFI, SPRITE_ANIMATION_DURATION,
-                         SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SDL_FLIP_NONE, 0,
-                         AT_BOTTOM_CENTER);
-  // just charactors
-  createAndPushAnimation(&animationsList[RENDER_LIST_SPRITE_ID], &textures[151],
-                         NULL, LOOP_INFI, SPRITE_ANIMATION_DURATION,
-                         SCREEN_WIDTH / 2 + 100, SCREEN_HEIGHT / 2 + 50,
-                         SDL_FLIP_HORIZONTAL, 0, AT_BOTTOM_CENTER);
-  // death effect test
-  createAndPushAnimation(&animationsList[RENDER_LIST_SPRITE_ID],
-                         &textures[RES_KNIGHT_M], &effects[0], LOOP_INFI, 30,
-                         SCREEN_WIDTH / 2 - 30, SCREEN_HEIGHT / 2 - 50,
-                         SDL_FLIP_HORIZONTAL, 45, AT_BOTTOM_CENTER);
-
-  // weapon effect preview
-  createAndPushAnimation(&animationsList[RENDER_LIST_EFFECT_ID], &textures[162],
-                         NULL, LOOP_INFI, 30, 200, 100, SDL_FLIP_NONE, 45,
-                         AT_BOTTOM_CENTER);
-  createAndPushAnimation(&animationsList[RENDER_LIST_EFFECT_ID], &textures[161],
-                         NULL, LOOP_INFI, 30, 200, 200, SDL_FLIP_NONE, 0,
-                         AT_BOTTOM_CENTER);
-  createAndPushAnimation(&animationsList[RENDER_LIST_EFFECT_ID], &textures[160],
-                         NULL, LOOP_INFI, 30, 200, 400, SDL_FLIP_NONE, 0,
-                         AT_BOTTOM_CENTER);
-  createAndPushAnimation(&animationsList[RENDER_LIST_EFFECT_ID], &textures[159],
-                         NULL, LOOP_INFI, 30, 200, 300, SDL_FLIP_NONE, 0,
-                         AT_BOTTOM_CENTER);
-  createAndPushAnimation(&animationsList[RENDER_LIST_EFFECT_ID],
-                         &textures[RES_SwordFx], NULL, LOOP_INFI, 30, 200, 500,
-                         SDL_FLIP_NONE, 90, AT_BOTTOM_CENTER);
-  // sprites
-  createAndPushAnimation(&animationsList[RENDER_LIST_SPRITE_ID],
-                         &textures[RES_BIG_DEMON], &effects[0], LOOP_INFI,
-                         SPRITE_ANIMATION_DURATION, SCREEN_WIDTH / 2 - 200,
-                         SCREEN_HEIGHT / 3, SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
-  createAndPushAnimation(&animationsList[RENDER_LIST_SPRITE_ID],
-                         &textures[RES_BIG_ZOMBIE], &effects[0], LOOP_INFI,
-                         SPRITE_ANIMATION_DURATION, SCREEN_WIDTH / 2 - 100,
-                         SCREEN_HEIGHT / 3, SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
-  for (int i = 102; i <= 128; i += 2)
-    createAndPushAnimation(
-        &animationsList[RENDER_LIST_SPRITE_ID], &textures[i], NULL, LOOP_INFI,
-        SPRITE_ANIMATION_DURATION, SCREEN_WIDTH / 2 + (i - 102) * UNIT / 2,
-        SCREEN_HEIGHT / 3, SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
-}
 void initSnake(Snake* snake, int step, int team) {
   snake->moveStep = step;
   snake->team = team;
