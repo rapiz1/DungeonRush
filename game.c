@@ -209,17 +209,6 @@ void generateHeroItem(int x, int y) {
   ani->at = AT_BOTTOM_CENTER;
   pushAnimationToRender(RENDER_LIST_SPRITE_ID, ani);
 }
-/*
-void generateMedcineItem(int x, int y) {
-  Animation* ani = malloc(sizeof(Animation));
-  itemMap[x][y] = (Item){ITEM_HP_MEDCINE, 0, ani};
-  x *= UNIT, y *= UNIT;
-  initAnimation(ani, &textures[RES_FLASK_BIG_RED], NULL, LOOP_INFI,
-                SPRITE_ANIMATION_DURATION, x, y, SDL_FLIP_NONE, 0,
-                AT_BOTTOM_LEFT);
-  pushAnimationToRender(RENDER_LIST_MAP_SPECIAL_ID, ani);
-}
-*/
 void generateItem(int x, int y, ItemType type) {
   int textureId = RES_FLASK_BIG_RED, id = 0, belong = SPRITE_KNIGHT;
   if (type == ITEM_HP_MEDCINE)
@@ -480,6 +469,11 @@ void initGame(int playersNum) {
   // testHarness();
 }
 void destroySnake(Snake* snake) {
+  if (bullets)
+    for (LinkNode* p = bullets->head; p; p = p->nxt) {
+      Bullet* bullet = p->element;
+      if (bullet->owner == snake) bullet->owner = NULL;
+    }
   for (LinkNode* p = snake->sprites->head; p; p = p->nxt) {
     Sprite* sprite = p->element;
     free(sprite);
@@ -602,7 +596,7 @@ void dealDamage(Snake* src, Snake* dest, Sprite* target, int damage) {
     src->score->damage += calcDamage;
     if (target->hp <= 0) src->score->killed++;
   }
-  dest->score->stand += calcDamage;
+  dest->score->stand += damage;
 }
 bool makeSnakeCross(Snake* snake) {
   if (!snake->sprites->head) return false;
@@ -917,6 +911,28 @@ void setTerm(int s) {
   willTerm = true;
   termCount = RENDER_TERM_COUNT;
 }
+void pauseGame() {
+  pauseSound();
+  playAudio(AUDIO_BUTTON1);
+  dim();
+  const char msg[] = "Paused";
+  extern SDL_Color WHITE;
+  Text* text = createText(msg, WHITE);
+  renderCenteredText(text, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 1);
+  SDL_RenderPresent(renderer);
+  destroyText(text);
+  SDL_Event e;
+  for (bool quit = 0; !quit;) {
+    while (SDL_PollEvent(&e)) {
+      if (e.type == SDL_QUIT || e.type == SDL_KEYDOWN) {
+        quit = true;
+        break;
+      }
+    }
+  }
+  resumeSound();
+  playAudio(AUDIO_BUTTON1);
+}
 int gameLoop() {
   // int posx = 0, posy = SCREEN_HEIGHT / 2;
   // Game loop
@@ -946,6 +962,9 @@ int gameLoop() {
             case SDLK_DOWN:
             case SDLK_j:
               changeSpriteDirection(player->sprites->head, DOWN);
+              break;
+            case SDLK_ESCAPE:
+              pauseGame();
               break;
           }
         if (playersCount > 1) {

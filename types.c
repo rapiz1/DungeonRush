@@ -177,13 +177,10 @@ void removeLinkNode(LinkList* list, LinkNode* node) {
   free(node);
 }
 void destroyLinkList(LinkList* self) {
-  LinkNode *p = self->head, *q = NULL;
-  while (p && p->nxt) {
-    q = p;
-    p = p->nxt;
-    free(q);
+  for (LinkNode *p = self->head, *nxt; p; p = nxt) {
+    nxt = p->nxt;
+    free(p);
   }
-  if (p) free(p);
   free(self);
 }
 void destroyAnimationsByLinkList(LinkList* list) {
@@ -197,7 +194,7 @@ void removeAnimationFromLinkList(LinkList* self, Animation* ani) {
   for (LinkNode* p = self->head; p; p = p->nxt)
     if (p->element == ani) {
       removeLinkNode(self, p);
-      free(ani);
+      destroyAnimation(ani);
       break;
     }
 }
