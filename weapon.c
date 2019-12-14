@@ -113,7 +113,7 @@ void initWeapons() {
   now->effects[BUFF_SLOWDOWN]=(WeaponBuff){0.3, 180};
 
   initWeapon(now = &weapons[WEAPON_SOLID_GREEN], -1, RES_SOLID_GREENFX, -1);
-  now->shootRange = 128;
+  now->shootRange = 96;
   now->deathAni->scaled = false;
   now->deathAni->angle = -1;
   now->effects[BUFF_SLOWDOWN]=(WeaponBuff){0.3, 180};
