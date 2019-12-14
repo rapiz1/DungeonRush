@@ -166,12 +166,6 @@ void appendSpriteToSnake(
       y += delta;
   }
   Sprite* sprite = createSprite(&commonSprites[sprite_id], x, y);
-  /*
-  if (snake->team == GAME_MONSTERS_TEAM) {
-    sprite->totoalHp *= GAME_MONSTERS_HP_ADJUST;
-    sprite->hp = sprite->totoalHp;
-  }
-  */
   sprite->direction = direcion;
   if (direcion == LEFT) sprite->face = LEFT;
   if (snakeHead) {
@@ -466,7 +460,6 @@ void initGame(int playersNum) {
   initEnemies(spritesSetting);
   pushMapToRender();
   bullets = createLinkList();
-  // testHarness();
 }
 void destroySnake(Snake* snake) {
   if (bullets)
@@ -567,7 +560,7 @@ void invokeWeaponBuff(Snake* src, Weapon* weapon, Snake* dest, int damage) {
   double random;
   for (int i = BUFF_BEGIN; i < BUFF_END; i++) {
     random = randd();
-    if (src->team == GAME_MONSTERS_TEAM) random *= GAME_MONSTERS_WEAPON_BUFF_ADJUST;
+    if (src && src->team == GAME_MONSTERS_TEAM) random *= GAME_MONSTERS_WEAPON_BUFF_ADJUST;
     if (random < weapon->effects[i].chance) switch (i) {
         case BUFF_FROZEN:
           freezeSnake(dest, weapon->effects[i].duration);
@@ -576,7 +569,7 @@ void invokeWeaponBuff(Snake* src, Weapon* weapon, Snake* dest, int damage) {
           slowDownSnake(dest, weapon->effects[i].duration);
           break;
         case BUFF_DEFFENCE:
-          shieldSnake(src, weapon->effects[i].duration);
+          if (src) shieldSnake(src, weapon->effects[i].duration);
         default:
           break;
       }
