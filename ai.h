@@ -2,7 +2,7 @@
 #define SNAKE_AI_H_
 #include "game.h"
 #define AI_PATH_RANDOM 0.01
-#define AI_PREDICT_STEPS 32
+#define AI_PREDICT_STEPS 64
 #define AI_DECIDE_RATE 4
 typedef struct {
   int value;
