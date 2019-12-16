@@ -210,7 +210,7 @@ void generateItem(int x, int y, ItemType type) {
   else if (type == ITEM_HP_EXTRA_MEDCINE)
     textureId = RES_FLASK_BIG_YELLOW;
   else if (type == ITEM_WEAPON) {
-    int kind = randint(0, 3);
+    int kind = randint(0, 4);
     if (kind == 0) {
       textureId = RES_ICE_SWORD;
       id = WEAPON_ICE_SWORD;
@@ -228,6 +228,10 @@ void generateItem(int x, int y, ItemType type) {
       textureId = RES_PURPLE_STAFF;
       id = WEAPON_PURPLE_STAFF;
       belong = SPRITE_WIZZARD;
+    } else if (kind == 4) {
+      textureId = RES_SOLID_GREENFX;
+      id = WEAPON_SOLID_CLAW;
+      belong = SPRITE_LIZARD;
     }
   }
   Animation* ani = createAndPushAnimation(
@@ -261,6 +265,9 @@ bool takeWeapon(Snake* snake, Item* weaponItem) {
           &animationsList[RENDER_LIST_EFFECT_ID], weaponItem->ani->origin, NULL,
           LOOP_INFI, 3, sprite->x, sprite->y, SDL_FLIP_NONE, 0,
           AT_BOTTOM_CENTER);
+      bindAnimationToSprite(ani, sprite, true);
+      sprite->hp += GAME_HP_MEDICINE_EXTRA_DELTA*5;
+      ani = createAndPushAnimation(&animationsList[RENDER_LIST_EFFECT_ID], &textures[RES_HP_MED], NULL, LOOP_ONCE, SPRITE_ANIMATION_DURATION, 0,0, SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
       bindAnimationToSprite(ani, sprite, true);
       taken = true;
       break;

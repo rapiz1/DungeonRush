@@ -69,9 +69,9 @@ void initWeapons() {
 
   initWeapon(now = &weapons[WEAPON_THUNDER_STAFF], -1, RES_THUNDER_YELLOW, -1);
   now->wp = WEAPON_SWORD_RANGE;
-  now->damage = 60;
-  now->shootRange = 180;
-  now->gap = 180;
+  now->damage = 50;
+  now->shootRange = 128;
+  now->gap = 120;
   now->deathAni->angle = -1;
   now->deathAni->scaled = false;
   now->deathAudio = AUDIO_THUNDER;
@@ -127,6 +127,15 @@ void initWeapons() {
   now->deathAni->angle = -1;
   now->effects[BUFF_SLOWDOWN]=(WeaponBuff){0.3, 180};
 
+  initWeapon(now = &weapons[WEAPON_SOLID_CLAW], -1, RES_SOLID_GREENFX, -1);
+  now->wp = WEAPON_SWORD_RANGE;
+  now->shootRange = 32 * 3 + 16;
+  now->damage = 30;
+  now->deathAni->scaled = false;
+  now->deathAni->angle = -1;
+  now->deathAudio = AUDIO_CLAW_HIT_HEAVY;
+  now->effects[BUFF_SLOWDOWN]=(WeaponBuff){0.1, 180};
+
   initWeapon(now = &weapons[WEAPON_ICEPICK], -1, RES_ICESHATTER, RES_ICEPICK);
   now->wp = WEAPON_GUN_RANGE;
   now->damage = 30;
@@ -159,8 +168,8 @@ void initWeapons() {
   now->damage = 30;
   now->effectRange = 50;
   now->shootRange = 256;
-  now->gap = 120;
-  now->bulletSpeed = 6;
+  now->gap = 100;
+  now->bulletSpeed = 7;
   now->deathAni->angle = -1;
   now->deathAni->scaled = false;
   now->flyAni->scaled = false;
