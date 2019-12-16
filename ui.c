@@ -45,6 +45,12 @@ bool moveCursor(int optsNum) {
         case SDLK_RETURN:
           quit = true;
           break;
+        case SDLK_ESCAPE:
+          quit = true;
+          cursorPos = optsNum;
+          playAudio(AUDIO_BUTTON1);
+          return quit;
+          break;
       }
     }
   }
@@ -84,15 +90,17 @@ void baseUi(int w, int h) {
   initBlankMap(w, h);
   pushMapToRender();
 }
-void chooseLevelUi() {
+bool chooseLevelUi() {
   baseUi(30, 12);
   int optsNum = 3;
   Text** opts = malloc(sizeof(Text*) * optsNum);
   for (int i = 0; i < optsNum; i++) opts[i] = texts + i + 10;
   int opt = chooseOptions(optsNum, opts);
-  setLevel(opt);
+  if (opt != optsNum)
+    setLevel(opt);
   blackout();
   clearRenderer();
+  return opt != optsNum;
 }
 void mainUi() {
   baseUi(30, 12);
@@ -201,7 +209,7 @@ void mainUi() {
   switch (opt) {
     case 0:
     case 1:
-      chooseLevelUi();
+      if (!chooseLevelUi()) break;
       Score** scores = startGame(opt + 1);
       rankListUi(opt + 1, scores);
       for (int i = 0; i < opt + 1; i++) updateLocalRanklist(scores[i]);
