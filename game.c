@@ -65,7 +65,7 @@ void setLevel(int level) {
   flasksSetting = 6;
   GAME_LUCKY = 1;
   GAME_DROPOUT_YELLOW_FLASKS = 0.6;
-  GAME_DROPOUT_WEAPONS = 0.97;
+  GAME_DROPOUT_WEAPONS = 0.9;
   GAME_TRAP_RATE = 0.005*(level+1);
   GAME_MONSTERS_HP_ADJUST = 1 + level*0.8 + stage*level*0.1;
   GAME_MONSTERS_GEN_FACTOR = 1 + level*0.5 + stage*level*0.05;
@@ -210,15 +210,24 @@ void generateItem(int x, int y, ItemType type) {
   else if (type == ITEM_HP_EXTRA_MEDCINE)
     textureId = RES_FLASK_BIG_YELLOW;
   else if (type == ITEM_WEAPON) {
-    int kind = randint(0, 1);
+    int kind = randint(0, 3);
     if (kind == 0) {
       textureId = RES_ICE_SWORD;
       id = WEAPON_ICE_SWORD;
       belong = SPRITE_KNIGHT;
-    } else {
+    } else if (kind == 1) {
       textureId = RES_HOLY_SWORD;
       id = WEAPON_HOLY_SWORD;
       belong = SPRITE_KNIGHT;
+    }
+    else if (kind == 2) {
+      textureId = RES_THUNDER_STAFF;
+      id = WEAPON_THUNDER_STAFF;
+      belong = SPRITE_WIZZARD;
+    } else if (kind == 3) {
+      textureId = RES_PURPLE_STAFF;
+      id = WEAPON_PURPLE_STAFF;
+      belong = SPRITE_WIZZARD;
     }
   }
   Animation* ani = createAndPushAnimation(
@@ -240,8 +249,9 @@ void takeHpMedcine(Snake* snake, int delta, bool extra) {
     bindAnimationToSprite(ani, sprite, false);
   }
 }
-void takeWeapon(Snake* snake, Item* weaponItem) {
+bool takeWeapon(Snake* snake, Item* weaponItem) {
   Weapon* weapon = &weapons[weaponItem->id];
+  bool taken = false;
   for (LinkNode* p = snake->sprites->head; p; p = p->nxt) {
     Sprite* sprite = p->element;
     if (sprite->ani->origin == commonSprites[weaponItem->belong].ani->origin &&
@@ -252,9 +262,11 @@ void takeWeapon(Snake* snake, Item* weaponItem) {
           LOOP_INFI, 3, sprite->x, sprite->y, SDL_FLIP_NONE, 0,
           AT_BOTTOM_CENTER);
       bindAnimationToSprite(ani, sprite, true);
+      taken = true;
       break;
     }
   }
+  return taken;
 }
 void dropItemNearSprite(Sprite* sprite, ItemType itemType) {
   for (int dx = -1; dx <= 1; dx++)
@@ -611,6 +623,7 @@ bool makeSnakeCross(Snake* snake) {
           SDL_Rect headBox = getSpriteFeetBox(snake->sprites->head->element);
           if (itemMap[i][j].type != ITEM_NONE) {
             if (RectRectCross(&headBox, &block)) {
+              bool taken = true;
               Animation* ani = itemMap[i][j].ani;
               if (itemMap[i][j].type == ITEM_HERO) {
                 playAudio(AUDIO_COIN);
@@ -628,12 +641,14 @@ bool makeSnakeCross(Snake* snake) {
                 removeAnimationFromLinkList(
                     &animationsList[RENDER_LIST_MAP_ITEMS_ID], ani);
               } else if (itemMap[i][j].type == ITEM_WEAPON) {
-                playAudio(AUDIO_MED);
-                takeWeapon(snake, &itemMap[i][j]);
-                removeAnimationFromLinkList(
-                    &animationsList[RENDER_LIST_MAP_ITEMS_ID], ani);
+                taken = takeWeapon(snake, &itemMap[i][j]);
+                if (taken) {
+                  playAudio(AUDIO_MED);
+                  removeAnimationFromLinkList(
+                      &animationsList[RENDER_LIST_MAP_ITEMS_ID], ani);
+                }
               }
-              itemMap[i][j].type = ITEM_NONE;
+              if (taken) itemMap[i][j].type = ITEM_NONE;
             }
           }
         }
