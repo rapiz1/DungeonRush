@@ -209,8 +209,8 @@ bool loadAudio() {
   for (int i = 0; i < bgmNums; i++) {
     bgms[i] = Mix_LoadMUS(bgmsPath[i]);
     success &= bgms[i] != NULL;
-    #ifdef DBG
     if (!bgms[i]) printf("Failed to load %s: SDL_mixer Error: %s\n", bgmsPath[i], Mix_GetError());
+    #ifdef DBG
     else printf("BGM %s loaded\n", bgmsPath[i]);
     #endif
   }
@@ -220,8 +220,8 @@ bool loadAudio() {
     sprintf(path, "%s%s", soundsPathPrefix, buf);
     sounds[soundsCount] = Mix_LoadWAV(path);
     success &= sounds[soundsCount] != NULL;
-    #ifdef DBG
     if (!sounds[soundsCount]) printf("Failed to load %s: : SDL_mixer Error: %s\n", path, Mix_GetError());
+    #ifdef DBG
     else printf("Sound #%d: %s\n", soundsCount, path);
     #endif
     soundsCount++;
@@ -249,13 +249,19 @@ bool loadMedia() {
     printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
     success = false;
   } else {
-    success &= loadTextset();
+    if (!loadTextset()) {
+      printf("Failed to load textset!\n");
+      success = false;
+    }
   }
   // Init common sprites
   initWeapons();
   initCommonSprites();
 
-  success &= loadAudio();
+  if (!loadAudio()) {
+    printf("Failed to load audio!\n");
+    success = false;
+  }
 
   return success;
 }
