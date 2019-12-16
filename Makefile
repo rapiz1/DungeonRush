@@ -11,6 +11,7 @@ cross: $(OBJS) *.h
 dist: $(OBJS) *.h
 	$(CC) $(OBJS) $(LINKER_FLAGS) -O2 -o $(OBJ_NAME)
 zip:
-	zip -r snake$(date -I) *.c *.h Makefile res
+	zip -r snake`date -I` *.c *.h Makefile res *.dat
+	cp snake`date -I`.zip ~/Downloads
 run: snake
 	./snake
