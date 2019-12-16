@@ -67,6 +67,15 @@ void initWeapons() {
   now->deathAni->scaled = false;
   now->deathAudio = AUDIO_THUNDER;
 
+  initWeapon(now = &weapons[WEAPON_THUNDER_STAFF], -1, RES_THUNDER_YELLOW, -1);
+  now->wp = WEAPON_SWORD_RANGE;
+  now->damage = 60;
+  now->shootRange = 180;
+  now->gap = 180;
+  now->deathAni->angle = -1;
+  now->deathAni->scaled = false;
+  now->deathAudio = AUDIO_THUNDER;
+
   initWeapon(now = &weapons[WEAPON_ARROW], -1, RES_HALO_EXPLOSION2, RES_ARROW);
   now->wp = WEAPON_GUN_POINT;
   now->gap = 40;
@@ -143,6 +152,21 @@ void initWeapons() {
   now->flyAni->scaled = false;
   now->deathAni->at = AT_CENTER;
   now->birthAudio = AUDIO_ICE_SHOOT;
+  now->deathAudio = AUDIO_ARROW_HIT;
+
+  initWeapon(now = &weapons[WEAPON_PURPLE_STAFF], -1, RES_PURPLE_EXP, RES_PURPLE_BALL);
+  now->wp = WEAPON_GUN_POINT_MULTI;
+  now->damage = 30;
+  now->effectRange = 50;
+  now->shootRange = 256;
+  now->gap = 120;
+  now->bulletSpeed = 6;
+  now->deathAni->angle = -1;
+  now->deathAni->scaled = false;
+  now->flyAni->scaled = false;
+  now->deathAni->at = AT_CENTER;
+  now->birthAudio = AUDIO_ICE_SHOOT;
+  now->deathAudio = AUDIO_ARROW_HIT;
 
   initWeapon(now = &weapons[WEAPON_HOLY_SWORD], -1, RES_GOLDEN_CROSS_HIT, -1);
   now->wp = WEAPON_SWORD_RANGE;

@@ -15,4 +15,6 @@
 #define WEAPON_ICE_SWORD 12
 #define WEAPON_HOLY_SWORD 13
 #define WEAPON_PURPLE_BALL 14
+#define WEAPON_PURPLE_STAFF 15
+#define WEAPON_THUNDER_STAFF 16
 void initWeapons();

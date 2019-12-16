@@ -45,7 +45,9 @@ const char tilesetPath[TILESET_SIZE][PATH_LEN] = {
     "res/drawable/ui",
     "res/drawable/title",
     "res/drawable/purple_ball",
-    "res/drawable/purple_exp"};
+    "res/drawable/purple_exp",
+    "res/drawable/staff",
+    "res/drawable/Thunder_Yellow"};
 const char fontPath[] = "res/font/m5x7.ttf";
 const char textsetPath[] = "res/text.txt";
 
