@@ -63,9 +63,9 @@ void setLevel(int level) {
   bossSetting = 2;
   herosSetting = 8;
   flasksSetting = 6;
-  GAME_LUCKY = 1.5;
-  GAME_DROPOUT_YELLOW_FLASKS = 0.6;
-  GAME_DROPOUT_WEAPONS = 0.9;
+  GAME_LUCKY = 1;
+  GAME_DROPOUT_YELLOW_FLASKS = 0.3;
+  GAME_DROPOUT_WEAPONS = 0.7;
   GAME_TRAP_RATE = 0.005*(level+1);
   GAME_MONSTERS_HP_ADJUST = 1 + level*0.8 + stage*level*0.1;
   GAME_MONSTERS_GEN_FACTOR = 1 + level*0.5 + stage*level*0.05;
@@ -270,7 +270,7 @@ bool takeWeapon(Snake* snake, Item* weaponItem) {
           LOOP_INFI, 3, sprite->x, sprite->y, SDL_FLIP_NONE, 0,
           AT_BOTTOM_CENTER);
       bindAnimationToSprite(ani, sprite, true);
-      sprite->hp += GAME_HP_MEDICINE_EXTRA_DELTA/100.0*sprite->hp*5;
+      sprite->hp += GAME_HP_MEDICINE_EXTRA_DELTA/100.0*sprite->totoalHp*5;
       ani = createAndPushAnimation(&animationsList[RENDER_LIST_EFFECT_ID], &textures[RES_HP_MED], NULL, LOOP_ONCE, SPRITE_ANIMATION_DURATION, 0,0, SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
       bindAnimationToSprite(ani, sprite, true);
       taken = true;
