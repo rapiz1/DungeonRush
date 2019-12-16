@@ -211,6 +211,7 @@ bool loadAudio() {
     success &= bgms[i] != NULL;
     #ifdef DBG
     if (!bgms[i]) printf("Failed to load %s: SDL_mixer Error: %s\n", bgmsPath[i], Mix_GetError());
+    else printf("BGM %s loaded\n", bgmsPath[i]);
     #endif
   }
   FILE* f = fopen(soundsPath,"r");
