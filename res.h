@@ -112,6 +112,8 @@
 #define RES_SLIDER 195
 #define RES_BAR_BLUE 196
 #define RES_TITLE 197
+#define RES_PURPLE_BALL 198
+#define RES_PURPLE_EXP 199
 // Effect
 #define EFFECT_DEATH 0
 #define EFFECT_BLINK 1

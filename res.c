@@ -43,7 +43,9 @@ const char tilesetPath[TILESET_SIZE][PATH_LEN] = {
     "res/drawable/HolyShield",
     "res/drawable/golden_cross_hit",
     "res/drawable/ui",
-    "res/drawable/title"};
+    "res/drawable/title",
+    "res/drawable/purple_ball",
+    "res/drawable/purple_exp"};
 const char fontPath[] = "res/font/m5x7.ttf";
 const char textsetPath[] = "res/text.txt";
 
@@ -330,7 +332,7 @@ void initCommonSprites() {
   initCommonSprite(&commonSprites[SPRITE_MASKED_ORC], &weapons[WEAPON_THROW_AXE], RES_MASKED_ORC, 120);
   initCommonSprite(&commonSprites[SPRITE_ORC_WARRIOR], &weapons[WEAPON_MONSTER_CLAW2], RES_ORC_WARRIOR, 200);
   initCommonSprite(&commonSprites[SPRITE_ORC_SHAMAN], &weapons[WEAPON_MONSTER_CLAW2], RES_ORC_SHAMAN, 120);
-  initCommonSprite(&commonSprites[SPRITE_NECROMANCER], &weapons[WEAPON_ICEPICK], RES_NECROMANCER, 120);
+  initCommonSprite(&commonSprites[SPRITE_NECROMANCER], &weapons[WEAPON_PURPLE_BALL], RES_NECROMANCER, 120);
   initCommonSprite(&commonSprites[SPRITE_WOGOL], &weapons[WEAPON_MONSTER_CLAW2], RES_WOGOL, 150);
   initCommonSprite(&commonSprites[SPRITE_CHROT], &weapons[WEAPON_MONSTER_CLAW2], RES_CHORT, 150);
   Sprite* now;

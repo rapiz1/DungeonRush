@@ -131,6 +131,19 @@ void initWeapons() {
   now->effects[BUFF_FROZEN] = (WeaponBuff){0.2, 60};
   now->birthAudio = AUDIO_ICE_SHOOT;
 
+  initWeapon(now = &weapons[WEAPON_PURPLE_BALL], -1, RES_PURPLE_EXP, RES_PURPLE_BALL);
+  now->wp = WEAPON_GUN_RANGE;
+  now->damage = 20;
+  now->effectRange = 50;
+  now->shootRange = 256;
+  now->gap = 100;
+  now->bulletSpeed = 6;
+  now->deathAni->angle = -1;
+  now->deathAni->scaled = false;
+  now->flyAni->scaled = false;
+  now->deathAni->at = AT_CENTER;
+  now->birthAudio = AUDIO_ICE_SHOOT;
+
   initWeapon(now = &weapons[WEAPON_HOLY_SWORD], -1, RES_GOLDEN_CROSS_HIT, -1);
   now->wp = WEAPON_SWORD_RANGE;
   now->damage = 30;
