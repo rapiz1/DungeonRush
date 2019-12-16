@@ -92,8 +92,8 @@ void initWeapons() {
   now->wp = WEAPON_GUN_POINT;
   now->gap = 60;
   now->damage = 25;
-  now->shootRange = 256;
-  now->bulletSpeed = 6;
+  now->shootRange = 320;
+  now->bulletSpeed = 7;
   now->deathAni->angle = -1;
   now->deathAni->at = AT_CENTER;
   now->birthAudio = AUDIO_LIGHT_SHOOT;
