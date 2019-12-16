@@ -18,4 +18,5 @@
 #define WEAPON_PURPLE_STAFF 15
 #define WEAPON_THUNDER_STAFF 16
 #define WEAPON_SOLID_CLAW 17
+#define WEAPON_POWERFUL_BOW 18
 void initWeapons();

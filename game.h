@@ -26,6 +26,7 @@
 #define GAME_MAP_RELOAD_PERIOD 120
 #define GAME_BUFF_ATTACK_K 1.5
 #define GAME_BUFF_DEFENSE_K 2
+#define GAME_FROZEN_DAMAGE_K 0.1
 // Drop Rate
 // Win
 

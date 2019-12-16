@@ -63,7 +63,7 @@ void setLevel(int level) {
   bossSetting = 2;
   herosSetting = 8;
   flasksSetting = 6;
-  GAME_LUCKY = 1;
+  GAME_LUCKY = 1.5;
   GAME_DROPOUT_YELLOW_FLASKS = 0.6;
   GAME_DROPOUT_WEAPONS = 0.9;
   GAME_TRAP_RATE = 0.005*(level+1);
@@ -210,7 +210,7 @@ void generateItem(int x, int y, ItemType type) {
   else if (type == ITEM_HP_EXTRA_MEDCINE)
     textureId = RES_FLASK_BIG_YELLOW;
   else if (type == ITEM_WEAPON) {
-    int kind = randint(0, 4);
+    int kind = randint(0, 5);
     if (kind == 0) {
       textureId = RES_ICE_SWORD;
       id = WEAPON_ICE_SWORD;
@@ -229,9 +229,13 @@ void generateItem(int x, int y, ItemType type) {
       id = WEAPON_PURPLE_STAFF;
       belong = SPRITE_WIZZARD;
     } else if (kind == 4) {
-      textureId = RES_SOLID_GREENFX;
+      textureId = RES_GRASS_SWORD;
       id = WEAPON_SOLID_CLAW;
       belong = SPRITE_LIZARD;
+    } else if (kind == 5) {
+      textureId = RES_POWERFUL_BOW;
+      id = WEAPON_POWERFUL_BOW;
+      belong = SPRITE_ELF;
     }
   }
   Animation* ani = createAndPushAnimation(
@@ -266,7 +270,7 @@ bool takeWeapon(Snake* snake, Item* weaponItem) {
           LOOP_INFI, 3, sprite->x, sprite->y, SDL_FLIP_NONE, 0,
           AT_BOTTOM_CENTER);
       bindAnimationToSprite(ani, sprite, true);
-      sprite->hp += GAME_HP_MEDICINE_EXTRA_DELTA*5;
+      sprite->hp += GAME_HP_MEDICINE_EXTRA_DELTA/100.0*sprite->hp*5;
       ani = createAndPushAnimation(&animationsList[RENDER_LIST_EFFECT_ID], &textures[RES_HP_MED], NULL, LOOP_ONCE, SPRITE_ANIMATION_DURATION, 0,0, SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
       bindAnimationToSprite(ani, sprite, true);
       taken = true;
@@ -457,6 +461,21 @@ void shieldSnake(Snake* snake, int duration) {
     shieldSprite(p->element, duration);
   }
 }
+void attackUpSprite(Sprite* sprite, int duration) {
+  Animation* ani = createAndPushAnimation(
+      &animationsList[RENDER_LIST_EFFECT_ID], &textures[RES_ATTACK_UP], NULL,
+      LOOP_LIFESPAN, SPRITE_ANIMATION_DURATION, sprite->x, sprite->y, SDL_FLIP_NONE, 0,
+      AT_BOTTOM_CENTER);
+  bindAnimationToSprite(ani, sprite, true);
+  ani->lifeSpan = duration;
+}
+void attackUpSnkae(Snake* snake, int duration) {
+  if (snake->buffs[BUFF_ATTACK]) return;
+  snake->buffs[BUFF_ATTACK] += duration;
+  for (LinkNode* p = snake->sprites->head; p; p = p->nxt) {
+    attackUpSprite(p->element, duration);
+  }
+}
 void initGame(int playersNum) {
   randomBgm();
   status = 0;
@@ -589,14 +608,18 @@ void invokeWeaponBuff(Snake* src, Weapon* weapon, Snake* dest, int damage) {
           break;
         case BUFF_DEFFENCE:
           if (src) shieldSnake(src, weapon->effects[i].duration);
+          break;
+        case BUFF_ATTACK:
+          if (src) attackUpSnkae(src, weapon->effects[i].duration);
+          break;
         default:
           break;
       }
   }
 }
 void dealDamage(Snake* src, Snake* dest, Sprite* target, int damage) {
-  if (dest->buffs[BUFF_FROZEN]) return;
   double calcDamage = damage;
+  if (dest->buffs[BUFF_FROZEN]) calcDamage *= GAME_FROZEN_DAMAGE_K;
   if (src && src != spriteSnake[GAME_MONSTERS_TEAM]) {
     if (src->buffs[BUFF_ATTACK]) calcDamage *= GAME_BUFF_ATTACK_K;
   }
