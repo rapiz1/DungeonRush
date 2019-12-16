@@ -142,7 +142,7 @@ void initWeapons() {
   initWeapon(now = &weapons[WEAPON_SOLID_CLAW], -1, RES_SOLID_GREENFX, -1);
   now->wp = WEAPON_SWORD_RANGE;
   now->shootRange = 32 * 3 + 16;
-  now->damage = 30;
+  now->damage = 35;
   now->deathAni->scaled = false;
   now->deathAni->angle = -1;
   now->deathAudio = AUDIO_CLAW_HIT_HEAVY;
