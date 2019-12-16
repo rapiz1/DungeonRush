@@ -146,7 +146,7 @@ void initWeapons() {
   now->deathAni->scaled = false;
   now->deathAni->angle = -1;
   now->deathAudio = AUDIO_CLAW_HIT_HEAVY;
-  now->effects[BUFF_SLOWDOWN]=(WeaponBuff){0.3, 60};
+  now->effects[BUFF_SLOWDOWN]=(WeaponBuff){0.7, 60};
 
   initWeapon(now = &weapons[WEAPON_ICEPICK], -1, RES_ICESHATTER, RES_ICEPICK);
   now->wp = WEAPON_GUN_RANGE;
@@ -177,7 +177,7 @@ void initWeapons() {
 
   initWeapon(now = &weapons[WEAPON_PURPLE_STAFF], -1, RES_PURPLE_EXP, RES_PURPLE_BALL);
   now->wp = WEAPON_GUN_POINT_MULTI;
-  now->damage = 30;
+  now->damage = 45;
   now->effectRange = 50;
   now->shootRange = 256;
   now->gap = 100;
