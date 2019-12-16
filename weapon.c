@@ -90,9 +90,9 @@ void initWeapons() {
 
   initWeapon(now = &weapons[WEAPON_POWERFUL_BOW], -1, RES_HALO_EXPLOSION2, RES_ARROW);
   now->wp = WEAPON_GUN_POINT;
-  now->gap = 30;
-  now->damage = 20;
-  now->shootRange = 200;
+  now->gap = 60;
+  now->damage = 25;
+  now->shootRange = 256;
   now->bulletSpeed = 6;
   now->deathAni->angle = -1;
   now->deathAni->at = AT_CENTER;
