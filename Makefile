@@ -13,5 +13,6 @@ dist: $(OBJS) *.h
 zip:
 	zip -r snake`date -I` *.c *.h Makefile res *.dat
 	cp snake`date -I`.zip ~/Downloads
+	mv *.zip archive
 run: snake
 	./snake
