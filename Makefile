@@ -6,6 +6,7 @@ OBJ_NAME = snake
 
 snake: $(OBJS) *.h
 	$(CC) $(OBJS) $(LINKER_FLAGS) $(CFLAGS) -o $(OBJ_NAME) -DDBG
+	echo 1 0 0 0 0 0 > storage.dat
 dist: $(OBJS) *.h
 	$(CC) $(OBJS) $(LINKER_FLAGS) -O2 -o $(OBJ_NAME)
 zip:
