@@ -1,5 +1,7 @@
 # DungeonRush
-My piece of work from C assignment. Hope you like it :)
+![](screenshot.png)
+>A game inspired by Snake, in pure C with SDL2.
+>My piece of work from C assignment. Hope you like it :)
 
 *I work on the small project on my own so the code lacks of comments.*
 ## How to run
