@@ -6,8 +6,6 @@ OBJ_NAME = snake
 
 snake: $(OBJS) *.h
 	$(CC) $(OBJS) $(LINKER_FLAGS) $(CFLAGS) -o $(OBJ_NAME) -DDBG
-cross: $(OBJS) *.h
-	$(CC) $(OBJS) $(LINKER_FLAGS) $(CFLAGS) -o $(OBJ_NAME) -DDBG -DDBG_CROSS
 dist: $(OBJS) *.h
 	$(CC) $(OBJS) $(LINKER_FLAGS) -O2 -o $(OBJ_NAME)
 zip:
