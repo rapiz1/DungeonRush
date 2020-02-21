@@ -5,7 +5,8 @@
 
 *I work on the small project on my own so the code lacks of comments.*
 ## How to run
-Run the executeable `snake`
+1. Go to [the release page](https://github.com/Rapiz1/DungeonRush/releases) and pick the binrary that suits your OS. If there isn't any, you need to build it by yourself, see **[Compliation](https://github.com/Rapiz1/DungeonRush/releases)**
+2. Run the executeable `snake`
 ## Dependencies
 The project requires no more than common SDL2 libraries.
 `SDL2, SDL2-ttf, SDL2-image, SDL2-mixer`
