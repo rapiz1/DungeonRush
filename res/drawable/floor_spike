@@ -1,0 +1,4 @@
+floor_spike_disabled 0 0 16 16 1
+floor_spike_enabled 48 0 16 16 1
+floor_spike_out_ani 0 0 16 16 4
+floor_spike_in_ani 64 0 16 16 4

@@ -1,0 +1,13 @@
+DungeonRush
+By Rapiz
+PLACEHOLDER
+PLACEHOLDER
+Player 1
+Player 2
+Singleplayer
+Multiplayers
+Ranklist
+Exit
+Normal
+Hard
+Insane
