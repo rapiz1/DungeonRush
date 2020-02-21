@@ -1,5 +1,7 @@
 # DungeonRush
 My piece of work from C assignment. Hope you like it :)
+
+*I work on the small project on my own so the code lacks of comments.*
 ## Dependency
 The project requires no more than common SDL2 libraries.
 `SDL2, SDL2-ttf, SDL2-image, SDL2-mixer`
