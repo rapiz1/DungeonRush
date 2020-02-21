@@ -96,7 +96,7 @@ bool init() {
     success = false;
   } else {
     // Create window
-    window = SDL_CreateWindow("snake", SDL_WINDOWPOS_UNDEFINED,
+    window = SDL_CreateWindow("Dungeon Rush (Alpha)", SDL_WINDOWPOS_UNDEFINED,
                               SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
                               SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     if (window == NULL) {
