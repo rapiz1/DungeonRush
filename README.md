@@ -2,7 +2,7 @@
 My piece of work from C assignment. Hope you like it :)
 
 *I work on the small project on my own so the code lacks of comments.*
-## Dependency
+## Dependencies
 The project requires no more than common SDL2 libraries.
 `SDL2, SDL2-ttf, SDL2-image, SDL2-mixer`
 ### For Arch
@@ -12,7 +12,7 @@ $ pacman -S sdl2 sdl2_image sdl2_mixer sdl2_ttf
 ### For other OS
 The names of packages should be similiar. You can look for SDL tutorial to set up the environment.
 ## Compilation
-**You should make sure all dependency are installed before compiling**
+**You should make sure all dependencies are installed before compiling**
 ```
 $ make
 ```
