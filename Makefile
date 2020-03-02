@@ -1,13 +1,13 @@
-OBJS = *.c
+OBJS = src/*.c
 CC = gcc
 LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lm
 CFLAGS = -g -Wall
 OBJ_NAME = snake
 
-snake: $(OBJS) *.h
+snake: $(OBJS) src/*.h
 	$(CC) $(OBJS) $(LINKER_FLAGS) $(CFLAGS) -o $(OBJ_NAME) -DDBG
 	echo 1 0 0 0 0 0 > storage.dat
-dist_bin: $(OBJS) *.h
+dist_bin: $(OBJS) src/*.h
 	$(CC) $(OBJS) $(LINKER_FLAGS) -O2 -o $(OBJ_NAME)
 	echo 1 0 0 0 0 0 > storage.dat
 dist_linux: dist_bin
