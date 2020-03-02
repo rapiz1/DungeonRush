@@ -5,7 +5,7 @@
 
 *I work on the small project on my own so the code lacks of comments.*
 
-### Download
+## Download
 
 [Windows](https://github.com/Rapiz1/DungeonRush/releases/download/v1.0-alpha/DungeonRush-v1.0-alpha-win32.zip)
 
