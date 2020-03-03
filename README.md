@@ -25,6 +25,12 @@ The project requires no more than common SDL2 libraries.
 ```
 # apt install libsdl2-*
 ```
+### For MacOs
+
+```
+#  brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer
+```
+
 ### For other OS
 
 The names of packages should be similiar. You can look for SDL tutorial to set up the environment.
