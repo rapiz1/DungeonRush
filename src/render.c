@@ -12,9 +12,6 @@
 #include <assert.h>
 #endif
 
-extern const int SCREEN_FPS;
-extern const int SCREEN_TICKS_PER_FRAME;
-
 // Sprite
 extern Snake* spriteSnake[SPRITES_MAX_NUM];
 extern int spritesCount;
