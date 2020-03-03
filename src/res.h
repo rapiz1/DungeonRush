@@ -4,9 +4,6 @@
 #include <SDL2/SDL.h>
 #include "types.h"
 
-
-#define D_SCREEN_FPS 60
-#define MILLISECONDS_IN_ONE_SECOND 1000
 #define PATH_LEN 1024
 #define TILESET_SIZE 1024
 #define TEXTSET_SIZE 1024
