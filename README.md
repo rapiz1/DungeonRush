@@ -20,7 +20,12 @@ The project requires no more than common SDL2 libraries.
 ```
 $ pacman -S sdl2 sdl2_image sdl2_mixer sdl2_ttf
 ```
-### For other OS
+### For Debian OS
+
+```
+$ sudo apt install libsdl2-*
+```
+
 The names of packages should be similiar. You can look for SDL tutorial to set up the environment.
 ## Compilation
 **You should make sure all dependencies are installed before compiling**

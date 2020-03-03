@@ -9,9 +9,11 @@
 #include "render.h"
 #include "weapon.h"
 
+
+
 // Constants
-const int SCREEN_FPS = 60;
-const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
+const int SCREEN_FPS = D_SCREEN_FPS;
+const int SCREEN_TICKS_PER_FRAME = MILLISECONDS_IN_ONE_SECOND/D_SCREEN_FPS;
 const int n = SCREEN_WIDTH/UNIT;
 const int m = SCREEN_HEIGHT/UNIT;
 
