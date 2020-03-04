@@ -11,6 +11,8 @@
 
 [Linux](https://github.com/Rapiz1/DungeonRush/releases/download/v1.0-alpha/DungeonRush-v1.0-alpha-linux.zip)
 
+*The game supports macOS but I don't have an Mac to complie for it.*
+
 The executable is called `snake`
 
 ## Dependencies
@@ -39,6 +41,8 @@ The names of packages should be similiar. You can look for SDL tutorial to set u
 ```
 $ make
 ```
+## Known issues
+[May not work on MX150](https://github.com/Rapiz1/DungeonRush/issues/4)
 ## License and Credits
 DungeonRush has mixed meida with 
 various licenses. Unfortunately I failed to track them all. In other word, there are many stuff excluding code that comes with unknown license. You should not reuse any of audio, bitmaps, font in this project. If you insist, use at your own risk.
