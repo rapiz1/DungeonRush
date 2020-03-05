@@ -380,7 +380,7 @@ void renderInfo() {
   if (playersCount == 1) {
     extern int GAME_WIN_NUM;
     char buf[1<<8];
-    sprintf(buf, "Find %d more heros!", GAME_WIN_NUM - spriteSnake[0]->num);
+    sprintf(buf, "Find %d more heros!", GAME_WIN_NUM > spriteSnake[0]->num ? GAME_WIN_NUM - spriteSnake[0]->num : 0);
     setText(taskText, buf);
     renderText(taskText, startX, startY, 1);
     startY += lineGap;
