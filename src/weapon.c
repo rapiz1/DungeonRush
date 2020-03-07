@@ -3,7 +3,7 @@
 #include "res.h"
 #include "types.h"
 extern Texture textures[RES_HALO_EXPLOSION2];
-Mix_Chunk *sounds[AUDIO_SOUND_SIZE];
+extern Mix_Chunk *sounds[AUDIO_SOUND_SIZE];
 
 Weapon weapons[WEAPONS_SIZE];
 void initWeapon(Weapon* self, int birthTextureId, int deathTextureId,

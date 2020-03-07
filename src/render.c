@@ -21,10 +21,10 @@ extern SDL_Color BLACK;
 extern SDL_Color WHITE;
 
 const int SCALLING_FACTOR = 2;
-int texturesCount;
-Texture textures[TEXTURES_SIZE];
-int textsCount;
-Text texts[TEXTSET_SIZE];
+extern int texturesCount;
+extern Texture textures[TEXTURES_SIZE];
+extern int textsCount;
+extern Text texts[TEXTSET_SIZE];
 Text* stageText;
 Text* taskText;
 Text* scoresText[MAX_PALYERS_NUM];

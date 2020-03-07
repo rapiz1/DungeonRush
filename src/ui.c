@@ -21,7 +21,7 @@ extern SDL_Color WHITE;
 extern Texture textures[];
 extern Effect effects[];
 
-LinkList animationsList[ANIMATION_LINK_LIST_NUM];
+extern LinkList animationsList[ANIMATION_LINK_LIST_NUM];
 int cursorPos;
 bool moveCursor(int optsNum) {
   SDL_Event e;
