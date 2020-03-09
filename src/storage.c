@@ -29,6 +29,7 @@ Score** insertScoreToRanklist(Score* score, int* n, Score** scores) {
     }
   return scores;
 }
+
 void writeRanklist(const char* path, int n, Score** scores) {
   FILE* f = fopen(path, "w");
   fprintf(f, "%d\n", n);
@@ -37,6 +38,13 @@ void writeRanklist(const char* path, int n, Score** scores) {
 }
 Score** readRanklist(const char* path, int* n) {
   FILE* f = fopen(path, "r");
+  if (!f) {
+      /* No storage file, create new one */
+      printf("No storage file, create.\n");
+      f = fopen(path, "w+");
+      fprintf(f, "1 0 0 0 0 0");
+      fseek(f, 0L, SEEK_SET);
+  }
   fscanf(f, "%d", n);
   Score** scores = malloc(sizeof(Score*) * (*n));
   for (int i = 0; i < *n; i++) {
