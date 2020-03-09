@@ -5,3 +5,6 @@ snake
 *.zip
 storage.dat
 archive
+cmake_install.cmake
+CMakeFiles/
+CMakeCache.txt

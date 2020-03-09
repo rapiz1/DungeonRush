@@ -37,10 +37,19 @@ The project requires no more than common SDL2 libraries.
 
 The names of packages should be similiar. You can look for SDL tutorial to set up the environment.
 ## Compilation
+### build with original Makefile
 **You should make sure all dependencies are installed before compiling**
 ```
 $ make
 ```
+### build with CMake
+```
+# For windows, you may need to set some values manually.
+# You can refer to cmake/sdl2/README.md for more details.
+$ cmake .
+$ make
+```
+
 ## Known issues
 [May not work on MX150](https://github.com/Rapiz1/DungeonRush/issues/4)
 ## License and Credits
