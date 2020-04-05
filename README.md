@@ -42,7 +42,7 @@ The names of packages should be similiar. You can look for SDL tutorial to set u
 $ make
 ```
 ## Known issues
-[May not work on MX150](https://github.com/Rapiz1/DungeonRush/issues/4)
+[Game speed too fast with some NVIDIA graphic cards on Linux](https://github.com/Rapiz1/DungeonRush/issues/4)
 ## License and Credits
 DungeonRush has mixed meida with 
 various licenses. Unfortunately I failed to track them all. In other word, there are many stuff excluding code that comes with unknown license. You should not reuse any of audio, bitmaps, font in this project. If you insist, use at your own risk.
