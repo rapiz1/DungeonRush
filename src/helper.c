@@ -8,8 +8,8 @@
 extern const int SCALLING_FACTOR;
 extern Texture textures[];
 bool inr(int x, int l, int r) { return x <= r && l <= x; }
-int randint(int l, int r) { return rand() % (r - l + 1) + l; }
-double randd() { return (double)rand() / RAND_MAX; }
+int randInt(int l, int r) { return rand() % (r - l + 1) + l; }
+double randDouble() { return (double)rand() / RAND_MAX; }
 int IntervalCalc(int l1, int r1, int l2, int r2) {
   return MAX(-MAX(l1, l2) + MIN(r1, r2), 0);
 }

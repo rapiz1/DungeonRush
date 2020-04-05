@@ -83,7 +83,7 @@ void initPrimMap(double floorPercent, int smoothTimes) {
   for (int i = 0; i < floors; i++) {
     int x, y;
     do {
-      x = randint(0, n - 1), y = randint(0, m - 1);
+      x = randInt(0, n - 1), y = randInt(0, m - 1);
     } while (primMap[x][y]);
     primMap[x][y] = 1;
   }
@@ -137,13 +137,13 @@ void decorateMap() {
   // this will add details to boring floors
   for (int i = 0, lim = n * m * MAP_HOW_OLD, x, y; i < lim; i++) {
     do {
-      x = randint(0, n - 2), y = randint(0, m - 2);
+      x = randInt(0, n - 2), y = randInt(0, m - 2);
     } while ((hasMap[x][y] && !isTrap[x][y]) +
                  (hasMap[x + 1][y] && !isTrap[x + 1][y]) +
                  (hasMap[x][y + 1] && !isTrap[x][y + 1]) +
                  (hasMap[x + 1][y + 1] && !isTrap[x + 1][y + 1]) <
              4);
-    if (randd() < MAP_HOW_OLD) {
+    if (randDouble() < MAP_HOW_OLD) {
       map[x][y].ani->origin = &textures[RES_FLOOR_6];
       map[x+1][y].ani->origin = &textures[RES_FLOOR_4];
       map[x+1][y+1].ani->origin = &textures[RES_FLOOR_8];
@@ -183,7 +183,7 @@ void initRandomMap(double floorPercent, int smoothTimes, double trapRate) {
   for (int t = n * m * trapRate; t > 0; t--) {
     int x, y;
     do {
-      x = randint(0, n - 2), y = randint(0, m - 2);
+      x = randInt(0, n - 2), y = randInt(0, m - 2);
     } while ((hasMap[x][y] + hasMap[x + 1][y] + hasMap[x][y + 1] +
               hasMap[x + 1][y + 1]) <= 1);
     isTrap[x][y] = 1;
@@ -192,7 +192,7 @@ void initRandomMap(double floorPercent, int smoothTimes, double trapRate) {
     if (hasMap[x + 1][y + 1]) isTrap[x + 1][y + 1] = 1;
   }
   do {
-    exitX = randint(0, n - 1), exitY = randint(0, m - 1);
+    exitX = randInt(0, n - 1), exitY = randInt(0, m - 1);
   } while (!(hasMap[exitX][exitY] && !isTrap[exitX][exitY]));
   initBlock(&map[exitX][exitY], BLOCK_EXIT, exitX * UNIT, exitY * UNIT,
             RES_FLOOR_EXIT, false);
@@ -228,11 +228,11 @@ void pushMapToRender() {
                                    LOOP_INFI, 1, i * UNIT, (j - 1) * UNIT,
                                    SDL_FLIP_NONE, 0, AT_TOP_LEFT);
           } else {
-            int bid = randd() < MAP_HOW_OLD * 5
-                          ? (RES_WALL_HOLE_1 + randint(0, 1))
+            int bid = randDouble() < MAP_HOW_OLD * 5
+                          ? (RES_WALL_HOLE_1 + randInt(0, 1))
                           : RES_WALL_MID;
-            if (randd() < MAP_WALL_HOW_DECORATED)
-              bid = RES_WALL_BANNER_RED + randint(0, 3);
+            if (randDouble() < MAP_WALL_HOW_DECORATED)
+              bid = RES_WALL_BANNER_RED + randInt(0, 3);
             createAndPushAnimation(&animationsList[RENDER_LIST_MAP_ID],
                                    &textures[bid], NULL, LOOP_INFI, 1, i * UNIT,
                                    j * UNIT, SDL_FLIP_NONE, 0, AT_TOP_LEFT);
@@ -243,8 +243,8 @@ void pushMapToRender() {
           }
         }
         if (inr(j - 1, 0, m - 1) && hasMap[i][j - 1]) {
-          int bid = randd() < MAP_HOW_OLD * 2
-                        ? (RES_WALL_HOLE_1 + randint(0, 1))
+          int bid = randDouble() < MAP_HOW_OLD * 2
+                        ? (RES_WALL_HOLE_1 + randInt(0, 1))
                         : RES_WALL_MID;
           createAndPushAnimation(&animationsList[RENDER_LIST_MAP_ID],
                                  &textures[bid], NULL, LOOP_INFI, 1, i * UNIT,

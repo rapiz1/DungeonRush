@@ -192,7 +192,7 @@ void initPlayer() {
   playersCount++;
 }
 void generateHeroItem(int x, int y) {
-  int heroId = randint(SPRITE_KNIGHT, SPRITE_LIZARD);
+  int heroId = randInt(SPRITE_KNIGHT, SPRITE_LIZARD);
   Animation* ani = malloc(sizeof(Animation));
   itemMap[x][y] = (Item){ITEM_HERO, heroId, 0, ani};
   copyAnimation(commonSprites[heroId].ani, ani);
@@ -210,7 +210,7 @@ void generateItem(int x, int y, ItemType type) {
   else if (type == ITEM_HP_EXTRA_MEDCINE)
     textureId = RES_FLASK_BIG_YELLOW;
   else if (type == ITEM_WEAPON) {
-    int kind = randint(0, 5);
+    int kind = randInt(0, 5);
     if (kind == 0) {
       textureId = RES_ICE_SWORD;
       id = WEAPON_ICE_SWORD;
@@ -293,7 +293,7 @@ void dropItemNearSprite(Sprite* sprite, ItemType itemType) {
 void generateHeroItemAllMap() {
   int x, y;
   do {
-    x = randint(1, n - 2), y = randint(1, m - 2);
+    x = randInt(1, n - 2), y = randInt(1, m - 2);
   } while (!hasMap[x][y] || map[x][y].bp != BLOCK_FLOOR ||
            itemMap[x][y].type != ITEM_NONE ||
            !hasMap[x - 1][y] + !hasMap[x + 1][y] + !hasMap[x][y + 1] +
@@ -315,7 +315,7 @@ void initItemMap(int hCount, int fCount) {
   }
   while (fCount--) {
     do {
-      x = randint(0, n - 1), y = randint(0, m - 1);
+      x = randInt(0, n - 1), y = randInt(0, m - 1);
     } while (!hasMap[x][y] || map[x][y].bp != BLOCK_FLOOR ||
              itemMap[x][y].type != ITEM_NONE);
     generateItem(x, y, ITEM_HP_MEDCINE);
@@ -327,7 +327,7 @@ int generateEnemy(int x, int y, int minLen, int maxLen, int minId, int maxId,
   Snake* snake = spriteSnake[spritesCount++] = malloc(sizeof(Snake));
   initSnake(snake, step, GAME_MONSTERS_TEAM);
   hasEnemy[x][y] = 1;
-  bool vertical = randint(0, 1);
+  bool vertical = randInt(0, 1);
   int len = 1;
   if (vertical) {
     while (inr(y + len, 0, m - 1) && hasMap[x][y + len] &&
@@ -342,7 +342,7 @@ int generateEnemy(int x, int y, int minLen, int maxLen, int minId, int maxId,
   }
   minLen = MIN(minLen, len);
   maxLen = MIN(maxLen, len);
-  len = randint(minLen, maxLen);
+  len = randInt(minLen, maxLen);
   for (int i = 0; i < len; i++) {
     int xx = x, yy = y;
     if (vertical)
@@ -353,7 +353,7 @@ int generateEnemy(int x, int y, int minLen, int maxLen, int minId, int maxId,
     xx *= UNIT, yy *= UNIT;
     yy += UNIT;
     xx += UNIT / 2;
-    int spriteId = randint(minId, maxId);
+    int spriteId = randInt(minId, maxId);
     appendSpriteToSnake(snake, spriteId, xx, yy, vertical ? DOWN : RIGHT);
   }
   return len;
@@ -361,7 +361,7 @@ int generateEnemy(int x, int y, int minLen, int maxLen, int minId, int maxId,
 Point getAvaliablePos() {
   int x, y;
   do {
-    x = randint(0, n - 1), y = randint(0, m - 1);
+    x = randInt(0, n - 1), y = randInt(0, m - 1);
   } while (!hasMap[x][y] || map[x][y].bp != BLOCK_FLOOR ||
            itemMap[x][y].type != ITEM_NONE || hasEnemy[x][y] ||
            !hasMap[x - 1][y] + !hasMap[x + 1][y] + !hasMap[x][y + 1] +
@@ -375,7 +375,7 @@ void initEnemies(int enemiesCount) {
     for (int j = -2; j <= 2; j++)
       hasEnemy[n / 2 + i][m / 2 + j] = 1;
   for (int i = 0; i < enemiesCount;) {
-    double random = randd() * GAME_MONSTERS_GEN_FACTOR;
+    double random = randDouble() * GAME_MONSTERS_GEN_FACTOR;
     Point pos = getAvaliablePos();
     int x = pos.x, y = pos.y;
     int minLen = 2, maxLen = 4, step = 1;
@@ -585,7 +585,7 @@ bool crushVerdict(Sprite* sprite, bool loose, bool useAnimationBox) {
   return false;
 }
 void dropItem(Sprite* sprite) {
-  double random = randd() * sprite->dropRate * GAME_LUCKY;
+  double random = randDouble() * sprite->dropRate * GAME_LUCKY;
 #ifdef DBG
 // printf("%lf\n", random);
 #endif
@@ -597,7 +597,7 @@ void dropItem(Sprite* sprite) {
 void invokeWeaponBuff(Snake* src, Weapon* weapon, Snake* dest, int damage) {
   double random;
   for (int i = BUFF_BEGIN; i < BUFF_END; i++) {
-    random = randd();
+    random = randDouble();
     if (src && src->team == GAME_MONSTERS_TEAM) random *= GAME_MONSTERS_WEAPON_BUFF_ADJUST;
     if (random < weapon->effects[i].chance) switch (i) {
         case BUFF_FROZEN:
@@ -694,8 +694,8 @@ bool makeSnakeCross(Snake* snake) {
       createAndPushAnimation(
           &animationsList[RENDER_LIST_DEATH_ID], &textures[RES_SKULL], NULL,
           LOOP_INFI, 1,
-          sprite->x + randint(-MAP_SKULL_SPILL_RANGE, MAP_SKULL_SPILL_RANGE),
-          sprite->y + randint(-MAP_SKULL_SPILL_RANGE, MAP_SKULL_SPILL_RANGE),
+          sprite->x + randInt(-MAP_SKULL_SPILL_RANGE, MAP_SKULL_SPILL_RANGE),
+          sprite->y + randInt(-MAP_SKULL_SPILL_RANGE, MAP_SKULL_SPILL_RANGE),
           sprite->face == LEFT ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL, 0,
           AT_BOTTOM_CENTER);
       createAndPushAnimation(
@@ -705,10 +705,10 @@ bool makeSnakeCross(Snake* snake) {
           AT_BOTTOM_CENTER);
       /* TOO BLOODY
   createAndPushAnimation(
-      &animationsList[RENDER_LIST_MAP_SPECIAL_ID], &textures[randint(RES_BLOOD1,
+      &animationsList[RENDER_LIST_MAP_SPECIAL_ID], &textures[randInt(RES_BLOOD1,
   RES_BLOOD4)],NULL , LOOP_INFI, SPRITE_ANIMATION_DURATION, sprite->x +
-  randint(-MAP_BLOOD_SPILL_RANGE, MAP_BLOOD_SPILL_RANGE), sprite->y +
-  randint(-MAP_BLOOD_SPILL_RANGE, MAP_BLOOD_SPILL_RANGE), sprite->face == RIGHT
+  randInt(-MAP_BLOOD_SPILL_RANGE, MAP_BLOOD_SPILL_RANGE), sprite->y +
+  randInt(-MAP_BLOOD_SPILL_RANGE, MAP_BLOOD_SPILL_RANGE), sprite->face == RIGHT
   ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL, 0, AT_BOTTOM_CENTER);
       */
       clearBindInAnimationsList(sprite, RENDER_LIST_EFFECT_ID);

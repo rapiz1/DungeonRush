@@ -87,7 +87,7 @@ void AiInput(Snake* snake) {
   Direction currentDirection = snakeHead->direction;
   int originValue = testOneMove(snake, currentDirection);
   bool change = originValue < 0;
-  if (randd() < AI_PATH_RANDOM) change = 1;
+  if (randDouble() < AI_PATH_RANDOM) change = 1;
   if (change) {
     static Choice choices[4];
     int count = 0;

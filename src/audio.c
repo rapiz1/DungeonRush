@@ -18,7 +18,7 @@ void stopBgm() {
   nowBgmId = -1;
 }
 void randomBgm() {
-  playBgm(randint(1, bgmNums-1));
+  playBgm(randInt(1, bgmNums-1));
 }
 void playAudio(int id) {
   if (id >= 0)

@@ -8,9 +8,9 @@
 #define MIN(x, y) (x > y ? y : x)
 #define PI 3.1415926535
 #define HELPER_RECT_CROSS_LIMIT 8
-int randint(int l, int r);
+int randInt(int l, int r);
 // return random double in [0, 1]
-double randd();
+double randDouble();
 bool inr(int x, int l, int r);
 bool IntervalCross(int,int,int,int);
 bool RectRectCross(SDL_Rect*, SDL_Rect*);

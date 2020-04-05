@@ -121,8 +121,8 @@ void mainUi() {
                          SPRITE_ANIMATION_DURATION, startX + UI_MAIN_GAP_ALT*2,
                          startY - 32, SDL_FLIP_HORIZONTAL, 0, AT_BOTTOM_CENTER);
 
-  startX += UI_MAIN_GAP_ALT*(6 + 2*randd());
-  startY += UI_MAIN_GAP*(1 + randd());
+  startX += UI_MAIN_GAP_ALT*(6 + 2*randDouble());
+  startY += UI_MAIN_GAP*(1 + randDouble());
   createAndPushAnimation(&animationsList[RENDER_LIST_SPRITE_ID],
                          &textures[RES_ELF_M], NULL, LOOP_INFI,
                          SPRITE_ANIMATION_DURATION, startX,
@@ -136,8 +136,8 @@ void mainUi() {
                          SPRITE_ANIMATION_DURATION, startX - UI_MAIN_GAP*1.5,
                          startY, SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
 
-  startX -= UI_MAIN_GAP_ALT*(1 + 2*randd());
-  startY += UI_MAIN_GAP*(2 + randd());
+  startX -= UI_MAIN_GAP_ALT*(1 + 2*randDouble());
+  startY += UI_MAIN_GAP*(2 + randDouble());
   createAndPushAnimation(&animationsList[RENDER_LIST_SPRITE_ID],
                          &textures[RES_WIZZARD_M], NULL, LOOP_INFI,
                          SPRITE_ANIMATION_DURATION, startX,
@@ -147,8 +147,8 @@ void mainUi() {
                          SPRITE_ANIMATION_DURATION, startX + UI_MAIN_GAP,
                          startY, SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
 
-  startX += UI_MAIN_GAP_ALT*(18 + 4*randd());
-  startY -= UI_MAIN_GAP*(1 + 3*randd());
+  startX += UI_MAIN_GAP_ALT*(18 + 4*randDouble());
+  startY -= UI_MAIN_GAP*(1 + 3*randDouble());
   createAndPushAnimation(&animationsList[RENDER_LIST_SPRITE_ID],
                          &textures[RES_LIZARD_M], NULL, LOOP_INFI,
                          SPRITE_ANIMATION_DURATION, startX,
