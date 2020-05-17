@@ -1,0 +1,31 @@
+language: cpp
+compiler: gcc
+sudo: require
+dist: xenial
+
+install:
+  - sudo apt-get -y install libsdl2-*
+script:
+  - make -j$(nproc)
+  - mkdir -p appdir/usr/share/icons/hicolor/256x256/apps # FIXME: "make INSTALL_ROOT=appdir install" should do this
+  - cp dungeonrush.png appdir/usr/share/icons/hicolor/256x256/apps/ # FIXME: "make INSTALL_ROOT=appdir install" should do this
+  - mkdir -p appdir/usr/share/applications # FIXME: "make INSTALL_ROOT=appdir install" should do this
+  - cp dungeonrush.desktop appdir/usr/share/applications/ # FIXME: "make INSTALL_ROOT=appdir install" should do this
+  - mkdir -p appdir/usr/bin # FIXME: "make INSTALL_ROOT=appdir install" should do this
+  - cp -r dungeon_rush appdir/usr/bin/ # FIXME: "make INSTALL_ROOT=appdir install" should do this
+  - cp -r res appdir/usr/ # FIXME: Workaround for https://github.com/Rapiz1/DungeonRush/issues/10#issuecomment-629748817
+  - wget -c "https://github.com/AppImage/AppImageKit/releases/download/continuous/AppRun-x86_64" -O ./appdir/AppRun # FIXME: Workaround for https://github.com/Rapiz1/DungeonRush/issues/10#issuecomment-629748817
+  - chmod +x ./appdir/AppRun # FIXME: Workaround for https://github.com/Rapiz1/DungeonRush/issues/10#issuecomment-629748817
+  - find appdir/
+  - wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
+  - chmod a+x linuxdeployqt-continuous-x86_64.AppImage
+  - ./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop -appimage
+
+after_success:
+  - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+  - bash upload.sh DungeonRush*.AppImage*
+  
+branches:
+  except:
+    - # Do not build tags that we create when we upload to GitHub Releases
+    - /^(?i:continuous)/

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=DungeonRush
+Exec=dungeon_rush
+Comment=A game inspired by Snake
+Categories=Game;
+Icon=dungeonrush
