@@ -13,7 +13,7 @@
 
 *The game supports macOS but I don't have an Mac to complie for it.*
 
-The executable is called `snake`
+The executable is called `dungeon_rush`
 
 ## Dependencies
 The project requires no more than common SDL2 libraries.
