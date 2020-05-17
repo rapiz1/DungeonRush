@@ -31,7 +31,7 @@ The project requires no more than common SDL2 libraries.
 ### For openSUSE
 
 ```
-zypper in libSDL2-devel libSDL2_mixer-devel libSDL2_ttf-devel libSDL2_image-devel
+# zypper in libSDL2-devel libSDL2_mixer-devel libSDL2_ttf-devel libSDL2_image-devel
 ```
 
 ### For MacOs
