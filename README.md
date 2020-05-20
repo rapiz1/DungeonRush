@@ -34,7 +34,7 @@ The project requires no more than common SDL2 libraries.
 # zypper in libSDL2-devel libSDL2_mixer-devel libSDL2_ttf-devel libSDL2_image-devel
 ```
 
-### For MacOs
+### For MacOS
 
 ```
 #  brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer
