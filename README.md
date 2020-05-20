@@ -11,6 +11,8 @@
 
 [Linux](https://github.com/Rapiz1/DungeonRush/releases/download/v1.0-alpha/DungeonRush-v1.0-alpha-linux.zip)
 
+AppImage for Linux is also available in release page.
+
 *The game supports macOS but I don't have an Mac to complie for it.*
 
 The executable is called `dungeon_rush`
