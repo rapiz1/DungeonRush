@@ -4,6 +4,36 @@
 >My piece of work from C assignment. Hope you like it :)
 
 *I work on the small project on my own so the code lacks of comments.*
+## How to Play
+
+### Singleplayer
+
+Use WASD to move.
+
+Collect heros to enlarge your army while defending yourself from the monsters. Each level has a target length of the hero queue. Once it's reached, you will be sent to the next level and start over. There are lots of stuff that will be adjusted according to the level you're on, including factors of HP and damage, duration of buffs and debuffs, the number and strength of monsters and so on.
+
+### Multiplayers
+Use WASD and the arrow keys to move.
+
+This mode is competitive. Defend yourself from the monsters and your friend!
+
+### Weapons
+
+There are powerful weapons randomly dropped by the monsters. Different kinds of heros can be equipped with different kind of weapons.
+
+*My favorite is the ThunderStaff. A cool staff that makes your wizard summon thunder striking all enmeies around.*
+
+### Buff/Debuff
+
+There's a possibility that the attack from those with weapon triggers certain buff on himself or debuff on the enemey.
+
+- IceSword can frozen enemeys.
+- HolySword can give you a shield that absorbs damage and makes you immune to debuff.
+- GreatBow can increase the damage of all your heros' attack.
+- And so on.
+
+For sure, some kinds of monsters have weapons that can put a debuff on you! *(Like the troublesome muddy monsters can slow down your movement.)*
+
 
 ## Download
 
