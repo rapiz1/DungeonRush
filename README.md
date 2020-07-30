@@ -25,7 +25,7 @@ There are powerful weapons randomly dropped by the monsters. Different kinds of 
 
 ### Buff/Debuff
 
-There's a possibility that the attack from those with weapon triggers certain buff on himself or debuff on the enemey.
+There's a possibility that the attack from one with weapon triggers certain buff on himself or debuff on the enemey.
 
 - IceSword can frozen enemeys.
 - HolySword can give you a shield that absorbs damage and makes you immune to debuff.
