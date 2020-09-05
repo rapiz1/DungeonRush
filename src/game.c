@@ -405,6 +405,11 @@ void initEnemies(int enemiesCount) {
     generateEnemy(pos.x, pos.y, 1, 1, SPRITE_BIG_ZOMBIE, SPRITE_BIG_DEMON, 1);
   }
 }
+
+/*
+* Put buff animation on snake
+*/
+
 void freezeSnake(Snake* snake, int duration) {
   if (snake->buffs[BUFF_FROZEN]) return;
   if (!snake->buffs[BUFF_DEFFENCE]) snake->buffs[BUFF_FROZEN] += duration;
@@ -425,6 +430,7 @@ void freezeSnake(Snake* snake, int duration) {
     bindAnimationToSprite(ani, sprite, true);
   }
 }
+
 void slowDownSnake(Snake* snake, int duration) {
   if (snake->buffs[BUFF_SLOWDOWN]) return;
   if (!snake->buffs[BUFF_DEFFENCE]) snake->buffs[BUFF_SLOWDOWN] += duration;
@@ -446,6 +452,7 @@ void slowDownSnake(Snake* snake, int duration) {
     bindAnimationToSprite(ani, sprite, true);
   }
 }
+
 void shieldSprite(Sprite* sprite, int duration) {
   Animation* ani = createAndPushAnimation(
       &animationsList[RENDER_LIST_EFFECT_ID], &textures[RES_HOLY_SHIELD], NULL,
@@ -454,6 +461,7 @@ void shieldSprite(Sprite* sprite, int duration) {
   bindAnimationToSprite(ani, sprite, true);
   ani->lifeSpan = duration;
 }
+
 void shieldSnake(Snake* snake, int duration) {
   if (snake->buffs[BUFF_DEFFENCE]) return;
   snake->buffs[BUFF_DEFFENCE] += duration;
@@ -461,6 +469,7 @@ void shieldSnake(Snake* snake, int duration) {
     shieldSprite(p->element, duration);
   }
 }
+
 void attackUpSprite(Sprite* sprite, int duration) {
   Animation* ani = createAndPushAnimation(
       &animationsList[RENDER_LIST_EFFECT_ID], &textures[RES_ATTACK_UP], NULL,
@@ -469,6 +478,7 @@ void attackUpSprite(Sprite* sprite, int duration) {
   bindAnimationToSprite(ani, sprite, true);
   ani->lifeSpan = duration;
 }
+
 void attackUpSnkae(Snake* snake, int duration) {
   if (snake->buffs[BUFF_ATTACK]) return;
   snake->buffs[BUFF_ATTACK] += duration;
@@ -476,6 +486,11 @@ void attackUpSnkae(Snake* snake, int duration) {
     attackUpSprite(p->element, duration);
   }
 }
+
+/*
+  Initialize and deinitialize game and snake
+*/
+
 void initGame(int playersNum) {
   randomBgm();
   status = 0;
@@ -499,23 +514,7 @@ void initGame(int playersNum) {
   pushMapToRender();
   bullets = createLinkList();
 }
-void destroySnake(Snake* snake) {
-  if (bullets)
-    for (LinkNode* p = bullets->head; p; p = p->nxt) {
-      Bullet* bullet = p->element;
-      if (bullet->owner == snake) bullet->owner = NULL;
-    }
-  for (LinkNode* p = snake->sprites->head; p; p = p->nxt) {
-    Sprite* sprite = p->element;
-    free(sprite);
-    p->element = NULL;
-  }
-  destroyLinkList(snake->sprites);
-  snake->sprites = NULL;
-  destroyScore(snake->score);
-  snake->score = NULL;
-  free(snake);
-}
+
 void destroyGame(int status) {
   while (spritesCount) {
     destroySnake(spriteSnake[--spritesCount]);
@@ -544,18 +543,47 @@ void destroyGame(int status) {
   sleep(RENDER_GAMEOVER_DURATION);
   clearRenderer();
 }
-bool isPlayer(Snake* snake) {
+
+void destroySnake(Snake* snake) {
+  if (bullets)
+    for (LinkNode* p = bullets->head; p; p = p->nxt) {
+      Bullet* bullet = p->element;
+      if (bullet->owner == snake) bullet->owner = NULL;
+    }
+  for (LinkNode* p = snake->sprites->head; p; p = p->nxt) {
+    Sprite* sprite = p->element;
+    free(sprite);
+    p->element = NULL;
+  }
+  destroyLinkList(snake->sprites);
+  snake->sprites = NULL;
+  destroyScore(snake->score);
+  snake->score = NULL;
+  free(snake);
+}
+
+/* 
+  Helper function to determine whehter a snake is a player
+*/
+inline bool isPlayer(Snake* snake) {
   for (int i = 0; i < playersCount; i++)
     if (snake == spriteSnake[i]) return true;
   return false;
 }
+
+/*
+  Verdict if a sprite crushes on other objects
+*/
 bool crushVerdict(Sprite* sprite, bool loose, bool useAnimationBox) {
   int x = sprite->x, y = sprite->y;
   SDL_Rect block, box = useAnimationBox ? getSpriteAnimationBox(sprite) : getSpriteFeetBox(sprite);
+
+  // If the sprite is out of the map, then consider it as crushed
   if (inr(x / UNIT, 0, n - 1) && inr(y / UNIT, 0, m - 1))
     ;
   else
     return true;
+  // Loop over the cells nearby the sprite to know better if it falls out of map
   for (int dx = -1; dx <= 1; dx++)
     for (int dy = -1; dy <= 1; dy++) {
       int xx = x / UNIT + dx, yy = y / UNIT + dy;
@@ -566,6 +594,9 @@ bool crushVerdict(Sprite* sprite, bool loose, bool useAnimationBox) {
         }
       }
     }
+
+
+  // If it has crushed on other sprites
   for (int i = 0; i < spritesCount; i++) {
     bool self = false;
     for (LinkNode* p = spriteSnake[i]->sprites->head; p; p = p->nxt) {
@@ -584,6 +615,7 @@ bool crushVerdict(Sprite* sprite, bool loose, bool useAnimationBox) {
   }
   return false;
 }
+
 void dropItem(Sprite* sprite) {
   double random = randDouble() * sprite->dropRate * GAME_LUCKY;
 #ifdef DBG
@@ -594,6 +626,7 @@ void dropItem(Sprite* sprite) {
   else if (random > GAME_DROPOUT_WEAPONS)
     dropItemNearSprite(sprite, ITEM_WEAPON);
 }
+
 void invokeWeaponBuff(Snake* src, Weapon* weapon, Snake* dest, int damage) {
   double random;
   for (int i = BUFF_BEGIN; i < BUFF_END; i++) {
@@ -617,6 +650,7 @@ void invokeWeaponBuff(Snake* src, Weapon* weapon, Snake* dest, int damage) {
       }
   }
 }
+
 void dealDamage(Snake* src, Snake* dest, Sprite* target, int damage) {
   double calcDamage = damage;
   if (dest->buffs[BUFF_FROZEN]) calcDamage *= GAME_FROZEN_DAMAGE_K;
@@ -633,6 +667,7 @@ void dealDamage(Snake* src, Snake* dest, Sprite* target, int damage) {
   }
   dest->score->stand += damage;
 }
+
 bool makeSnakeCross(Snake* snake) {
   if (!snake->sprites->head) return false;
   // Trap and Item ( everything related to block ) verdict
