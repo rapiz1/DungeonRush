@@ -1006,60 +1006,67 @@ void pauseGame() {
   resumeSound();
   playAudio(AUDIO_BUTTON1);
 }
+
+bool handleLocalKeypress() {
+  static SDL_Event e;
+  bool quit = false;
+  while (SDL_PollEvent(&e)) {
+    if (e.type == SDL_QUIT) {
+      quit = true;
+      setTerm(1);
+    } else if (e.type == SDL_KEYDOWN) {
+      int keyValue = e.key.keysym.sym;
+      Snake* player = spriteSnake[0];
+      if (!player->buffs[BUFF_FROZEN] && player->sprites->head != NULL)
+        switch (keyValue) {
+          case SDLK_LEFT:
+          case SDLK_h:
+            changeSpriteDirection(player->sprites->head, LEFT);
+            break;
+          case SDLK_RIGHT:
+          case SDLK_l:
+            changeSpriteDirection(player->sprites->head, RIGHT);
+            break;
+          case SDLK_UP:
+          case SDLK_k:
+            changeSpriteDirection(player->sprites->head, UP);
+            break;
+          case SDLK_DOWN:
+          case SDLK_j:
+            changeSpriteDirection(player->sprites->head, DOWN);
+            break;
+          case SDLK_ESCAPE:
+            pauseGame();
+            break;
+        }
+      if (playersCount > 1) {
+        player = spriteSnake[1];
+        if (!player->buffs[BUFF_FROZEN] && player->sprites->head)
+          switch (keyValue) {
+            case SDLK_a:
+              changeSpriteDirection(player->sprites->head, LEFT);
+              break;
+            case SDLK_d:
+              changeSpriteDirection(player->sprites->head, RIGHT);
+              break;
+            case SDLK_w:
+              changeSpriteDirection(player->sprites->head, UP);
+              break;
+            case SDLK_s:
+              changeSpriteDirection(player->sprites->head, DOWN);
+              break;
+          }
+      }
+    }
+  }
+  return quit;
+}
+
 int gameLoop() {
   // int posx = 0, posy = SCREEN_HEIGHT / 2;
   // Game loop
-  SDL_Event e;
   for (bool quit = 0; !quit;) {
-    while (SDL_PollEvent(&e)) {
-      if (e.type == SDL_QUIT) {
-        quit = true;
-        setTerm(1);
-      } else if (e.type == SDL_KEYDOWN) {
-        int keyValue = e.key.keysym.sym;
-        Snake* player = spriteSnake[0];
-        if (!player->buffs[BUFF_FROZEN] && player->sprites->head != NULL)
-          switch (keyValue) {
-            case SDLK_LEFT:
-            case SDLK_h:
-              changeSpriteDirection(player->sprites->head, LEFT);
-              break;
-            case SDLK_RIGHT:
-            case SDLK_l:
-              changeSpriteDirection(player->sprites->head, RIGHT);
-              break;
-            case SDLK_UP:
-            case SDLK_k:
-              changeSpriteDirection(player->sprites->head, UP);
-              break;
-            case SDLK_DOWN:
-            case SDLK_j:
-              changeSpriteDirection(player->sprites->head, DOWN);
-              break;
-            case SDLK_ESCAPE:
-              pauseGame();
-              break;
-          }
-        if (playersCount > 1) {
-          player = spriteSnake[1];
-          if (!player->buffs[BUFF_FROZEN] && player->sprites->head)
-            switch (keyValue) {
-              case SDLK_a:
-                changeSpriteDirection(player->sprites->head, LEFT);
-                break;
-              case SDLK_d:
-                changeSpriteDirection(player->sprites->head, RIGHT);
-                break;
-              case SDLK_w:
-                changeSpriteDirection(player->sprites->head, UP);
-                break;
-              case SDLK_s:
-                changeSpriteDirection(player->sprites->head, DOWN);
-                break;
-            }
-        }
-      }
-    }
+    quit = handleLocalKeypress();
 
     updateMap();
 
