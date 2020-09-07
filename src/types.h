@@ -57,12 +57,15 @@ typedef struct {
 void initTexture(Texture* self, SDL_Texture* origin, int width, int height,
                  int frames);
 void destroyTexture(Texture* self);
+
 bool initText(Text* self, const char* str, SDL_Color color);
 Text* createText(const char* str, SDL_Color color);
 void destroyText(Text* self);
+
 void initEffect(Effect* self,  int duration, int length, SDL_BlendMode mode);
 void destroyEffect(Effect* self);
 void copyEffect(const Effect* src, Effect* dest);
+
 void initAnimation(Animation* self, Texture* origin, const Effect* effect, LoopType lp, int duration, int x, int y, SDL_RendererFlip flip, double angle, At at);
 Animation* createAnimation(Texture* origin, const Effect* effect, LoopType lp, int duration, int x, int y, SDL_RendererFlip flip, double angle, At at);
 void destroyAnimation(Animation* self);
@@ -77,10 +80,12 @@ typedef struct _LinkNode LinkNode;
 typedef struct {
   LinkNode *head, *tail;
 } LinkList;
-LinkNode* createLinkNode(void* element);
-LinkList* createLinkList();
-void initLinkList(LinkList* self);
+
 void initLinkNode(LinkNode* self);
+LinkNode* createLinkNode(void* element);
+
+void initLinkList(LinkList* self);
+LinkList* createLinkList();
 void destroyLinkList(LinkList* self);
 void destroyAnimationsByLinkList(LinkList* list);
 void removeAnimationFromLinkList(LinkList* list, Animation* ani);
