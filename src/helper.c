@@ -1,9 +1,10 @@
 #include "helper.h"
+
+#include <stdlib.h>
+
 #include "game.h"
 #include "res.h"
 #include "types.h"
-
-#include <stdlib.h>
 
 extern const int SCALLING_FACTOR;
 extern Texture textures[];
@@ -97,5 +98,5 @@ SDL_Rect getMapRect(int x, int y) {
 }
 double distance(Point a, Point b) {
   double dx = a.x - b.x, dy = a.y - b.y;
-  return sqrt(dx*dx + dy*dy);
+  return sqrt(dx * dx + dy * dy);
 }

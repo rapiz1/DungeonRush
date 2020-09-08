@@ -1,9 +1,14 @@
 #ifndef SNAKE_HELPER_H
 #define SNAKE_HELPER_H
+
 #include <SDL2/SDL.h>
+
 #include <stdbool.h>
 #include <math.h>
+
 #include "types.h"
+#include "sprite.h"
+
 #define MAX(x, y) (x > y ? x : y)
 #define MIN(x, y) (x > y ? y : x)
 #define PI 3.1415926535
@@ -21,4 +26,5 @@ SDL_Rect getMapRect(int x, int y);
 SDL_Rect getSpriteAnimationBox(Sprite* sprite);
 int RectRectCalc(SDL_Rect* a, SDL_Rect* b);
 double distance(Point a, Point b);
+
 #endif

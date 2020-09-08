@@ -1,7 +1,8 @@
 #ifndef SNAKE_STORAGE_H_
 #define SNAKE_STORAGE_H_
-#include "types.h"
 #include <stdio.h>
+
+#include "types.h"
 
 #define STORAGE_PATH "storage.dat"
 #define STORAGE_RANKLIST_NUM 10

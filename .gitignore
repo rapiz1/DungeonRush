@@ -6,3 +6,5 @@ snake
 storage.dat
 archive
 dungeon_rush
+*.o
+*.gch

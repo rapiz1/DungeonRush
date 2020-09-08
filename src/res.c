@@ -3,6 +3,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_net.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include "types.h"
@@ -132,10 +133,14 @@ bool init() {
           success = false;
         }
         //Initialize SDL_mixer
-        if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
-        {
-            printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
-            success = false;
+        if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 ) {
+          printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
+          success = false;
+        }
+        //Initialize SDL_net
+        if (SDLNet_Init() == -1) {
+          printf("SDL_Net_Init: %s\n", SDLNet_GetError());
+          success = false;
         }
       }
     }

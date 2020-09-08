@@ -1,17 +1,20 @@
+#include "game.h"
+
 #include <SDL2/SDL.h>
 #include <math.h>
 #include <stdbool.h>
 #include <unistd.h>
 
-#include "game.h"
 #include "ai.h"
+#include "audio.h"
+#include "bullet.h"
 #include "helper.h"
 #include "map.h"
 #include "render.h"
 #include "res.h"
+#include "sprite.h"
 #include "types.h"
 #include "weapon.h"
-#include "audio.h"
 
 #ifdef DBG
 #include <assert.h>
@@ -66,22 +69,20 @@ void setLevel(int level) {
   GAME_LUCKY = 1;
   GAME_DROPOUT_YELLOW_FLASKS = 0.3;
   GAME_DROPOUT_WEAPONS = 0.7;
-  GAME_TRAP_RATE = 0.005*(level+1);
-  GAME_MONSTERS_HP_ADJUST = 1 + level*0.8 + stage*level*0.1;
-  GAME_MONSTERS_GEN_FACTOR = 1 + level*0.5 + stage*level*0.05;
-  GAME_MONSTERS_WEAPON_BUFF_ADJUST = 1 + level*0.8 + stage*level*0.02;
-  AI_LOCK_LIMIT = MAX(1, 7 - level*2 - stage/2);
-  GAME_WIN_NUM = 10 + level*5 + stage*3;
+  GAME_TRAP_RATE = 0.005 * (level + 1);
+  GAME_MONSTERS_HP_ADJUST = 1 + level * 0.8 + stage * level * 0.1;
+  GAME_MONSTERS_GEN_FACTOR = 1 + level * 0.5 + stage * level * 0.05;
+  GAME_MONSTERS_WEAPON_BUFF_ADJUST = 1 + level * 0.8 + stage * level * 0.02;
+  AI_LOCK_LIMIT = MAX(1, 7 - level * 2 - stage / 2);
+  GAME_WIN_NUM = 10 + level * 5 + stage * 3;
   if (level == 0) {
-  }
-  else if (level == 1) {
+  } else if (level == 1) {
     GAME_DROPOUT_WEAPONS = 0.98;
     herosSetting = 5;
     flasksSetting = 4;
     spritesSetting = 28;
     bossSetting = 3;
-  }
-  else if (level == 2) {
+  } else if (level == 2) {
     GAME_DROPOUT_WEAPONS = 0.98;
     GAME_DROPOUT_YELLOW_FLASKS = 0.3;
     spritesSetting = 28;
@@ -89,11 +90,11 @@ void setLevel(int level) {
     flasksSetting = 3;
     bossSetting = 5;
   }
-  spritesSetting += stage/2*(level+1);
-  bossSetting += stage/3;
+  spritesSetting += stage / 2 * (level + 1);
+  bossSetting += stage / 3;
 }
 Score** startGame(int players) {
-  Score** scores = malloc(sizeof(Score*)*players);
+  Score** scores = malloc(sizeof(Score*) * players);
   for (int i = 0; i < players; i++) {
     scores[i] = createScore();
   }
@@ -102,41 +103,13 @@ Score** startGame(int players) {
   do {
     initGame(players);
     setLevel(gameLevel);
-    status = gameLoop();
+    status = gameLoop(false);
     for (int i = 0; i < players; i++)
       addScore(scores[i], spriteSnake[i]->score);
     destroyGame(status);
     stage++;
   } while (status == 0);
   return scores;
-}
-void initSnake(Snake* snake, int step, int team) {
-  snake->moveStep = step;
-  snake->team = team;
-  snake->num = 0;
-  memset(snake->buffs, 0, sizeof(snake->buffs));
-  snake->sprites = createLinkList();
-  snake->score = createScore();
-}
-Snake* createSnake(int step, int team) {
-  Snake* self = malloc(sizeof(Snake));
-  initSnake(self, step, team);
-  return self;
-}
-void initSprite(Sprite* model, Sprite* self, int x, int y) {
-  memcpy(self, model, sizeof(Sprite));
-  self->x = x;
-  self->y = y;
-  self->bufferSize = 0;
-  Animation* ani = malloc(sizeof(Animation));
-  copyAnimation(model->ani, ani);
-  self->ani = ani;
-  updateAnimationOfSprite(self);
-}
-Sprite* createSprite(Sprite* model, int x, int y) {
-  Sprite* self = malloc(sizeof(Sprite));
-  initSprite(model, self, x, y);
-  return self;
 }
 void appendSpriteToSnake(
     Snake* snake, int sprite_id, int x, int y,
@@ -186,7 +159,8 @@ void appendSpriteToSnake(
 }
 void initPlayer() {
   spritesCount++;
-  Snake* p = spriteSnake[playersCount] = createSnake(MOVE_STEP, playersCount);
+  Snake* p = spriteSnake[playersCount] =
+      createSnake(MOVE_STEP, playersCount, LOCAL);
   appendSpriteToSnake(p, SPRITE_KNIGHT, SCREEN_WIDTH / 2,
                       SCREEN_HEIGHT / 2 + playersCount * 2 * UNIT, RIGHT);
   playersCount++;
@@ -219,8 +193,7 @@ void generateItem(int x, int y, ItemType type) {
       textureId = RES_HOLY_SWORD;
       id = WEAPON_HOLY_SWORD;
       belong = SPRITE_KNIGHT;
-    }
-    else if (kind == 2) {
+    } else if (kind == 2) {
       textureId = RES_THUNDER_STAFF;
       id = WEAPON_THUNDER_STAFF;
       belong = SPRITE_WIZZARD;
@@ -270,8 +243,11 @@ bool takeWeapon(Snake* snake, Item* weaponItem) {
           LOOP_INFI, 3, sprite->x, sprite->y, SDL_FLIP_NONE, 0,
           AT_BOTTOM_CENTER);
       bindAnimationToSprite(ani, sprite, true);
-      sprite->hp += GAME_HP_MEDICINE_EXTRA_DELTA/100.0*sprite->totoalHp*5;
-      ani = createAndPushAnimation(&animationsList[RENDER_LIST_EFFECT_ID], &textures[RES_HP_MED], NULL, LOOP_ONCE, SPRITE_ANIMATION_DURATION, 0,0, SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
+      sprite->hp += GAME_HP_MEDICINE_EXTRA_DELTA / 100.0 * sprite->totoalHp * 5;
+      ani = createAndPushAnimation(&animationsList[RENDER_LIST_EFFECT_ID],
+                                   &textures[RES_HP_MED], NULL, LOOP_ONCE,
+                                   SPRITE_ANIMATION_DURATION, 0, 0,
+                                   SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
       bindAnimationToSprite(ani, sprite, true);
       taken = true;
       break;
@@ -324,8 +300,8 @@ void initItemMap(int hCount, int fCount) {
 }
 int generateEnemy(int x, int y, int minLen, int maxLen, int minId, int maxId,
                   int step) {
-  Snake* snake = spriteSnake[spritesCount++] = malloc(sizeof(Snake));
-  initSnake(snake, step, GAME_MONSTERS_TEAM);
+  Snake* snake = spriteSnake[spritesCount++] =
+      createSnake(step, GAME_MONSTERS_TEAM, COMPUTER);
   hasEnemy[x][y] = 1;
   bool vertical = randInt(0, 1);
   int len = 1;
@@ -372,15 +348,14 @@ Point getAvaliablePos() {
 void initEnemies(int enemiesCount) {
   memset(hasEnemy, 0, sizeof hasEnemy);
   for (int i = -2; i <= 2; i++)
-    for (int j = -2; j <= 2; j++)
-      hasEnemy[n / 2 + i][m / 2 + j] = 1;
+    for (int j = -2; j <= 2; j++) hasEnemy[n / 2 + i][m / 2 + j] = 1;
   for (int i = 0; i < enemiesCount;) {
     double random = randDouble() * GAME_MONSTERS_GEN_FACTOR;
     Point pos = getAvaliablePos();
     int x = pos.x, y = pos.y;
     int minLen = 2, maxLen = 4, step = 1;
     int startId = SPRITE_TINY_ZOMBIE, endId = SPRITE_TINY_ZOMBIE;
-    //double random = i * GAME_MONSTERS_GEN_FACTOR / enemiesCount;
+    // double random = i * GAME_MONSTERS_GEN_FACTOR / enemiesCount;
     if (random < 0.3) {
       startId = SPRITE_TINY_ZOMBIE;
       endId = SPRITE_SKELET;
@@ -407,8 +382,8 @@ void initEnemies(int enemiesCount) {
 }
 
 /*
-* Put buff animation on snake
-*/
+ * Put buff animation on snake
+ */
 
 void freezeSnake(Snake* snake, int duration) {
   if (snake->buffs[BUFF_FROZEN]) return;
@@ -473,8 +448,8 @@ void shieldSnake(Snake* snake, int duration) {
 void attackUpSprite(Sprite* sprite, int duration) {
   Animation* ani = createAndPushAnimation(
       &animationsList[RENDER_LIST_EFFECT_ID], &textures[RES_ATTACK_UP], NULL,
-      LOOP_LIFESPAN, SPRITE_ANIMATION_DURATION, sprite->x, sprite->y, SDL_FLIP_NONE, 0,
-      AT_BOTTOM_CENTER);
+      LOOP_LIFESPAN, SPRITE_ANIMATION_DURATION, sprite->x, sprite->y,
+      SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
   bindAnimationToSprite(ani, sprite, true);
   ani->lifeSpan = duration;
 }
@@ -532,12 +507,14 @@ void destroyGame(int status) {
   bullets = NULL;
 
   blackout();
-  char* msg; 
-  if (status == 0) msg = "Stage Clear";
-  else msg = "Game Over";
+  char* msg;
+  if (status == 0)
+    msg = "Stage Clear";
+  else
+    msg = "Game Over";
   extern SDL_Color WHITE;
   Text* text = createText(msg, WHITE);
-  renderCenteredText(text, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 1);
+  renderCenteredText(text, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 1);
   destroyText(text);
   SDL_RenderPresent(renderer);
   sleep(RENDER_GAMEOVER_DURATION);
@@ -562,7 +539,7 @@ void destroySnake(Snake* snake) {
   free(snake);
 }
 
-/* 
+/*
   Helper function to determine whehter a snake is a player
 */
 inline bool isPlayer(Snake* snake) {
@@ -576,7 +553,8 @@ inline bool isPlayer(Snake* snake) {
 */
 bool crushVerdict(Sprite* sprite, bool loose, bool useAnimationBox) {
   int x = sprite->x, y = sprite->y;
-  SDL_Rect block, box = useAnimationBox ? getSpriteAnimationBox(sprite) : getSpriteFeetBox(sprite);
+  SDL_Rect block, box = useAnimationBox ? getSpriteAnimationBox(sprite)
+                                        : getSpriteFeetBox(sprite);
 
   // If the sprite is out of the map, then consider it as crushed
   if (inr(x / UNIT, 0, n - 1) && inr(y / UNIT, 0, m - 1))
@@ -595,14 +573,14 @@ bool crushVerdict(Sprite* sprite, bool loose, bool useAnimationBox) {
       }
     }
 
-
   // If it has crushed on other sprites
   for (int i = 0; i < spritesCount; i++) {
     bool self = false;
     for (LinkNode* p = spriteSnake[i]->sprites->head; p; p = p->nxt) {
       Sprite* other = p->element;
       if (other != sprite) {
-        SDL_Rect otherBox = useAnimationBox ? getSpriteAnimationBox(other) : getSpriteFeetBox(other);
+        SDL_Rect otherBox = useAnimationBox ? getSpriteAnimationBox(other)
+                                            : getSpriteFeetBox(other);
         if (RectRectCross(&box, &otherBox)) {
           if ((self && loose) || (p->pre && p->pre->element == sprite))
             ;
@@ -631,7 +609,8 @@ void invokeWeaponBuff(Snake* src, Weapon* weapon, Snake* dest, int damage) {
   double random;
   for (int i = BUFF_BEGIN; i < BUFF_END; i++) {
     random = randDouble();
-    if (src && src->team == GAME_MONSTERS_TEAM) random *= GAME_MONSTERS_WEAPON_BUFF_ADJUST;
+    if (src && src->team == GAME_MONSTERS_TEAM)
+      random *= GAME_MONSTERS_WEAPON_BUFF_ADJUST;
     if (random < weapon->effects[i].chance) switch (i) {
         case BUFF_FROZEN:
           freezeSnake(dest, weapon->effects[i].duration);
@@ -963,7 +942,8 @@ ATTACK_END:
     }
     if (weapon->wp == WEAPON_SWORD_POINT || weapon->wp == WEAPON_SWORD_RANGE)
       playAudio(weapon->deathAudio);
-    else playAudio(weapon->birthAudio);
+    else
+      playAudio(weapon->birthAudio);
     sprite->lastAttack = renderFrames;
   }
 }
@@ -977,9 +957,11 @@ bool isWin() {
   return spriteSnake[0]->num >= GAME_WIN_NUM;
 }
 void setTerm(int s) {
-  stopBgm(); 
-  if (s == 0) playAudio(AUDIO_WIN);
-  else playAudio(AUDIO_LOSE);
+  stopBgm();
+  if (s == 0)
+    playAudio(AUDIO_WIN);
+  else
+    playAudio(AUDIO_LOSE);
   status = s;
   willTerm = true;
   termCount = RENDER_TERM_COUNT;
@@ -991,7 +973,7 @@ void pauseGame() {
   const char msg[] = "Paused";
   extern SDL_Color WHITE;
   Text* text = createText(msg, WHITE);
-  renderCenteredText(text, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 1);
+  renderCenteredText(text, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 1);
   SDL_RenderPresent(renderer);
   destroyText(text);
   SDL_Event e;
@@ -1062,11 +1044,14 @@ bool handleLocalKeypress() {
   return quit;
 }
 
-int gameLoop() {
+void handleLanKeypress() {}
+
+int gameLoop(bool lan) {
   // int posx = 0, posy = SCREEN_HEIGHT / 2;
   // Game loop
   for (bool quit = 0; !quit;) {
     quit = handleLocalKeypress();
+    if (lan) handleLanKeypress();
 
     updateMap();
 
@@ -1104,8 +1089,7 @@ int gameLoop() {
     if (willTerm) {
       termCount--;
       if (!termCount) break;
-    }
-    else {
+    } else {
       for (int i = 0; i < playersCount; i++) {
         if (!spriteSnake[i]->sprites->head) {
           setTerm(1);

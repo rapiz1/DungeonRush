@@ -2,6 +2,8 @@
 #define SNAKE_RENDER_H_
 #include <SDL2/SDL.h>
 #include "types.h"
+#include "player.h"
+#include "sprite.h"
 
 #define ANIMATION_LINK_LIST_NUM 16
 #define RENDER_LIST_MAP_ID 0

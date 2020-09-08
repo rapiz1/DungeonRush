@@ -60,7 +60,7 @@ bool moveCursor(int optsNum) {
 }
 int chooseOptions(int optionsNum, Text** options) {
   cursorPos = 0;
-  Snake* player = createSnake(2, 0);
+  Snake* player = createSnake(2, 0, LOCAL);
   appendSpriteToSnake(player, SPRITE_KNIGHT, SCREEN_WIDTH / 2,
                       SCREEN_HEIGHT / 2, UP);
   int lineGap = FONT_SIZE + FONT_SIZE / 2,
