@@ -86,6 +86,7 @@ void clearRenderer() {
   for (int i = 0; i < ANIMATION_LINK_LIST_NUM; i++) {
     destroyAnimationsByLinkList(&animationsList[i]);
   }
+  SDL_RenderClear(renderer);
 }
 void renderCstrCenteredText(const char* str, int x, int y, double scale) {
   Text* text = malloc(sizeof(Text));
@@ -97,12 +98,12 @@ void renderCstrText(const char* str, int x, int y, double scale) {
   initText(text, str, WHITE);
   renderText(text, x, y, scale);
 }
-void renderText(Text* text, int x, int y, double scale) {
+void renderText(const Text* text, int x, int y, double scale) {
   SDL_Rect dst = {x, y, (int)(text->width * scale + 0.5),
                   (int)(text->height * scale + 0.5)};
   SDL_RenderCopy(renderer, text->origin, NULL, &dst);
 }
-SDL_Point renderCenteredText(Text* text, int x, int y, double scale) {
+SDL_Point renderCenteredText(const Text* text, int x, int y, double scale) {
   int width = text->width * scale + 0.5;
   int height = text->height * scale + 0.5;
   SDL_Rect dst = {x - width / 2, y - height / 2, width, height};

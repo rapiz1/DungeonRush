@@ -29,8 +29,8 @@
 // UI
 #define UI_COUNTDOWN_BAR_WIDTH 128
 
-void renderText(Text* text, int x, int y, double);
-SDL_Point renderCenteredText(Text* text, int x, int y, double);
+void renderText(const Text* text, int x, int y, double);
+SDL_Point renderCenteredText(const Text* text, int x, int y, double);
 void setEffect(Texture* texture, Effect* effect);
 void unsetEffect(Texture* texture);
 Animation* createAndPushAnimation(LinkList* list, Texture* texture,
