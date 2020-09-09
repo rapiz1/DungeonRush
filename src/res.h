@@ -178,4 +178,6 @@ bool loadTextset();
 void initCommonEffects();
 void initCommonAnimations();
 void initCommonSprites();
+
+extern SDL_Renderer* renderer;
 #endif

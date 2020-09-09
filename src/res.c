@@ -286,6 +286,7 @@ void cleanup() {
   TTF_Quit();
   IMG_Quit();
   Mix_CloseAudio();
+  SDLNet_Quit();
   SDL_Quit();
 }
 void initCommonEffects() {

@@ -11,3 +11,7 @@ Exit
 Normal
 Hard
 Insane
+Local
+Lan
+Host a game
+Join a game

@@ -2,6 +2,8 @@
 
 #include "render.h"
 
+#include <string.h>
+
 void initSprite(Sprite* model, Sprite* self, int x, int y) {
   memcpy(self, model, sizeof(Sprite));
   self->x = x;

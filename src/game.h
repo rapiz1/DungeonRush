@@ -33,10 +33,10 @@
 // Win
 
 void pushMapToRender();
-Score** startGame(int);
-void initGame(int);
+Score** startGame(int localPlayers, int remotePlayers, bool localFirst);
+void initGame(int localPlayers, int remotePlayers, bool localFirst);
 void destroyGame(int);
-int gameLoop(bool);
+int gameLoop();
 void updateAnimationOfSprite(Sprite* self);
 void updateAnimationOfBlock(Block* self);
 // this shuold only be used to create once or permant animation

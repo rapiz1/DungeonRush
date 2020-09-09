@@ -1,6 +1,8 @@
 #include "game.h"
 
 #include <SDL2/SDL.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <stdbool.h>
 #include <unistd.h>
@@ -10,6 +12,7 @@
 #include "bullet.h"
 #include "helper.h"
 #include "map.h"
+#include "net.h"
 #include "render.h"
 #include "res.h"
 #include "sprite.h"
@@ -21,7 +24,6 @@
 #endif
 extern const int SCALLING_FACTOR;
 extern const int n, m;
-extern SDL_Renderer* renderer;
 
 extern Texture textures[TEXTURES_SIZE];
 const int MOVE_STEP = 2;
@@ -93,18 +95,19 @@ void setLevel(int level) {
   spritesSetting += stage / 2 * (level + 1);
   bossSetting += stage / 3;
 }
-Score** startGame(int players) {
-  Score** scores = malloc(sizeof(Score*) * players);
-  for (int i = 0; i < players; i++) {
+
+Score** startGame(int localPlayers, int remotePlayers, bool localFirst) {
+  Score** scores = malloc(sizeof(Score*) * localPlayers);
+  for (int i = 0; i < localPlayers; i++) {
     scores[i] = createScore();
   }
   int status;
   stage = 0;
   do {
-    initGame(players);
+    initGame(localPlayers, remotePlayers, localFirst);
     setLevel(gameLevel);
-    status = gameLoop(false);
-    for (int i = 0; i < players; i++)
+    status = gameLoop();
+    for (int i = 0; i < localPlayers; i++)
       addScore(scores[i], spriteSnake[i]->score);
     destroyGame(status);
     stage++;
@@ -157,10 +160,10 @@ void appendSpriteToSnake(
   if (snake->buffs[BUFF_DEFFENCE])
     shieldSprite(sprite, snake->buffs[BUFF_DEFFENCE]);
 }
-void initPlayer() {
+void initPlayer(int playerType) {
   spritesCount++;
   Snake* p = spriteSnake[playersCount] =
-      createSnake(MOVE_STEP, playersCount, LOCAL);
+      createSnake(MOVE_STEP, playersCount, playerType);
   appendSpriteToSnake(p, SPRITE_KNIGHT, SCREEN_WIDTH / 2,
                       SCREEN_HEIGHT / 2 + playersCount * 2 * UNIT, RIGHT);
   playersCount++;
@@ -466,7 +469,7 @@ void attackUpSnkae(Snake* snake, int duration) {
   Initialize and deinitialize game and snake
 */
 
-void initGame(int playersNum) {
+void initGame(int localPlayers, int remotePlayers, bool localFirst) {
   randomBgm();
   status = 0;
   termCount = willTerm = 0;
@@ -475,8 +478,13 @@ void initGame(int playersNum) {
   initCountDownBar();
 
   // create default hero at (w/2, h/2) (as well push ani)
-  for (int i = 0; i < playersNum; i++) {
-    initPlayer();
+  for (int i = 0; i < localPlayers + remotePlayers; i++) {
+    int playerType = LOCAL;
+    if (localFirst)
+      playerType = i < localPlayers ? LOCAL : REMOTE;
+    else
+      playerType = i < remotePlayers ? REMOTE : LOCAL;
+    initPlayer(playerType);
     shieldSnake(spriteSnake[i], 300);
   }
   initInfo();
@@ -514,7 +522,7 @@ void destroyGame(int status) {
     msg = "Game Over";
   extern SDL_Color WHITE;
   Text* text = createText(msg, WHITE);
-  renderCenteredText(text, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 1);
+  renderCenteredText(text, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 2);
   destroyText(text);
   SDL_RenderPresent(renderer);
   sleep(RENDER_GAMEOVER_DURATION);
@@ -953,10 +961,12 @@ void makeSnakeAttack(Snake* snake) {
     makeSpriteAttack(p->element, snake);
 }
 bool isWin() {
-  if (playersCount != 1) return 0;
+  if (playersCount != 1) return false;
   return spriteSnake[0]->num >= GAME_WIN_NUM;
 }
-void setTerm(int s) {
+
+typedef enum { STAGE_CLEAR, GAME_OVER } GameStatus;
+void setTerm(GameStatus s) {
   stopBgm();
   if (s == 0)
     playAudio(AUDIO_WIN);
@@ -989,69 +999,96 @@ void pauseGame() {
   playAudio(AUDIO_BUTTON1);
 }
 
+int arrowsToDirection(int keyValue) {
+  switch (keyValue) {
+    case SDLK_LEFT:
+      return LEFT;
+      break;
+    case SDLK_RIGHT:
+      return RIGHT;
+      break;
+    case SDLK_UP:
+      return UP;
+      break;
+    case SDLK_DOWN:
+      return DOWN;
+      break;
+  }
+  return -1;
+}
+
+int wasdToDirection(int keyValue) {
+  switch (keyValue) {
+    case SDLK_a:
+      return LEFT;
+      break;
+    case SDLK_d:
+      return RIGHT;
+      break;
+    case SDLK_w:
+      return UP;
+      break;
+    case SDLK_s:
+      return DOWN;
+      break;
+  }
+  return -1;
+}
+
 bool handleLocalKeypress() {
   static SDL_Event e;
   bool quit = false;
   while (SDL_PollEvent(&e)) {
     if (e.type == SDL_QUIT) {
       quit = true;
-      setTerm(1);
+      setTerm(GAME_OVER);
     } else if (e.type == SDL_KEYDOWN) {
       int keyValue = e.key.keysym.sym;
-      Snake* player = spriteSnake[0];
-      if (!player->buffs[BUFF_FROZEN] && player->sprites->head != NULL)
-        switch (keyValue) {
-          case SDLK_LEFT:
-          case SDLK_h:
-            changeSpriteDirection(player->sprites->head, LEFT);
-            break;
-          case SDLK_RIGHT:
-          case SDLK_l:
-            changeSpriteDirection(player->sprites->head, RIGHT);
-            break;
-          case SDLK_UP:
-          case SDLK_k:
-            changeSpriteDirection(player->sprites->head, UP);
-            break;
-          case SDLK_DOWN:
-          case SDLK_j:
-            changeSpriteDirection(player->sprites->head, DOWN);
-            break;
-          case SDLK_ESCAPE:
-            pauseGame();
-            break;
-        }
-      if (playersCount > 1) {
-        player = spriteSnake[1];
-        if (!player->buffs[BUFF_FROZEN] && player->sprites->head)
-          switch (keyValue) {
-            case SDLK_a:
-              changeSpriteDirection(player->sprites->head, LEFT);
-              break;
-            case SDLK_d:
-              changeSpriteDirection(player->sprites->head, RIGHT);
-              break;
-            case SDLK_w:
-              changeSpriteDirection(player->sprites->head, UP);
-              break;
-            case SDLK_s:
-              changeSpriteDirection(player->sprites->head, DOWN);
-              break;
+      if (keyValue == SDLK_ESCAPE)
+        pauseGame();
+      for (int id = 0; id <= 1 && id < playersCount; id++) {
+        Snake* player = spriteSnake[id];
+        if (player->playerType == LOCAL) {
+          if (!player->buffs[BUFF_FROZEN] && player->sprites->head != NULL) {
+              int direction = id == 0 ? arrowsToDirection(keyValue)
+                                    : wasdToDirection(keyValue);
+              if (direction >= 0) {
+                sendPlayerMovePacket(id, direction);
+                changeSpriteDirection(player->sprites->head, direction);
+              }
           }
+        }
       }
     }
   }
   return quit;
 }
 
-void handleLanKeypress() {}
+void handleLanKeypress() {
+  static LanPacket packet;
+  int status = recvLanPacket(&packet);
+  if (!status) return; // nop
+  unsigned type = packet.header.type;
+  if (type == HEADER_PLAYERMOVE) {
+    PlayerMovePacket* playerMovePacket = (PlayerMovePacket*)(&packet);
+    Snake* player = spriteSnake[playerMovePacket->playerId];
+    int direction = playerMovePacket->direction;
+    fprintf(stderr, "recv: player move, %d, %d\n", playerMovePacket->playerId, direction);
+    if (player->sprites->head) changeSpriteDirection(player->sprites->head, direction);
+  }
+  else if (type == HEADER_GAMEOVER) {
+    fprintf(stderr, "recv: game over, %d\n", -1);
+    setTerm(GAME_OVER);
+  }
+}
 
-int gameLoop(bool lan) {
+int gameLoop() {
   // int posx = 0, posy = SCREEN_HEIGHT / 2;
   // Game loop
   for (bool quit = 0; !quit;) {
     quit = handleLocalKeypress();
-    if (lan) handleLanKeypress();
+    if (quit) sendGameOverPacket(3);
+    if (lanClientSocket != NULL) handleLanKeypress();
 
     updateMap();
 
@@ -1090,14 +1127,17 @@ int gameLoop(bool lan) {
       termCount--;
       if (!termCount) break;
     } else {
+      int alivePlayer = -1;
       for (int i = 0; i < playersCount; i++) {
         if (!spriteSnake[i]->sprites->head) {
-          setTerm(1);
+          setTerm(GAME_OVER);
+          sendGameOverPacket(alivePlayer);
           break;
-        }
+        } else
+          alivePlayer = i;
       }
       if (isWin()) {
-        setTerm(0);
+        setTerm(STAGE_CLEAR);
       }
     }
   }
