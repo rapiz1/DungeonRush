@@ -1,9 +1,13 @@
 #include "weapon.h"
+
 #include "render.h"
 #include "res.h"
 #include "types.h"
+
+#include <stdio.h>
+
 extern Texture textures[RES_HALO_EXPLOSION2];
-extern Mix_Chunk *sounds[AUDIO_SOUND_SIZE];
+extern Mix_Chunk* sounds[AUDIO_SOUND_SIZE];
 
 Weapon weapons[WEAPONS_SIZE];
 void initWeapon(Weapon* self, int birthTextureId, int deathTextureId,
@@ -12,20 +16,23 @@ void initWeapon(Weapon* self, int birthTextureId, int deathTextureId,
   Animation* deathAni = NULL;
   Animation* flyAni = NULL;
   if (birthTextureId != -1) {
-    birthAni =  createAnimation(&textures[birthTextureId], NULL, LOOP_ONCE,
-                  SPRITE_ANIMATION_DURATION, 0, 0, SDL_FLIP_NONE, 0, AT_CENTER);
+    birthAni = createAnimation(&textures[birthTextureId], NULL, LOOP_ONCE,
+                               SPRITE_ANIMATION_DURATION, 0, 0, SDL_FLIP_NONE,
+                               0, AT_CENTER);
   }
   if (deathTextureId != -1) {
-    deathAni =  createAnimation(&textures[deathTextureId], NULL, LOOP_ONCE,
-                  SPRITE_ANIMATION_DURATION, 0, 0, SDL_FLIP_NONE, 0,
-                  AT_BOTTOM_CENTER);
+    deathAni = createAnimation(&textures[deathTextureId], NULL, LOOP_ONCE,
+                               SPRITE_ANIMATION_DURATION, 0, 0, SDL_FLIP_NONE,
+                               0, AT_BOTTOM_CENTER);
   }
   if (flyTextureId != -1) {
-    flyAni =  createAnimation(&textures[flyTextureId], NULL, LOOP_INFI,
-                  SPRITE_ANIMATION_DURATION, 0, 0, SDL_FLIP_NONE, 0, AT_CENTER);
+    flyAni = createAnimation(&textures[flyTextureId], NULL, LOOP_INFI,
+                             SPRITE_ANIMATION_DURATION, 0, 0, SDL_FLIP_NONE, 0,
+                             AT_CENTER);
   }
-  *self = (Weapon){WEAPON_SWORD_POINT, 32 * 2,   40,    10, 60, 6,
-                   birthAni,           deathAni, flyAni, -1, AUDIO_CLAW_HIT};
+  *self = (Weapon){
+      WEAPON_SWORD_POINT, 32 * 2, 40, 10, 60, 6, birthAni, deathAni, flyAni, -1,
+      AUDIO_CLAW_HIT};
 }
 void initWeapons() {
   Weapon* now;
@@ -88,7 +95,8 @@ void initWeapons() {
   now->birthAudio = AUDIO_LIGHT_SHOOT;
   now->deathAudio = AUDIO_ARROW_HIT;
 
-  initWeapon(now = &weapons[WEAPON_POWERFUL_BOW], -1, RES_HALO_EXPLOSION2, RES_ARROW);
+  initWeapon(now = &weapons[WEAPON_POWERFUL_BOW], -1, RES_HALO_EXPLOSION2,
+             RES_ARROW);
   now->wp = WEAPON_GUN_POINT;
   now->gap = 60;
   now->damage = 25;
@@ -131,13 +139,13 @@ void initWeapons() {
   initWeapon(now = &weapons[WEAPON_SOLID], -1, RES_SOLIDFX, -1);
   now->deathAni->scaled = false;
   now->deathAni->angle = -1;
-  now->effects[BUFF_SLOWDOWN]=(WeaponBuff){0.3, 180};
+  now->effects[BUFF_SLOWDOWN] = (WeaponBuff){0.3, 180};
 
   initWeapon(now = &weapons[WEAPON_SOLID_GREEN], -1, RES_SOLID_GREENFX, -1);
   now->shootRange = 96;
   now->deathAni->scaled = false;
   now->deathAni->angle = -1;
-  now->effects[BUFF_SLOWDOWN]=(WeaponBuff){0.3, 180};
+  now->effects[BUFF_SLOWDOWN] = (WeaponBuff){0.3, 180};
 
   initWeapon(now = &weapons[WEAPON_SOLID_CLAW], -1, RES_SOLID_GREENFX, -1);
   now->wp = WEAPON_SWORD_RANGE;
@@ -146,7 +154,7 @@ void initWeapons() {
   now->deathAni->scaled = false;
   now->deathAni->angle = -1;
   now->deathAudio = AUDIO_CLAW_HIT_HEAVY;
-  now->effects[BUFF_SLOWDOWN]=(WeaponBuff){0.7, 60};
+  now->effects[BUFF_SLOWDOWN] = (WeaponBuff){0.7, 60};
 
   initWeapon(now = &weapons[WEAPON_ICEPICK], -1, RES_ICESHATTER, RES_ICEPICK);
   now->wp = WEAPON_GUN_RANGE;
@@ -161,7 +169,8 @@ void initWeapons() {
   now->effects[BUFF_FROZEN] = (WeaponBuff){0.2, 60};
   now->birthAudio = AUDIO_ICE_SHOOT;
 
-  initWeapon(now = &weapons[WEAPON_PURPLE_BALL], -1, RES_PURPLE_EXP, RES_PURPLE_BALL);
+  initWeapon(now = &weapons[WEAPON_PURPLE_BALL], -1, RES_PURPLE_EXP,
+             RES_PURPLE_BALL);
   now->wp = WEAPON_GUN_RANGE;
   now->damage = 20;
   now->effectRange = 50;
@@ -175,7 +184,8 @@ void initWeapons() {
   now->birthAudio = AUDIO_ICE_SHOOT;
   now->deathAudio = AUDIO_ARROW_HIT;
 
-  initWeapon(now = &weapons[WEAPON_PURPLE_STAFF], -1, RES_PURPLE_EXP, RES_PURPLE_BALL);
+  initWeapon(now = &weapons[WEAPON_PURPLE_STAFF], -1, RES_PURPLE_EXP,
+             RES_PURPLE_BALL);
   now->wp = WEAPON_GUN_POINT_MULTI;
   now->damage = 45;
   now->effectRange = 50;
@@ -205,7 +215,7 @@ void initWeapons() {
   now->effects[BUFF_FROZEN] = (WeaponBuff){0.6, 80};
   now->deathAudio = AUDIO_SWORD_HIT;
 
-  #ifdef DBG
+#ifdef DBG
   puts("weapon done");
-  #endif
+#endif
 }

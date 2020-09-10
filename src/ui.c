@@ -11,6 +11,11 @@
 #include "types.h"
 #include "ui.h"
 #include "audio.h"
+#include "text.h"
+#include "net.h"
+
+#include <stdlib.h>
+#include <string.h>
 
 extern LinkList animationsList[];
 extern bool hasMap[MAP_SIZE][MAP_SIZE];
@@ -60,7 +65,7 @@ bool moveCursor(int optsNum) {
 }
 int chooseOptions(int optionsNum, Text** options) {
   cursorPos = 0;
-  Snake* player = createSnake(2, 0);
+  Snake* player = createSnake(2, 0, LOCAL);
   appendSpriteToSnake(player, SPRITE_KNIGHT, SCREEN_WIDTH / 2,
                       SCREEN_HEIGHT / 2, UP);
   int lineGap = FONT_SIZE + FONT_SIZE / 2,
@@ -98,10 +103,115 @@ bool chooseLevelUi() {
   int opt = chooseOptions(optsNum, opts);
   if (opt != optsNum)
     setLevel(opt);
-  blackout();
   clearRenderer();
   return opt != optsNum;
 }
+
+void launchLocalGame(int localPlayerNum) {
+  Score** scores = startGame(localPlayerNum, 0, true);
+  rankListUi(localPlayerNum, scores);
+  for (int i = 0; i < localPlayerNum; i++) updateLocalRanklist(scores[i]);
+  destroyRanklist(localPlayerNum, scores);
+}
+int rangeOptions(int start, int end) {
+  int optsNum = end - start + 1;
+  Text** opts = malloc(sizeof(Text*)*optsNum);
+  for (int i = 0; i < optsNum; i++) opts[i] = texts + i + start;
+  int opt = chooseOptions(optsNum, opts);
+  free(opts);
+  return opt;
+}
+
+char* inputUi() {
+  const int MAX_LEN = 30;
+
+  baseUi(20, 10);
+
+
+  char* ret = malloc(MAX_LEN);
+  int retLen = 0;
+  memset(ret, 0, MAX_LEN);
+
+  extern SDL_Color WHITE;
+  Text* text = NULL;
+  Text* placeholder = createText("Enter IP", WHITE);
+
+  SDL_StartTextInput();
+  SDL_Event e;
+  bool quit = false;
+  bool finished = false;
+  while (!quit && !finished) {
+    const Text* displayText = NULL;
+    if (ret[0]) {
+      if (text)
+        setText(text, ret);
+      else text = createText(ret, WHITE);
+      displayText = text;
+    }
+    else {
+      displayText = placeholder;
+    }
+    renderCenteredText(displayText, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 2);
+    SDL_RenderPresent(renderer);
+    clearRenderer();
+
+    while (SDL_PollEvent(&e)) {
+      if (e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)) {
+        quit = true;
+        break;
+      }
+      else if (e.type == SDL_KEYDOWN) {
+        if (e.key.keysym.sym == SDLK_BACKSPACE) {
+          if (retLen)
+            ret[--retLen] = 0;
+        }
+        else if (e.key.keysym.sym == SDLK_RETURN) {
+          finished = true;
+          break;
+        }
+      }
+      else if (e.type == SDL_TEXTINPUT) {
+        strcpy(ret + retLen, e.text.text);
+        retLen += strlen(e.text.text);
+      }
+    }
+  }
+
+  SDL_StopTextInput();
+  destroyText(placeholder);
+  destroyText(text);
+
+  if (quit) {
+    free(ret);
+    return NULL;
+  }
+
+  return ret;
+}
+
+void launchLanGame() {
+  baseUi(10, 10);
+  int opt = rangeOptions(LAN_HOSTGAME, LAN_JOINGAME);
+  blackout();
+  clearRenderer();
+  if (opt == 0) {
+    hostGame();
+  }
+  else {
+    char* ip = inputUi();
+    if (ip == NULL) return;
+    joinGame(ip, LAN_LISTEN_PORT);
+    free(ip);
+  }
+}
+
+int chooseOnLanUi() {
+  baseUi(10, 10);
+  int opt = rangeOptions(MULTIPLAYER_LOCAL, MULTIPLAYER_LAN);
+  clearRenderer();
+  return opt;
+}
+
 void mainUi() {
   baseUi(30, 12);
   playBgm(0);
@@ -206,14 +316,21 @@ void mainUi() {
 
   blackout();
   clearRenderer();
+  int lan;
   switch (opt) {
     case 0:
-    case 1:
       if (!chooseLevelUi()) break;
-      Score** scores = startGame(opt + 1);
-      rankListUi(opt + 1, scores);
-      for (int i = 0; i < opt + 1; i++) updateLocalRanklist(scores[i]);
-      destroyRanklist(opt + 1, scores);
+      launchLocalGame(1);
+      break;
+    case 1:
+      lan = chooseOnLanUi();
+      if (lan == 0) {
+        if (!chooseLevelUi()) break;
+        launchLocalGame(2);
+      }
+      else if (lan == 1) {
+        launchLanGame();
+      }
       break;
     case 2:
       localRankListUi();

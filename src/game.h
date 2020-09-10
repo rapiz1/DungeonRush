@@ -1,6 +1,8 @@
 #ifndef SNAKE_GAME_H_
 #define SNAKE_GAME_H_
 #include "types.h"
+#include "player.h"
+#include "sprite.h"
 
 // Control
 #define SPRITES_MAX_NUM 1024
@@ -31,8 +33,8 @@
 // Win
 
 void pushMapToRender();
-Score** startGame(int);
-void initGame(int);
+Score** startGame(int localPlayers, int remotePlayers, bool localFirst);
+void initGame(int localPlayers, int remotePlayers, bool localFirst);
 void destroyGame(int);
 int gameLoop();
 void updateAnimationOfSprite(Sprite* self);
@@ -44,7 +46,6 @@ bool crushVerdict(Sprite* sprite, bool loose, bool useAnimationBox);
 void moveSprite(Sprite*, int);
 void moveSnake(Snake* snake);
 void shieldSprite(Sprite* sprite, int duration);
-Snake* createSnake(int step, int team);
 void appendSpriteToSnake(
     Snake* snake, int sprite_id, int x, int y,
     Direction direcion);

@@ -1,6 +1,9 @@
 #include "types.h"
+
 #include <SDL2/SDL_ttf.h>
+#include <stdlib.h>
 #include <stdbool.h>
+
 #include "helper.h"
 #include "render.h"
 
@@ -184,7 +187,7 @@ void destroyLinkList(LinkList* self) {
   free(self);
 }
 void destroyAnimationsByLinkList(LinkList* list) {
-  for (LinkNode* p = list->head, *nxt; p; p = nxt) {
+  for (LinkNode *p = list->head, *nxt; p; p = nxt) {
     nxt = p->nxt;
     destroyAnimation(p->element);
     removeLinkNode(list, p);
@@ -210,44 +213,22 @@ void changeSpriteDirection(LinkNode* self, Direction newDirection) {
         (PositionBuffer){sprite->x, sprite->y, sprite->direction};
   }
 }
-Bullet* createBullet(Snake* owner, Weapon* parent, int x, int y,
-                     double rad, int team, Animation* ani) {
-  Bullet* bullet = malloc(sizeof(Bullet));
-  *bullet = (Bullet){parent, x, y, team, owner, rad, malloc(sizeof(Animation))};
-  copyAnimation(ani, bullet->ani);
-  bullet->ani->x = x;
-  bullet->ani->y = y;
-  bullet->ani->angle = rad * 180 / PI;
-  return bullet;
-}
-void moveBullet(Bullet* bullet) {
-  int speed = bullet->parent->bulletSpeed;
-  bullet->x += cos(bullet->rad) * speed;
-  bullet->y += sin(bullet->rad) * speed;
-  bullet->ani->x = bullet->x;
-  bullet->ani->y = bullet->y;
-}
-void destroyBullet(Bullet* bullet) {
-  free(bullet);
-}
-void initScore(Score* score) {
-  memset(score, 0, sizeof(Score));
-}
+void initScore(Score* score) { memset(score, 0, sizeof(Score)); }
 Score* createScore() {
   Score* score = malloc(sizeof(Score));
   initScore(score);
   return score;
 }
-void destroyScore(Score* self) {
-  free(self);
-}
+void destroyScore(Score* self) { free(self); }
 void calcScore(Score* self) {
   if (!self->got) {
     self->rank = 0;
     return;
   }
   extern int gameLevel;
-  self->rank = (double)self->damage/self->got + (double)self->stand/self->got + self->got*50 + self->killed*100;
+  self->rank = (double)self->damage / self->got +
+               (double)self->stand / self->got + self->got * 50 +
+               self->killed * 100;
   self->rank *= gameLevel + 1;
 }
 void addScore(Score* a, Score* b) {

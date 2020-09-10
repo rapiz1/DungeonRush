@@ -1,10 +1,11 @@
+#include "render.h"
+
 #include <SDL2/SDL.h>
 #include <stdlib.h>
 
 #include "ai.h"
 #include "game.h"
 #include "helper.h"
-#include "render.h"
 #include "res.h"
 #include "types.h"
 
@@ -43,12 +44,8 @@ void blacken(int duration) {
     SDL_RenderPresent(renderer);
   }
 }
-void blackout() {
-  blacken(RENDER_BLACKOUT_DURATION);
-}
-void dim() {
-  blacken(RENDER_DIM_DURATION);
-}
+void blackout() { blacken(RENDER_BLACKOUT_DURATION); }
+void dim() { blacken(RENDER_DIM_DURATION); }
 void initCountDownBar() {
   createAndPushAnimation(
       &animationsList[RENDER_LIST_UI_ID], &textures[RES_SLIDER], NULL,
@@ -59,11 +56,14 @@ void initCountDownBar() {
 }
 void initInfo() {
   extern int stage;
-  char buf[1<<8];
+  char buf[1 << 8];
   sprintf(buf, "Stage:%3d", stage);
-  if (stageText) setText(stageText, buf);
-  else stageText = createText(buf, WHITE);
-  for (int i = 0; i < playersCount; i++) scoresText[i] = createText("placeholder", WHITE);
+  if (stageText)
+    setText(stageText, buf);
+  else
+    stageText = createText(buf, WHITE);
+  for (int i = 0; i < playersCount; i++)
+    scoresText[i] = createText("placeholder", WHITE);
   taskText = createText("placeholder", WHITE);
 }
 void initRenderer() {
@@ -86,6 +86,7 @@ void clearRenderer() {
   for (int i = 0; i < ANIMATION_LINK_LIST_NUM; i++) {
     destroyAnimationsByLinkList(&animationsList[i]);
   }
+  SDL_RenderClear(renderer);
 }
 void renderCstrCenteredText(const char* str, int x, int y, double scale) {
   Text* text = malloc(sizeof(Text));
@@ -97,12 +98,12 @@ void renderCstrText(const char* str, int x, int y, double scale) {
   initText(text, str, WHITE);
   renderText(text, x, y, scale);
 }
-void renderText(Text* text, int x, int y, double scale) {
+void renderText(const Text* text, int x, int y, double scale) {
   SDL_Rect dst = {x, y, (int)(text->width * scale + 0.5),
                   (int)(text->height * scale + 0.5)};
   SDL_RenderCopy(renderer, text->origin, NULL, &dst);
 }
-SDL_Point renderCenteredText(Text* text, int x, int y, double scale) {
+SDL_Point renderCenteredText(const Text* text, int x, int y, double scale) {
   int width = text->width * scale + 0.5;
   int height = text->height * scale + 0.5;
   SDL_Rect dst = {x - width / 2, y - height / 2, width, height};
@@ -370,17 +371,21 @@ void renderInfo() {
   renderText(stageText, startX, startY, 1);
   startY += lineGap;
   for (int i = 0; i < playersCount; i++) {
-    char buf[1<<8];
+    char buf[1 << 8];
     calcScore(spriteSnake[i]->score);
-    sprintf(buf, "Player%d:%5d", i+1, (int)(spriteSnake[i]->score->rank + 0.5));
+    sprintf(buf, "Player%d:%5d", i + 1,
+            (int)(spriteSnake[i]->score->rank + 0.5));
     setText(scoresText[i], buf);
     renderText(scoresText[i], startX, startY, 1);
     startY += lineGap;
   }
   if (playersCount == 1) {
     extern int GAME_WIN_NUM;
-    char buf[1<<8];
-    sprintf(buf, "Find %d more heros!", GAME_WIN_NUM > spriteSnake[0]->num ? GAME_WIN_NUM - spriteSnake[0]->num : 0);
+    char buf[1 << 8];
+    sprintf(buf, "Find %d more heros!",
+            GAME_WIN_NUM > spriteSnake[0]->num
+                ? GAME_WIN_NUM - spriteSnake[0]->num
+                : 0);
     setText(taskText, buf);
     renderText(taskText, startX, startY, 1);
     startY += lineGap;

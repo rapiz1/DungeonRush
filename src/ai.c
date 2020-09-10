@@ -1,7 +1,9 @@
 #include "ai.h"
+
 #include "helper.h"
 #include "map.h"
 #include "res.h"
+#include "sprite.h"
 
 extern Block map[MAP_SIZE][MAP_SIZE];
 extern Item itemMap[MAP_SIZE][MAP_SIZE];
@@ -35,18 +37,19 @@ int trapVerdict(Sprite* sprite) {
   return ret;
 }
 int getPowerfulPlayer() {
-  int maxNum = 0, mxCount=0, id = -1;
+  int maxNum = 0, mxCount = 0, id = -1;
   for (int i = 0; i < playersCount; i++) {
     int num = spriteSnake[i]->num;
     if (num > maxNum) {
       maxNum = num;
       mxCount = 1;
       id = i;
-    }
-    else if (num == maxNum)
+    } else if (num == maxNum)
       mxCount++;
   }
-  return id != -1 && mxCount == 1 ? (spriteSnake[id]->num >= AI_LOCK_LIMIT ? id : -1) : -1;
+  return id != -1 && mxCount == 1
+             ? (spriteSnake[id]->num >= AI_LOCK_LIMIT ? id : -1)
+             : -1;
 }
 int balanceVerdict(Sprite* sprite, int id) {
   if (id == -1) return 0;
@@ -68,9 +71,9 @@ int testOneMove(Snake* snake, Direction direction) {
   for (int i = 1; i <= AI_PREDICT_STEPS; i++) {
     moveSprite(snakeHead, snake->moveStep * i);
     updateAnimationOfSprite(snakeHead);
-    crush -= crushVerdict(snakeHead, false, true)*500;
+    crush -= crushVerdict(snakeHead, false, true) * 500;
     trap -= trapVerdict(snakeHead);
-    playerBalance += balanceVerdict(snakeHead,powerful)*10;
+    playerBalance += balanceVerdict(snakeHead, powerful) * 10;
     // revoke position
     moveSprite(snakeHead, -snake->moveStep * i);
     updateAnimationOfSprite(snakeHead);
@@ -94,12 +97,18 @@ void AiInput(Snake* snake) {
     for (int i = LEFT; i <= DOWN; i++)
       if (i != currentDirection && (i ^ 1) != currentDirection) {
         int value = testOneMove(snake, i);
-        if (value >= originValue)
-          choices[count++] = (Choice){value, i};
+        if (value >= originValue) choices[count++] = (Choice){value, i};
       }
     if (count) {
-      qsort(choices, count, sizeof(Choice), compareChoiceByValue);
-      changeSpriteDirection(snake->sprites->head, choices[0].direction);
+      int maxValue = choices[0].value;
+      int nowChoice = 0;
+      for (int i = 1; i < 4; i++) {
+        if (choices[i].value > maxValue) {
+          maxValue = choices[i].value;
+          nowChoice = i;
+        }
+      }
+      changeSpriteDirection(snake->sprites->head, choices[nowChoice].direction);
     }
   }
 }
