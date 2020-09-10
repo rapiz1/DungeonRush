@@ -4,18 +4,25 @@
 #include "res.h"
 #include "game.h"
 #include "storage.h"
+#include "prng.h"
 
 #include <string.h>
 #include <stdlib.h>
+
+#define CASSERT(EXPRESSION) switch (0) {case 0: case (EXPRESSION):;}
 
 TCPsocket lanServerSocket;
 TCPsocket lanClientSocket;
 SDLNet_SocketSet socketSet;
 
+static void CHECK() {
+  CASSERT(sizeof(LanPacket) == 4);
+}
+
 HandShakePacket createHandShakePacket() {
   HandShakePacket handshakePacket;
   memset(&handshakePacket, 0, sizeof(handshakePacket));
-  handshakePacket.seed = (rand()*rand())&LAN_SEED_MASK;
+  handshakePacket.seed = (prngRand()*prngRand())&LAN_SEED_MASK;
   return handshakePacket;
 }
 
@@ -30,7 +37,7 @@ static inline void fillPacket(void* packet, unsigned payload) {
 void sendPlayerMovePacket(unsigned playerId, unsigned direction) {
   if (!lanClientSocket) return;
   static PlayerMovePacket p;
-  p.header.type = 1;
+  p.type = 1;
   p.playerId = playerId;
   p.direction = direction;
   static char buffer[4];
@@ -51,7 +58,7 @@ unsigned recvLanPacket(LanPacket* dest) {
 void sendGameOverPacket(unsigned playerId) {
   if (!lanClientSocket) return;
   static GameOverPacket p;
-  p.header.type = 2;
+  p.type = 2;
   p.playerId = playerId;
   static char buffer[4];
   SDLNet_Write32(packet2unsigned(&p), buffer);
@@ -122,7 +129,7 @@ void hostGame() {
 
   unsigned seed = handShakePacket.seed;
   fprintf(stderr, "seed: %d\n", seed);
-  srand(seed);
+  prngSrand(seed);
 
   setLevel(0);
   Score** score = startGame(1, 1, true);
@@ -185,7 +192,7 @@ void joinGame(const char* hostname, Uint16 port) {
     fillPacket(&handShakePacket, SDLNet_Read32(buffer));
 
     unsigned seed = handShakePacket.seed;
-    srand(seed);
+    prngSrand(seed);
     fprintf(stderr, "seed: %d\n", seed);
 
     // Start game

@@ -100,8 +100,15 @@ void AiInput(Snake* snake) {
         if (value >= originValue) choices[count++] = (Choice){value, i};
       }
     if (count) {
-      qsort(choices, count, sizeof(Choice), compareChoiceByValue);
-      changeSpriteDirection(snake->sprites->head, choices[0].direction);
+      int maxValue = choices[0].value;
+      int nowChoice = 0;
+      for (int i = 1; i < 4; i++) {
+        if (choices[i].value > maxValue) {
+          maxValue = choices[i].value;
+          nowChoice = i;
+        }
+      }
+      changeSpriteDirection(snake->sprites->head, choices[nowChoice].direction);
     }
   }
 }

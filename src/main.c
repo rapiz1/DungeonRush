@@ -11,7 +11,7 @@
 #endif
 
 int main(int argc, char** args) {
-  srand(time(NULL));
+  prngSrand(time(NULL));
   // Start up SDL and create window
   if (!init()) {
     printf("Failed to initialize!\n");

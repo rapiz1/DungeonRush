@@ -1,5 +1,8 @@
 #include "player.h"
 
+#include <stdlib.h>
+#include <string.h>
+
 void initSnake(Snake* snake, int step, int team, PlayerType playerType) {
   snake->moveStep = step;
   snake->team = team;

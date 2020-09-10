@@ -3,6 +3,9 @@
 #include "render.h"
 #include "res.h"
 #include "types.h"
+
+#include <stdio.h>
+
 extern Texture textures[RES_HALO_EXPLOSION2];
 extern Mix_Chunk* sounds[AUDIO_SOUND_SIZE];
 

@@ -1,16 +1,18 @@
 #include "helper.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "game.h"
 #include "res.h"
 #include "types.h"
+#include "prng.h"
 
 extern const int SCALLING_FACTOR;
 extern Texture textures[];
 bool inr(int x, int l, int r) { return x <= r && l <= x; }
-int randInt(int l, int r) { return rand() % (r - l + 1) + l; }
-double randDouble() { return (double)rand() / RAND_MAX; }
+int randInt(int l, int r) { return prngRand() % (r - l + 1) + l; }
+double randDouble() { return (double)prngRand() / PRNG_MAX; }
 int IntervalCalc(int l1, int r1, int l2, int r2) {
   return MAX(-MAX(l1, l2) + MIN(r1, r2), 0);
 }

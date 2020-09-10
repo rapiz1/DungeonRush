@@ -2,6 +2,7 @@
 
 #include "render.h"
 
+#include <stdlib.h>
 #include <string.h>
 
 void initSprite(Sprite* model, Sprite* self, int x, int y) {

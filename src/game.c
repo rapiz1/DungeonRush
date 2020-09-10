@@ -1068,7 +1068,7 @@ void handleLanKeypress() {
   static LanPacket packet;
   int status = recvLanPacket(&packet);
   if (!status) return; // nop
-  unsigned type = packet.header.type;
+  unsigned type = packet.type;
   if (type == HEADER_PLAYERMOVE) {
     PlayerMovePacket* playerMovePacket = (PlayerMovePacket*)(&packet);
     Snake* player = spriteSnake[playerMovePacket->playerId];

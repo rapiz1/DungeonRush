@@ -14,6 +14,9 @@
 #include "text.h"
 #include "net.h"
 
+#include <stdlib.h>
+#include <string.h>
+
 extern LinkList animationsList[];
 extern bool hasMap[MAP_SIZE][MAP_SIZE];
 extern Text texts[TEXTSET_SIZE];
