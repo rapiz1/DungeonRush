@@ -50,6 +50,7 @@ bool initText(Text* self, const char* str, SDL_Color color) {
       printf("Unable to create texture from rendered text! SDL Error: %s\n",
              SDL_GetError());
     } else {
+      if (self->origin) SDL_DestroyTexture(self->origin);
       self->origin = texture;
       return true;
     }
@@ -58,6 +59,7 @@ bool initText(Text* self, const char* str, SDL_Color color) {
 }
 Text* createText(const char* str, SDL_Color color) {
   Text* self = malloc(sizeof(Text));
+  self->origin = NULL;
   initText(self, str, color);
   return self;
 }
