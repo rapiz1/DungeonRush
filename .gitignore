@@ -1,5 +1,4 @@
 .vscode
-misc
 dist
 snake
 *.zip
@@ -8,3 +7,4 @@ archive
 dungeon_rush
 *.o
 *.gch
+build
