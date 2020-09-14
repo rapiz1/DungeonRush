@@ -1,7 +1,7 @@
 #ifndef SNAKE_RES_H_
 #define SNAKE_RES_H_
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include "types.h"
 
 #define PATH_LEN 1024

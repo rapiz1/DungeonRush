@@ -20,6 +20,7 @@ file(GLOB SRC src/*.c)
 add_executable(${BIN_NAME} ${SRC})
 
 target_include_directories(${BIN_NAME} PUBLIC src)
+target_include_directories(${BIN_NAME} PUBLIC ${SDL2_INCLUDE_DIR})
 target_link_libraries(${BIN_NAME} SDL2::Main SDL2::Net SDL2::Image SDL2::Mixer 
                       SDL2::TTF m)
 
