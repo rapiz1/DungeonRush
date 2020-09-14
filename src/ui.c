@@ -1,21 +1,21 @@
-#include <stdbool.h>
+#include "ui.h"
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
 
+#include "audio.h"
 #include "game.h"
 #include "helper.h"
 #include "map.h"
+#include "net.h"
 #include "render.h"
 #include "res.h"
 #include "storage.h"
-#include "types.h"
-#include "ui.h"
-#include "audio.h"
 #include "text.h"
-#include "net.h"
-
-#include <stdlib.h>
-#include <string.h>
+#include "types.h"
 
 extern LinkList animationsList[];
 extern bool hasMap[MAP_SIZE][MAP_SIZE];
@@ -101,8 +101,7 @@ bool chooseLevelUi() {
   Text** opts = malloc(sizeof(Text*) * optsNum);
   for (int i = 0; i < optsNum; i++) opts[i] = texts + i + 10;
   int opt = chooseOptions(optsNum, opts);
-  if (opt != optsNum)
-    setLevel(opt);
+  if (opt != optsNum) setLevel(opt);
   clearRenderer();
   return opt != optsNum;
 }
@@ -115,7 +114,7 @@ void launchLocalGame(int localPlayerNum) {
 }
 int rangeOptions(int start, int end) {
   int optsNum = end - start + 1;
-  Text** opts = malloc(sizeof(Text*)*optsNum);
+  Text** opts = malloc(sizeof(Text*) * optsNum);
   for (int i = 0; i < optsNum; i++) opts[i] = texts + i + start;
   int opt = chooseOptions(optsNum, opts);
   free(opts);
@@ -126,7 +125,6 @@ char* inputUi() {
   const int MAX_LEN = 30;
 
   baseUi(20, 10);
-
 
   char* ret = malloc(MAX_LEN);
   int retLen = 0;
@@ -145,32 +143,29 @@ char* inputUi() {
     if (ret[0]) {
       if (text)
         setText(text, ret);
-      else text = createText(ret, WHITE);
+      else
+        text = createText(ret, WHITE);
       displayText = text;
-    }
-    else {
+    } else {
       displayText = placeholder;
     }
-    renderCenteredText(displayText, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 2);
+    renderCenteredText(displayText, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 2);
     SDL_RenderPresent(renderer);
     clearRenderer();
 
     while (SDL_PollEvent(&e)) {
-      if (e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)) {
+      if (e.type == SDL_QUIT ||
+          (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)) {
         quit = true;
         break;
-      }
-      else if (e.type == SDL_KEYDOWN) {
+      } else if (e.type == SDL_KEYDOWN) {
         if (e.key.keysym.sym == SDLK_BACKSPACE) {
-          if (retLen)
-            ret[--retLen] = 0;
-        }
-        else if (e.key.keysym.sym == SDLK_RETURN) {
+          if (retLen) ret[--retLen] = 0;
+        } else if (e.key.keysym.sym == SDLK_RETURN) {
           finished = true;
           break;
         }
-      }
-      else if (e.type == SDL_TEXTINPUT) {
+      } else if (e.type == SDL_TEXTINPUT) {
         strcpy(ret + retLen, e.text.text);
         retLen += strlen(e.text.text);
       }
@@ -196,8 +191,7 @@ void launchLanGame() {
   clearRenderer();
   if (opt == 0) {
     hostGame();
-  }
-  else {
+  } else {
     char* ip = inputUi();
     if (ip == NULL) return;
     joinGame(ip, LAN_LISTEN_PORT);
@@ -215,71 +209,74 @@ int chooseOnLanUi() {
 void mainUi() {
   baseUi(30, 12);
   playBgm(0);
-  int startY = SCREEN_HEIGHT/2 - 70;
-  int startX = SCREEN_WIDTH/5 + 32;
-  createAndPushAnimation(&animationsList[RENDER_LIST_UI_ID], &textures[RES_TITLE], NULL, LOOP_INFI, 80, SCREEN_WIDTH/2, 280, SDL_FLIP_NONE, 0, AT_CENTER);
+  int startY = SCREEN_HEIGHT / 2 - 70;
+  int startX = SCREEN_WIDTH / 5 + 32;
+  createAndPushAnimation(&animationsList[RENDER_LIST_UI_ID],
+                         &textures[RES_TITLE], NULL, LOOP_INFI, 80,
+                         SCREEN_WIDTH / 2, 280, SDL_FLIP_NONE, 0, AT_CENTER);
   createAndPushAnimation(&animationsList[RENDER_LIST_SPRITE_ID],
                          &textures[RES_KNIGHT_M], NULL, LOOP_INFI,
-                         SPRITE_ANIMATION_DURATION, startX,
-                         startY, SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
-  createAndPushAnimation(&animationsList[RENDER_LIST_EFFECT_ID],
-                         &textures[RES_SwordFx], NULL, LOOP_INFI,
-                         SPRITE_ANIMATION_DURATION, startX + UI_MAIN_GAP_ALT*2,
-                         startY - 32, SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER)->scaled = false;
-  createAndPushAnimation(&animationsList[RENDER_LIST_SPRITE_ID],
-                         &textures[RES_CHORT], NULL, LOOP_INFI,
-                         SPRITE_ANIMATION_DURATION, startX + UI_MAIN_GAP_ALT*2,
-                         startY - 32, SDL_FLIP_HORIZONTAL, 0, AT_BOTTOM_CENTER);
+                         SPRITE_ANIMATION_DURATION, startX, startY,
+                         SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
+  createAndPushAnimation(
+      &animationsList[RENDER_LIST_EFFECT_ID], &textures[RES_SwordFx], NULL,
+      LOOP_INFI, SPRITE_ANIMATION_DURATION, startX + UI_MAIN_GAP_ALT * 2,
+      startY - 32, SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER)
+      ->scaled = false;
+  createAndPushAnimation(
+      &animationsList[RENDER_LIST_SPRITE_ID], &textures[RES_CHORT], NULL,
+      LOOP_INFI, SPRITE_ANIMATION_DURATION, startX + UI_MAIN_GAP_ALT * 2,
+      startY - 32, SDL_FLIP_HORIZONTAL, 0, AT_BOTTOM_CENTER);
 
-  startX += UI_MAIN_GAP_ALT*(6 + 2*randDouble());
-  startY += UI_MAIN_GAP*(1 + randDouble());
+  startX += UI_MAIN_GAP_ALT * (6 + 2 * randDouble());
+  startY += UI_MAIN_GAP * (1 + randDouble());
   createAndPushAnimation(&animationsList[RENDER_LIST_SPRITE_ID],
                          &textures[RES_ELF_M], NULL, LOOP_INFI,
-                         SPRITE_ANIMATION_DURATION, startX,
-                         startY, SDL_FLIP_HORIZONTAL, 0, AT_BOTTOM_CENTER);
+                         SPRITE_ANIMATION_DURATION, startX, startY,
+                         SDL_FLIP_HORIZONTAL, 0, AT_BOTTOM_CENTER);
   createAndPushAnimation(&animationsList[RENDER_LIST_EFFECT_ID],
                          &textures[RES_HALO_EXPLOSION2], NULL, LOOP_INFI,
-                         SPRITE_ANIMATION_DURATION, startX - UI_MAIN_GAP*1.5,
+                         SPRITE_ANIMATION_DURATION, startX - UI_MAIN_GAP * 1.5,
                          startY, SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
   createAndPushAnimation(&animationsList[RENDER_LIST_SPRITE_ID],
                          &textures[RES_ZOMBIE], NULL, LOOP_INFI,
-                         SPRITE_ANIMATION_DURATION, startX - UI_MAIN_GAP*1.5,
+                         SPRITE_ANIMATION_DURATION, startX - UI_MAIN_GAP * 1.5,
                          startY, SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
 
-  startX -= UI_MAIN_GAP_ALT*(1 + 2*randDouble());
-  startY += UI_MAIN_GAP*(2 + randDouble());
+  startX -= UI_MAIN_GAP_ALT * (1 + 2 * randDouble());
+  startY += UI_MAIN_GAP * (2 + randDouble());
   createAndPushAnimation(&animationsList[RENDER_LIST_SPRITE_ID],
                          &textures[RES_WIZZARD_M], NULL, LOOP_INFI,
-                         SPRITE_ANIMATION_DURATION, startX,
-                         startY, SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
+                         SPRITE_ANIMATION_DURATION, startX, startY,
+                         SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
   createAndPushAnimation(&animationsList[RENDER_LIST_EFFECT_ID],
                          &textures[RES_FIREBALL], NULL, LOOP_INFI,
                          SPRITE_ANIMATION_DURATION, startX + UI_MAIN_GAP,
                          startY, SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
 
-  startX += UI_MAIN_GAP_ALT*(18 + 4*randDouble());
-  startY -= UI_MAIN_GAP*(1 + 3*randDouble());
+  startX += UI_MAIN_GAP_ALT * (18 + 4 * randDouble());
+  startY -= UI_MAIN_GAP * (1 + 3 * randDouble());
   createAndPushAnimation(&animationsList[RENDER_LIST_SPRITE_ID],
                          &textures[RES_LIZARD_M], NULL, LOOP_INFI,
-                         SPRITE_ANIMATION_DURATION, startX,
-                         startY, SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
-  createAndPushAnimation(&animationsList[RENDER_LIST_EFFECT_ID],
-                         &textures[RES_CLAWFX2], NULL, LOOP_INFI,
-                         SPRITE_ANIMATION_DURATION, startX,
-                         startY - UI_MAIN_GAP + 16, SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
-  createAndPushAnimation(&animationsList[RENDER_LIST_SPRITE_ID],
-                         &textures[RES_MUDDY], NULL, LOOP_INFI,
-                         SPRITE_ANIMATION_DURATION, startX,
-                         startY - UI_MAIN_GAP, SDL_FLIP_HORIZONTAL, 0, AT_BOTTOM_CENTER);
+                         SPRITE_ANIMATION_DURATION, startX, startY,
+                         SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
+  createAndPushAnimation(
+      &animationsList[RENDER_LIST_EFFECT_ID], &textures[RES_CLAWFX2], NULL,
+      LOOP_INFI, SPRITE_ANIMATION_DURATION, startX, startY - UI_MAIN_GAP + 16,
+      SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
+  createAndPushAnimation(
+      &animationsList[RENDER_LIST_SPRITE_ID], &textures[RES_MUDDY], NULL,
+      LOOP_INFI, SPRITE_ANIMATION_DURATION, startX, startY - UI_MAIN_GAP,
+      SDL_FLIP_HORIZONTAL, 0, AT_BOTTOM_CENTER);
 
-  createAndPushAnimation(&animationsList[RENDER_LIST_EFFECT_ID],
-                         &textures[RES_CLAWFX2], NULL, LOOP_INFI,
-                         SPRITE_ANIMATION_DURATION, startX + UI_MAIN_GAP,
-                         startY - UI_MAIN_GAP + 16, SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
-  createAndPushAnimation(&animationsList[RENDER_LIST_SPRITE_ID],
-                         &textures[RES_SWAMPY], NULL, LOOP_INFI,
-                         SPRITE_ANIMATION_DURATION, startX + UI_MAIN_GAP,
-                         startY - UI_MAIN_GAP, SDL_FLIP_HORIZONTAL, 0, AT_BOTTOM_CENTER);
+  createAndPushAnimation(
+      &animationsList[RENDER_LIST_EFFECT_ID], &textures[RES_CLAWFX2], NULL,
+      LOOP_INFI, SPRITE_ANIMATION_DURATION, startX + UI_MAIN_GAP,
+      startY - UI_MAIN_GAP + 16, SDL_FLIP_NONE, 0, AT_BOTTOM_CENTER);
+  createAndPushAnimation(
+      &animationsList[RENDER_LIST_SPRITE_ID], &textures[RES_SWAMPY], NULL,
+      LOOP_INFI, SPRITE_ANIMATION_DURATION, startX + UI_MAIN_GAP,
+      startY - UI_MAIN_GAP, SDL_FLIP_HORIZONTAL, 0, AT_BOTTOM_CENTER);
 
   createAndPushAnimation(&animationsList[RENDER_LIST_EFFECT_ID],
                          &textures[RES_CLAWFX2], NULL, LOOP_INFI,
@@ -289,25 +286,27 @@ void mainUi() {
                          &textures[RES_SWAMPY], NULL, LOOP_INFI,
                          SPRITE_ANIMATION_DURATION, startX + UI_MAIN_GAP,
                          startY, SDL_FLIP_HORIZONTAL, 0, AT_BOTTOM_CENTER);
- /* 
-  startX = SCREEN_WIDTH/3*2;
-  startY = SCREEN_HEIGHT/3 + 10;
-  int colNum = 8;
-  for (int i = RES_TINY_ZOMBIE; i <= RES_CHORT; i+=2) {
-    int col = (i - RES_TINY_ZOMBIE)%colNum;
-    int row = (i - RES_TINY_ZOMBIE)/colNum;
-    createAndPushAnimation(&animationsList[RENDER_LIST_SPRITE_ID],
-                          &textures[i], NULL, LOOP_INFI,
-                          SPRITE_ANIMATION_DURATION, startX + col*UI_MAIN_GAP_ALT,
-                          startY + row*UI_MAIN_GAP, SDL_FLIP_HORIZONTAL, 0, AT_BOTTOM_CENTER);
-  }
-  for (int i = RES_BIG_ZOMBIE; i <= RES_BIG_DEMON; i+=2) {
-    createAndPushAnimation(&animationsList[RENDER_LIST_SPRITE_ID],
-                          &textures[i], NULL, LOOP_INFI,
-                          SPRITE_ANIMATION_DURATION, startX + (i-RES_BIG_ZOMBIE)*UNIT,
-                          startY + 200, SDL_FLIP_HORIZONTAL, 0, AT_BOTTOM_CENTER);
-  }
-  */
+  /*
+   startX = SCREEN_WIDTH/3*2;
+   startY = SCREEN_HEIGHT/3 + 10;
+   int colNum = 8;
+   for (int i = RES_TINY_ZOMBIE; i <= RES_CHORT; i+=2) {
+     int col = (i - RES_TINY_ZOMBIE)%colNum;
+     int row = (i - RES_TINY_ZOMBIE)/colNum;
+     createAndPushAnimation(&animationsList[RENDER_LIST_SPRITE_ID],
+                           &textures[i], NULL, LOOP_INFI,
+                           SPRITE_ANIMATION_DURATION, startX +
+   col*UI_MAIN_GAP_ALT, startY + row*UI_MAIN_GAP, SDL_FLIP_HORIZONTAL, 0,
+   AT_BOTTOM_CENTER);
+   }
+   for (int i = RES_BIG_ZOMBIE; i <= RES_BIG_DEMON; i+=2) {
+     createAndPushAnimation(&animationsList[RENDER_LIST_SPRITE_ID],
+                           &textures[i], NULL, LOOP_INFI,
+                           SPRITE_ANIMATION_DURATION, startX +
+   (i-RES_BIG_ZOMBIE)*UNIT, startY + 200, SDL_FLIP_HORIZONTAL, 0,
+   AT_BOTTOM_CENTER);
+   }
+   */
   int optsNum = 4;
   Text** opts = malloc(sizeof(Text*) * optsNum);
   for (int i = 0; i < optsNum; i++) opts[i] = texts + i + 6;
@@ -327,8 +326,7 @@ void mainUi() {
       if (lan == 0) {
         if (!chooseLevelUi()) break;
         launchLocalGame(2);
-      }
-      else if (lan == 1) {
+      } else if (lan == 1) {
         launchLanGame();
       }
       break;

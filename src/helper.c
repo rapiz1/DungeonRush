@@ -4,9 +4,9 @@
 #include <stdlib.h>
 
 #include "game.h"
+#include "prng.h"
 #include "res.h"
 #include "types.h"
-#include "prng.h"
 
 extern const int SCALLING_FACTOR;
 extern Texture textures[];

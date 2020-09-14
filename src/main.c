@@ -5,6 +5,7 @@
 #include "res.h"
 #include "game.h"
 #include "ui.h"
+#include "prng.h"
 
 #ifdef DBG
 #include <assert.h>

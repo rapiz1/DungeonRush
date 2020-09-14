@@ -1,10 +1,10 @@
 #include "game.h"
 
 #include <SDL2/SDL.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <math.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 #include "ai.h"
@@ -1044,18 +1044,17 @@ bool handleLocalKeypress() {
       setTerm(GAME_OVER);
     } else if (e.type == SDL_KEYDOWN) {
       int keyValue = e.key.keysym.sym;
-      if (keyValue == SDLK_ESCAPE)
-        pauseGame();
+      if (keyValue == SDLK_ESCAPE) pauseGame();
       for (int id = 0; id <= 1 && id < playersCount; id++) {
         Snake* player = spriteSnake[id];
         if (player->playerType == LOCAL) {
           if (!player->buffs[BUFF_FROZEN] && player->sprites->head != NULL) {
-              int direction = id == 0 ? arrowsToDirection(keyValue)
+            int direction = id == 0 ? arrowsToDirection(keyValue)
                                     : wasdToDirection(keyValue);
-              if (direction >= 0) {
-                sendPlayerMovePacket(id, direction);
-                changeSpriteDirection(player->sprites->head, direction);
-              }
+            if (direction >= 0) {
+              sendPlayerMovePacket(id, direction);
+              changeSpriteDirection(player->sprites->head, direction);
+            }
           }
         }
       }
@@ -1067,16 +1066,17 @@ bool handleLocalKeypress() {
 void handleLanKeypress() {
   static LanPacket packet;
   int status = recvLanPacket(&packet);
-  if (!status) return; // nop
+  if (!status) return;  // nop
   unsigned type = packet.type;
   if (type == HEADER_PLAYERMOVE) {
     PlayerMovePacket* playerMovePacket = (PlayerMovePacket*)(&packet);
     Snake* player = spriteSnake[playerMovePacket->playerId];
     int direction = playerMovePacket->direction;
-    fprintf(stderr, "recv: player move, %d, %d\n", playerMovePacket->playerId, direction);
-    if (player->sprites->head) changeSpriteDirection(player->sprites->head, direction);
-  }
-  else if (type == HEADER_GAMEOVER) {
+    fprintf(stderr, "recv: player move, %d, %d\n", playerMovePacket->playerId,
+            direction);
+    if (player->sprites->head)
+      changeSpriteDirection(player->sprites->head, direction);
+  } else if (type == HEADER_GAMEOVER) {
     fprintf(stderr, "recv: game over, %d\n", -1);
     setTerm(GAME_OVER);
   }
