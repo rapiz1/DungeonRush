@@ -63,6 +63,7 @@ Text* createText(const char* str, SDL_Color color) {
 }
 void setText(Text* self, const char* str) {
   if (!strcmp(str, self->text)) return;
+  SDL_DestroyTexture(self->origin);
   initText(self, str, self->color);
 }
 void destroyText(Text* self) {
