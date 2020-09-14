@@ -4,13 +4,15 @@ sudo: require
 dist: xenial
 
 install:
-  - sudo apt-get -y install libsdl2-*
+  - sudo apt-get -y install libsdl2-* cmake
 script:
+  - mkdir build && cd build
+  - cmake ..
   - make -j$(nproc)
   - mkdir -p appdir/usr/share/icons/hicolor/256x256/apps # FIXME: "make INSTALL_ROOT=appdir install" should do this
-  - cp dungeonrush.png appdir/usr/share/icons/hicolor/256x256/apps/ # FIXME: "make INSTALL_ROOT=appdir install" should do this
+  - cp ../dungeonrush.png appdir/usr/share/icons/hicolor/256x256/apps/ # FIXME: "make INSTALL_ROOT=appdir install" should do this
   - mkdir -p appdir/usr/share/applications # FIXME: "make INSTALL_ROOT=appdir install" should do this
-  - cp dungeonrush.desktop appdir/usr/share/applications/ # FIXME: "make INSTALL_ROOT=appdir install" should do this
+  - cp ../dungeonrush.desktop appdir/usr/share/applications/ # FIXME: "make INSTALL_ROOT=appdir install" should do this
   - mkdir -p appdir/usr/bin # FIXME: "make INSTALL_ROOT=appdir install" should do this
   - cp -r dungeon_rush appdir/usr/bin/ # FIXME: "make INSTALL_ROOT=appdir install" should do this
   - cp -r res appdir/usr/ # FIXME: Workaround for https://github.com/Rapiz1/DungeonRush/issues/10#issuecomment-629748817
