@@ -14,8 +14,8 @@ script:
   - mkdir -p appdir/usr/share/applications # FIXME: "make INSTALL_ROOT=appdir install" should do this
   - cp ../dungeonrush.desktop appdir/usr/share/applications/ # FIXME: "make INSTALL_ROOT=appdir install" should do this
   - mkdir -p appdir/usr/bin # FIXME: "make INSTALL_ROOT=appdir install" should do this
-  - cp -r dungeon_rush appdir/usr/bin/ # FIXME: "make INSTALL_ROOT=appdir install" should do this
-  - cp -r res appdir/usr/ # FIXME: Workaround for https://github.com/Rapiz1/DungeonRush/issues/10#issuecomment-629748817
+  - cp -r bin/dungeon_rush appdir/usr/bin/ # FIXME: "make INSTALL_ROOT=appdir install" should do this
+  - cp -r bin/res appdir/usr/ # FIXME: Workaround for https://github.com/Rapiz1/DungeonRush/issues/10#issuecomment-629748817
   - wget -c "https://github.com/AppImage/AppImageKit/releases/download/continuous/AppRun-x86_64" -O ./appdir/AppRun # FIXME: Workaround for https://github.com/Rapiz1/DungeonRush/issues/10#issuecomment-629748817
   - chmod +x ./appdir/AppRun # FIXME: Workaround for https://github.com/Rapiz1/DungeonRush/issues/10#issuecomment-629748817
   - find appdir/

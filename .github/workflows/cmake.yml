@@ -52,7 +52,7 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: DungeonRush-${{runner.os}}
-        path: ${{runner.workspace}}/build
+        path: ${{runner.workspace}}/build/bin
         
   build-windows:
     runs-on: ${{ matrix.os }}
@@ -125,4 +125,4 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: DungeonRush-${{runner.os}}-${{matrix.arch}}
-        path: ${{github.workspace}}\build
+        path: ${{github.workspace}}\build\bin
