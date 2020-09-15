@@ -122,6 +122,14 @@ jobs:
       # Execute the build.  You can specify a specific target with "--target <NAME>"
       run: cd build && cmake --build . --config $BUILD_TYPE
 
+    - name: Copy libraries
+      working-directory: ${{github.workspace}}
+      run: |
+          cd build
+          wget https://github.com/Rapiz1/DungeonRush/releases/download/v1.0-alpha/win-${{matrix.arch}}-lib.tar.gz
+          tar xzf win-${{matrix.arch}}-lib.tar.gz
+          mv win-${{matrix.arch}}-lib/* bin
+
     - uses: actions/upload-artifact@v2
       with:
         name: DungeonRush-${{runner.os}}-${{matrix.arch}}
