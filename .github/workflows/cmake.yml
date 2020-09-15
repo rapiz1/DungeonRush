@@ -48,6 +48,16 @@ jobs:
       shell: bash
       # Execute the build.  You can specify a specific target with "--target <NAME>"
       run: cmake --build . --config $BUILD_TYPE
+
+    - name: Copy Libraries (Linux)
+      if: runner.os == 'Linux'
+      working-directory: ${{runner.workspace}}/build
+      shell: bash
+      # Execute the build.  You can specify a specific target with "--target <NAME>"
+      run: |
+        wget https://github.com/Rapiz1/DungeonRush/releases/download/v1.0-alpha/linux-lib.tar.gz
+        tar xzf linux-lib.tar.gz
+        mv linux-lib/* bin
   
     - uses: actions/upload-artifact@v2
       with:
