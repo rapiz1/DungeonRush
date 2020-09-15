@@ -1,5 +1,7 @@
 #include "storage.h"
 
+#include <string.h>
+
 void readScore(FILE* f, Score* score) {
   fscanf(f, "%d %d %d %d\n", &score->damage, &score->stand, &score->killed,
          &score->got);
