@@ -1,7 +1,7 @@
 #ifndef SNAKE__NET_H_
 #define SNAKE__NET_H_
 
-#include <SDL_net.h>
+#include <SDL2/SDL_net.h>
 
 #define LAN_LISTEN_PORT 21739
 #define LAN_SEED_MASK 0x00ffffff

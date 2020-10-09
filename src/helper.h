@@ -1,7 +1,7 @@
 #ifndef SNAKE_HELPER_H
 #define SNAKE_HELPER_H
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <math.h>
 #include <stdbool.h>
 

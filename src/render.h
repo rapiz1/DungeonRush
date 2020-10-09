@@ -1,6 +1,6 @@
 #ifndef SNAKE_RENDER_H_
 #define SNAKE_RENDER_H_
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "types.h"
 #include "player.h"
 #include "sprite.h"
