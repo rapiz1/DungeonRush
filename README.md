@@ -49,27 +49,27 @@ The executable is called `dungeon_rush`
 
 ## Dependencies
 The project requires no more than common SDL2 libraries.
-`SDL2, SDL2-ttf, SDL2-image, SDL2-mixer`
+`SDL2, SDL2-image, SDL2-mixer, SDL2-net, SDL2-ttf`
 ### For Arch
 ```
-# pacman -S sdl2 sdl2_image sdl2_mixer sdl2_ttf
+# pacman -S sdl2 sdl2_image sdl2_mixer sdl2_net sdl2_ttf --needed
 ```
 ### For Debian
 
 ```
-# apt install libsdl2-*
+# apt install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-net-dev libsdl2-ttf-dev
 ```
 
 ### For openSUSE
 
 ```
-# zypper in libSDL2-devel libSDL2_mixer-devel libSDL2_ttf-devel libSDL2_image-devel
+# zypper in libSDL2-devel libSDL2_image-devel libSDL2_mixer-devel libSDL2_net-devel libSDL2_ttf-devel
 ```
 
 ### For MacOS
 
 ```
-#  brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer
+#  brew install sdl2 sdl2_image sdl2_mixer sdl2_net sdl2_ttf
 ```
 
 ### For other OS
