@@ -78,8 +78,7 @@ The names of packages should be similiar. You can look for SDL tutorial to set u
 ## Compilation
 **You should make sure all dependencies are installed before compiling**
 ```
-$ mkdir build && cd build
-$ cmake ..
+$ cmake -B build && cmake --build build
 ```
 ## Known issues
 [Game speed too fast with some NVIDIA graphic cards on Linux](https://github.com/Rapiz1/DungeonRush/issues/4)
