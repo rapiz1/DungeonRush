@@ -4,6 +4,19 @@
 >My piece of work from C assignment. Hope you like it :)
 
 *I work on the small project on my own so the code lacks of comments.*
+## Release Note
+
+### v1.0-beta
+- Fix bugs
+- Add Multiplayer / LAN mode
+
+**You can play with your friend via Internet!**
+*You need to be in the same network and can dierctly connect by IP*
+
+### v1.0-alpha
+
+Initial release
+
 ## How to Play
 
 ### Singleplayer
