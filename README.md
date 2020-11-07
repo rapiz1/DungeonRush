@@ -50,9 +50,11 @@ For sure, some kinds of monsters have weapons that can put a debuff on you! *(Li
 
 ## Download
 
-[Windows](https://github.com/Rapiz1/DungeonRush/releases/download/v1.0-alpha/DungeonRush-v1.0-alpha-win32.zip)
+[Windows(64bit)](https://github.com/Rapiz1/DungeonRush/releases/download/v1.0-beta/DungeonRush-v1.0-beta-Windows-x86_64.zip)
 
-[Linux](https://github.com/Rapiz1/DungeonRush/releases/download/v1.0-alpha/DungeonRush-v1.0-alpha-linux.zip)
+[Windows(32bit)](https://github.com/Rapiz1/DungeonRush/releases/download/v1.0-beta/DungeonRush-v1.0-beta-Windows-i686.zip)
+
+[Linux](https://github.com/Rapiz1/DungeonRush/releases/download/v1.0-beta/DungeonRush-v1.0-beta-linux.zip)
 
 AppImage for Linux is also available in release page.
 
