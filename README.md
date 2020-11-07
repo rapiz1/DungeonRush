@@ -11,7 +11,7 @@
 - Add Multiplayer / LAN mode
 
 **You can play with your friend via Internet!**
-*You need to be in the same network and can dierctly connect by IP*
+*You need to be in the same network and can directly connect by IP*
 
 ### v1.0-alpha
 
