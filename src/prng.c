@@ -19,5 +19,5 @@ unsigned int prngRand()
     nSeed = (8253729 * nSeed + 2396403); 
 
     // Take the seed and return a value between 0 and 32767
-    return nSeed  % 32767;
+    return nSeed  % PRNG_MAX;
 }
