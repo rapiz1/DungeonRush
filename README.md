@@ -1,6 +1,6 @@
 # DungeonRush
 ![](screenshot.gif)
-English | [¼òÌåÖÐÎÄ](README.zh-CN.md) 
+English | [ç®€ä½“ä¸­æ–‡](README.zh-CN.md) 
 >A game inspired by Snake, in pure C with SDL2.
 >My piece of work from C assignment. Hope you like it :)
 
