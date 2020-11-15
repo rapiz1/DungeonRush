@@ -443,7 +443,7 @@ bool changeToNextLanguage() {
   } else if (!loadTextset()) {
     puts("Failed to load textset!");
     return false;
-  } else if (!loadMessages()) {
+  } else if (!loadMessage()) {
     puts("Failde to load messages!");
     return false;
   }
