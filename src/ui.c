@@ -58,15 +58,13 @@ bool moveCursor(int optsNum) {
           return quit;
           break;
         case SDLK_LEFT:
-          if (cursorPos == 3)
-          {
+          if (cursorPos == 3) {
             changeToLastLanguage();
             playAudio(AUDIO_BUTTON1);
           }
           break;
         case SDLK_RIGHT:
-          if (cursorPos == 3)
-          {
+          if (cursorPos == 3) {
             changeToNextLanguage();
             playAudio(AUDIO_BUTTON1);
           }
@@ -114,6 +112,10 @@ bool chooseLevelUi() {
   baseUi(30, 12);
   int optsNum = 3;
   Text** opts = malloc(sizeof(Text*) * optsNum);
+  if (opts == NULL) {
+    fputs("malloc failed.\n", stderr);
+    return false;
+  }
   for (int i = 0; i < optsNum; i++) opts[i] = texts + i + 11;
   int opt = chooseOptions(optsNum, opts);
   if (opt != optsNum) setLevel(opt);
@@ -142,6 +144,10 @@ char* inputUi() {
   baseUi(20, 10);
 
   char* ret = malloc(MAX_LEN);
+  if (ret == NULL) {
+    fputs("malloc failed.\n", stderr);
+    return NULL;
+  }
   int retLen = 0;
   memset(ret, 0, MAX_LEN);
 
@@ -322,10 +328,9 @@ void mainUi() {
    */
   int optsNum = 5;
   Text** opts = malloc(sizeof(Text*) * optsNum);
-  if (opts == NULL)
-  {
-      printf("malloc failed!!!");
-      exit(EXIT_FAILURE);
+  if (opts == NULL) {
+    fputs("malloc failed.\n", stderr);
+    return;
   }
   for (int i = 0; i < optsNum; i++) opts[i] = texts + i + 6;
   int opt = chooseOptions(optsNum, opts);
@@ -368,6 +373,10 @@ void rankListUi(int count, Score** scores) {
   baseUi(30, 12 + MAX(0, count - 4));
   playBgm(0);
   Text** opts = malloc(sizeof(Text*) * count);
+  if (opts == NULL) {
+    fputs("malloc failed.", stderr);
+    return;
+  }
   char buf[1 << 8];
   for (int i = 0; i < count; i++) {
     sprintf(buf, messages[MSG_RANKLISH_FORMAT].text,

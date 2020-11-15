@@ -11,8 +11,8 @@
 #include <assert.h>
 #endif
 
-int demain(int argc, char** args) {
-  prngSrand((unsigned int)time(NULL));
+int main(int argc, char** args) {
+  prngSrand(time(NULL));
   // Start up SDL and create window
   if (!init()) {
     printf("Failed to initialize!\n");

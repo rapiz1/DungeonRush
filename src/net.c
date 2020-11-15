@@ -80,7 +80,8 @@ void hostGame() {
     &messages[MSG_LAN_LISTENING0],
     &messages[MSG_LAN_LISTENING1],
     &messages[MSG_LAN_LISTENING2],
-    &messages[MSG_LAN_LISTENING3]};
+    &messages[MSG_LAN_LISTENING3],
+    };
   
   SDL_Event e;
   unsigned frameCount = 0;
@@ -152,8 +153,8 @@ void joinGame(const char* hostname, Uint16 port) {
     &messages[MSG_LAN_CONNECTING0],
     &messages[MSG_LAN_CONNECTING1],
     &messages[MSG_LAN_CONNECTING2],
-    &messages[MSG_LAN_CONNECTING3]
-  };
+    &messages[MSG_LAN_CONNECTING3],
+    };
   
   bool quit = false;
   SDL_Event e;

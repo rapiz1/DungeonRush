@@ -15,8 +15,8 @@
 
 
 // Constants
-const int n = SCREEN_WIDTH / UNIT;
-const int m = SCREEN_HEIGHT / UNIT;
+const int n = SCREEN_WIDTH/UNIT;
+const int m = SCREEN_HEIGHT/UNIT;
 
 const char tilesetPath[TILESET_SIZE][PATH_LEN] = {
     "res/drawable/0x72_DungeonTilesetII_v1_3",
@@ -81,12 +81,12 @@ Text texts[TEXTSET_SIZE];
 
 extern SDL_Color BLACK;
 extern SDL_Color WHITE;
-extern SDL_Renderer *renderer;
+extern SDL_Renderer* renderer;
 extern Weapon weapons[WEAPONS_SIZE];
 
-SDL_Window *window;
-SDL_Texture *originTextures[TILESET_SIZE];
-TTF_Font *font;
+SDL_Window* window;
+SDL_Texture* originTextures[TILESET_SIZE];
+TTF_Font* font;
 
 Effect effects[EFFECTS_SIZE];
 
@@ -99,87 +99,79 @@ Mix_Chunk *sounds[AUDIO_SOUND_SIZE];
 
 int language = LANG_ENGLISH;
 
-bool init()
-{
+bool init() {
+  // Initialization flag
+  bool success = true;
+
   // Initialize SDL
-  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
-  {
+  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
     printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
-    return false;
-  }
-  // Create window
-  window = SDL_CreateWindow("Dungeon Rush (Alpha)", SDL_WINDOWPOS_UNDEFINED,
-                            SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
-                            SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-  if (window == NULL)
-  {
-    printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
-    return false;
-  }
-// Software Render
+    success = false;
+  } else {
+    // Create window
+    window = SDL_CreateWindow("Dungeon Rush (Alpha)", SDL_WINDOWPOS_UNDEFINED,
+                              SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
+                              SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    if (window == NULL) {
+      printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+      success = false;
+    } else {
+      // Software Render
 #ifndef SOFTWARE_ACC
-  renderer = SDL_CreateRenderer(
-      window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+      renderer = SDL_CreateRenderer(
+          window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 #endif
 #ifdef SOFTWARE_ACC
-  printf("define software acc\n");
-  renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
+      printf("define software acc\n");
+      renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
 #endif
-  if (renderer == NULL)
-  {
-    printf("Renderer could not be created! SDL Error: %s\n",
-           SDL_GetError());
-    return false;
+      if (renderer == NULL) {
+        printf("Renderer could not be created! SDL Error: %s\n",
+               SDL_GetError());
+        success = false;
+      } else {
+        SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+        // Initialize PNG loading
+        int imgFlags = IMG_INIT_PNG;
+        if (!(IMG_Init(imgFlags) & imgFlags)) {
+          printf("SDL_image could not initialize! SDL_image Error: %s\n",
+                 IMG_GetError());
+          success = false;
+        }
+        // Initialize SDL_ttf
+        if (TTF_Init() == -1) {
+          printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n",
+                 TTF_GetError());
+          success = false;
+        }
+        //Initialize SDL_mixer
+        if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 ) {
+          printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
+          success = false;
+        }
+        //Initialize SDL_net
+        if (SDLNet_Init() == -1) {
+          printf("SDL_Net_Init: %s\n", SDLNet_GetError());
+          success = false;
+        }
+      }
+    }
   }
-  SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-  // Initialize PNG loading
-  int imgFlags = IMG_INIT_PNG;
-  if (!(IMG_Init(imgFlags) & imgFlags))
-  {
-    printf("SDL_image could not initialize! SDL_image Error: %s\n",
-           IMG_GetError());
-    return false;
-  }
-  // Initialize SDL_ttf
-  if (TTF_Init() == -1)
-  {
-    printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n",
-           TTF_GetError());
-    return false;
-  }
-  //Initialize SDL_mixer
-  if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
-  {
-    printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
-    return false;
-  }
-  //Initialize SDL_net
-  if (SDLNet_Init() == -1)
-  {
-    printf("SDL_Net_Init: %s\n", SDLNet_GetError());
-    return false;
-  }
-
-  return true;
+  return success;
 }
-SDL_Texture *loadSDLTexture(const char *path)
-{
+SDL_Texture* loadSDLTexture(const char* path) {
   // The final texture
-  SDL_Texture *newTexture = NULL;
+  SDL_Texture* newTexture = NULL;
 
   // Load image at specified path
-  SDL_Surface *loadedSurface = IMG_Load(path);
-  if (loadedSurface == NULL)
-  {
+  SDL_Surface* loadedSurface = IMG_Load(path);
+  if (loadedSurface == NULL) {
     printf("Unable to load image %s! SDL_image Error: %s\n", path,
            IMG_GetError());
-  }
-  else
-  {
+  } else {
     // Create texture from surface pixels
     newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
-    if (newTexture == NULL)
-    {
+    if (newTexture == NULL) {
       printf("Unable to create texture from %s! SDL Error: %s\n", path,
              SDL_GetError());
     }
@@ -190,8 +182,7 @@ SDL_Texture *loadSDLTexture(const char *path)
 
   return newTexture;
 }
-bool loadTextset()
-{
+bool loadTextset() {
   bool success = true;
   FILE* file;
   switch (language) {
@@ -225,12 +216,12 @@ bool loadTextset()
   fclose(file);
   return success;
 }
-bool loadTileset(const char *path, SDL_Texture *origin) {
-  FILE *file = fopen(path, "r");
+bool loadTileset(const char* path, SDL_Texture* origin) {
+  FILE* file = fopen(path, "r");
   int x, y, w, h, f;
   char resName[256];
   while (fscanf(file, "%s %d %d %d %d %d", resName, &x, &y, &w, &h, &f) == 6) {
-    Texture *p = &textures[texturesCount++];
+    Texture* p = &textures[texturesCount++];
     initTexture(p, origin, w, h, f);
     for (int i = 0; i < f; i++) {
       p->crops[i].x = x + i * w;
@@ -252,60 +243,51 @@ bool loadAudio() {
     bgms[i] = Mix_LoadMUS(bgmsPath[i]);
     success &= bgms[i] != NULL;
     if (!bgms[i]) printf("Failed to load %s: SDL_mixer Error: %s\n", bgmsPath[i], Mix_GetError());
-#ifdef DBG
+    #ifdef DBG
     else printf("BGM %s loaded\n", bgmsPath[i]);
-#endif
+    #endif
   }
-  FILE *f = fopen(soundsPath, "r");
-  char buf[PATH_LEN], path[PATH_LEN << 1];
+  FILE* f = fopen(soundsPath,"r");
+  char buf[PATH_LEN], path[PATH_LEN<<1];
   while (~fscanf(f, "%s", buf)) {
     sprintf(path, "%s%s", soundsPathPrefix, buf);
     sounds[soundsCount] = Mix_LoadWAV(path);
     success &= sounds[soundsCount] != NULL;
     if (!sounds[soundsCount]) printf("Failed to load %s: : SDL_mixer Error: %s\n", path, Mix_GetError());
-#ifdef DBG
+    #ifdef DBG
     else printf("Sound #%d: %s\n", soundsCount, path);
-#endif
+    #endif
     soundsCount++;
   }
   fclose(f);
   return success;
 }
-bool loadMessages()
-{
-    int messagesCount = 0;
-    bool success = true;
-    FILE* file;
-    switch (language)
-    {
-    case LANG_ENGLISH:
-        file = fopen(messagePath, "r");
-        break;
+bool loadMessage() {
+  bool success = true;
+  FILE* file;
+  switch (language) {
     case LANG_SIMPLIFIED_CHINESE:
-        file = fopen(simplifiedChineseMessagePath, "r");
-        break;
+      file = fopen(simplifiedChineseMessagePath, "r");
+      break;
     case LANG_TRADITIONAL_CHINESE:
-        file = fopen(traditionalChineseTextsetPath, "r");
-        break;
+      file = fopen(traditionalChineseMessagePath, "r");
+      break;
     default:
-        file = NULL;
-        break;
+      file = fopen(messagePath, "r");
+      break;
+  }
+  char str[MSG_LEN];
+  int count = 0;
+  while (fgets(str, MSG_LEN, file)) {
+    int n = strlen(str);
+    while (n - 1 >= 0 && !iswprint(str[n - 1])) str[--n] = 0;
+    if (!n) continue;
+    if (!initText(&messages[count++], str, WHITE)) {
+      success = false;
     }
-    char str[MSG_LEN];
-    while (fgets(str, MSG_LEN, file))
-    {
-        int n = strlen(str);
-        while (n - 1 >= 0 && !iswprint(str[n - 1]))
-            str[--n] = 0;
-        if (!n)
-            continue;
-        if (!initText(&messages[messagesCount++], str, WHITE))
-        {
-            success = false;
-        }
-    }
-    fclose(file);
-    return success;
+  }
+  fclose(file);
+  return success;
 }
 bool loadMedia() {
   // Loading success flag
@@ -322,19 +304,14 @@ bool loadMedia() {
     success &= (bool)originTextures[i];
   }
   // Open the font
-  if (!loadFont())
-  {
+  if (!loadFont()) {
     fputs("Failed to load font! SDL_ttf Error: ", stdout);
     puts(TTF_GetError());
     success = false;
-  }
-  else if (!loadTextset())
-  {
+  } else if (!loadTextset()) {
     printf("Failed to load textset!\n");
     success = false;
-  }
-  else if (!loadMessages())
-  {
+  } else if (!loadMessage()) {
     puts("Failde to load messages!");
     success = false;
   }
@@ -342,28 +319,22 @@ bool loadMedia() {
   initWeapons();
   initCommonSprites();
 
-  if (!loadAudio())
-  {
-    printf("Failed to load audio!\n");
+  if (!loadAudio()) {
+    puts("Failed to load audio!");
     success = false;
   }
 
   return success;
 }
-bool loadFont()
-{
-  switch (language)
-  {
-  case LANG_ENGLISH:
-    font = TTF_OpenFont(fontPath, FONT_SIZE);
-    break;
-  case LANG_SIMPLIFIED_CHINESE:
-  case LANG_TRADITIONAL_CHINESE:
-    font = TTF_OpenFont(chineseFontPath, CHINESE_FONT_SIZE);
-    break;
-  default:
-    font = NULL;
-    return false;
+bool loadFont() {
+  switch (language) {
+    case LANG_SIMPLIFIED_CHINESE:
+    case LANG_TRADITIONAL_CHINESE:
+      font = TTF_OpenFont(chineseFontPath, CHINESE_FONT_SIZE);
+      break;
+    default:
+      font = TTF_OpenFont(fontPath, FONT_SIZE);
+      break;
   }
   return font != NULL;
 }
@@ -422,19 +393,18 @@ void initCommonEffects() {
   puts("Effect #2: Vanish (30fm) loaded");
 #endif
 }
-void initCommonSprite(Sprite *sprite, Weapon *weapon, int res_id, int hp) {
-  Animation *ani = createAnimation(&textures[res_id], NULL, LOOP_INFI,
-                                   SPRITE_ANIMATION_DURATION, 0, 0, SDL_FLIP_NONE, 0,
-                                   AT_BOTTOM_CENTER);
+void initCommonSprite(Sprite* sprite, Weapon* weapon, int res_id, int hp) {
+  Animation* ani = createAnimation(&textures[res_id], NULL, LOOP_INFI,
+                SPRITE_ANIMATION_DURATION, 0, 0, SDL_FLIP_NONE, 0,
+                AT_BOTTOM_CENTER);
   *sprite = (Sprite){0, 0, hp, hp, weapon, ani, RIGHT, RIGHT};
   sprite->lastAttack = 0;
   sprite->dropRate = 1;
 }
-void initCommonSprites()
-{
+void initCommonSprites() {
   initCommonSprite(&commonSprites[SPRITE_KNIGHT], &weapons[WEAPON_SWORD], RES_KNIGHT_M, 150);
-  initCommonSprite(&commonSprites[SPRITE_ELF], &weapons[WEAPON_ARROW], RES_ELF_M, 100);
-  initCommonSprite(&commonSprites[SPRITE_WIZZARD], &weapons[WEAPON_FIREBALL], RES_WIZZARD_M, 95);
+  initCommonSprite(&commonSprites[SPRITE_ELF], &weapons[WEAPON_ARROW],RES_ELF_M, 100);
+  initCommonSprite(&commonSprites[SPRITE_WIZZARD], &weapons[WEAPON_FIREBALL],RES_WIZZARD_M, 95);
   initCommonSprite(&commonSprites[SPRITE_LIZARD], &weapons[WEAPON_MONSTER_CLAW], RES_LIZARD_M, 120);
   initCommonSprite(&commonSprites[SPRITE_TINY_ZOMBIE], &weapons[WEAPON_MONSTER_CLAW2], RES_TINY_ZOMBIE, 50);
   initCommonSprite(&commonSprites[SPRITE_GOBLIN], &weapons[WEAPON_MONSTER_CLAW2], RES_GOBLIN, 100);
@@ -450,65 +420,47 @@ void initCommonSprites()
   initCommonSprite(&commonSprites[SPRITE_NECROMANCER], &weapons[WEAPON_PURPLE_BALL], RES_NECROMANCER, 120);
   initCommonSprite(&commonSprites[SPRITE_WOGOL], &weapons[WEAPON_MONSTER_CLAW2], RES_WOGOL, 150);
   initCommonSprite(&commonSprites[SPRITE_CHROT], &weapons[WEAPON_MONSTER_CLAW2], RES_CHORT, 150);
-  Sprite *now;
-  initCommonSprite(now = &commonSprites[SPRITE_BIG_ZOMBIE], &weapons[WEAPON_THUNDER], RES_BIG_ZOMBIE, 3000);
+  Sprite* now;
+  initCommonSprite(now=&commonSprites[SPRITE_BIG_ZOMBIE], &weapons[WEAPON_THUNDER], RES_BIG_ZOMBIE, 3000);
   now->dropRate = 100;
-  initCommonSprite(now = &commonSprites[SPRITE_ORGRE], &weapons[WEAPON_MANY_AXES], RES_ORGRE, 3000);
+  initCommonSprite(now=&commonSprites[SPRITE_ORGRE], &weapons[WEAPON_MANY_AXES], RES_ORGRE, 3000);
   now->dropRate = 100;
-  initCommonSprite(now = &commonSprites[SPRITE_BIG_DEMON], &weapons[WEAPON_THUNDER], RES_BIG_DEMON, 2500);
+  initCommonSprite(now=&commonSprites[SPRITE_BIG_DEMON], &weapons[WEAPON_THUNDER], RES_BIG_DEMON, 2500);
   now->dropRate = 100;
 }
-void nextLanguage()
-{
+void nextLanguage() {
   language = (language + 1 > LANG_COUNT ? 1 : language + 1);
 }
-void lastLanguage()
-{
+void lastLanguage() {
   language = (language - 1 == 0 ? LANG_COUNT : language - 1);
 }
-bool changeToNextLanguage()
-{
+bool changeToNextLanguage() {
   nextLanguage();
-  if (!loadFont())
-  {
+  if (!loadFont()) {
     fputs("Failed to load font! SDL_ttf Error: ", stdout);
     puts(TTF_GetError());
     return false;
-  }
-  else if (!loadTextset())
-  {
+  } else if (!loadTextset()) {
     puts("Failed to load textset!");
     return false;
-  }
-  else if (!loadMessages())
-  {
+  } else if (!loadMessages()) {
     puts("Failde to load messages!");
     return false;
   }
   return true;
 }
-bool changeToLastLanguage()
-{
+bool changeToLastLanguage() {
   lastLanguage();
-  if (!loadFont())
-  {
+  if (!loadFont()) {
     fputs("Failed to load font! SDL_ttf Error: ", stdout);
     puts(TTF_GetError());
     return false;
-  }
-  else if (!loadTextset())
-  {
+  } else if (!loadTextset()) {
     puts("Failed to load textset!");
     return false;
-  }
-  else if (!loadMessages())
-  {
+  } else if (!loadMessage()) {
     puts("Failde to load messages!");
     return false;
   }
   return true;
-}
-int currentLanguage()
-{
-    return language;
 }

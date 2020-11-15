@@ -14,7 +14,6 @@
 #define SCREEN_HEIGHT 960
 #define FONT_SIZE 32
 #define CHINESE_FONT_SIZE 20
-#define SECOND * 1000
 // Resource ID
 // Map Resource
 #define RES_WALL_TOP_LEFT 0
@@ -202,7 +201,7 @@ bool loadFont();
 SDL_Texture* loadSDLTexture(const char* path);
 bool loadTileset(const char* path, SDL_Texture* origin);
 bool loadTextset();
-bool loadMessages();
+bool loadMessage();
 void initCommonEffects();
 void initCommonAnimations();
 void initCommonSprites();
@@ -210,7 +209,6 @@ void nextLanguage();
 void lastLanguage();
 bool changeToNextLanguage();
 bool changeToLastLanguage();
-int currentLanguage();
 
 extern SDL_Renderer* renderer;
 #endif
