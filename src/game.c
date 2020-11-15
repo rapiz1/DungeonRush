@@ -635,7 +635,7 @@ void invokeWeaponBuff(Snake* src, Weapon* weapon, Snake* dest, int damage) {
           if (src) shieldSnake(src, weapon->effects[i].duration);
           break;
         case BUFF_ATTACK:
-          if (src) attackUpSnkae(src, weapon->effects[i].duration);
+          if (src) attackUpSnake(src, weapon->effects[i].duration);
           break;
         default:
           break;
