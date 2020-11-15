@@ -6,8 +6,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+// Compatible with more platforms
+#ifdef _WIN32
+#include <Windows.h>
+#else
 #include <unistd.h>
-
+#endif // _WIN32
 #include "ai.h"
 #include "audio.h"
 #include "bullet.h"
@@ -36,6 +40,8 @@ extern Weapon weapons[WEAPONS_SIZE];
 extern Sprite commonSprites[COMMON_SPRITE_SIZE];
 
 extern unsigned int renderFrames;
+extern Text messages[];
+
 // Map
 Block map[MAP_SIZE][MAP_SIZE];
 Item itemMap[MAP_SIZE][MAP_SIZE];
@@ -458,7 +464,7 @@ void attackUpSprite(Sprite* sprite, int duration) {
   ani->lifeSpan = duration;
 }
 
-void attackUpSnkae(Snake* snake, int duration) {
+void attackUpSnake(Snake* snake, int duration) {
   if (snake->buffs[BUFF_ATTACK]) return;
   snake->buffs[BUFF_ATTACK] += duration;
   for (LinkNode* p = snake->sprites->head; p; p = p->nxt) {
@@ -516,17 +522,15 @@ void destroyGame(int status) {
   bullets = NULL;
 
   blackout();
-  char* msg;
-  if (status == 0)
-    msg = "Stage Clear";
-  else
-    msg = "Game Over";
-  extern SDL_Color WHITE;
-  Text* text = createText(msg, WHITE);
+  Text* text = (status ? &messages[MSG_GAME_OVER] : &messages[MSG_STAGE_CLEAR]);
   renderCenteredText(text, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 2);
-  destroyText(text);
   SDL_RenderPresent(renderer);
+  // Compatible with more platforms
+#ifndef _WIN32
   sleep(RENDER_GAMEOVER_DURATION);
+#else
+  Sleep(RENDER_GAMEOVER_DURATION SECOND);
+#endif // _WIN32
   clearRenderer();
 }
 
@@ -981,12 +985,9 @@ void pauseGame() {
   pauseSound();
   playAudio(AUDIO_BUTTON1);
   dim();
-  const char msg[] = "Paused";
-  extern SDL_Color WHITE;
-  Text* text = createText(msg, WHITE);
+  Text* text = &messages[MSG_PAUSED];
   renderCenteredText(text, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 1);
   SDL_RenderPresent(renderer);
-  destroyText(text);
   SDL_Event e;
   for (bool quit = 0; !quit;) {
     while (SDL_PollEvent(&e)) {

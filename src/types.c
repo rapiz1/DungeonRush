@@ -38,7 +38,7 @@ bool initText(Text* self, const char* str, SDL_Color color) {
   self->color = color;
   strcpy(self->text, str);
   // Render text surface
-  SDL_Surface* textSurface = TTF_RenderText_Solid(font, str, color);
+  SDL_Surface* textSurface = TTF_RenderUTF8_Solid(font, str, color);
   if (textSurface == NULL) {
     printf("Unable to render text surface! SDL_ttf Error: %s\n",
            TTF_GetError());
@@ -69,8 +69,11 @@ void setText(Text* self, const char* str) {
   initText(self, str, self->color);
 }
 void destroyText(Text* self) {
-  SDL_DestroyTexture(self->origin);
-  free(self);
+  if (self != NULL)
+  {
+    SDL_DestroyTexture(self->origin);
+    free(self);
+  }
 }
 void initEffect(Effect* self, int duration, int length, SDL_BlendMode mode) {
   self->keys = malloc(sizeof(SDL_Color) * length);

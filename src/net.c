@@ -14,6 +14,7 @@
 TCPsocket lanServerSocket;
 TCPsocket lanClientSocket;
 SDLNet_SocketSet socketSet;
+extern Text messages[MSG_COUNT];
 
 static void CHECK() {
   CASSERT(sizeof(LanPacket) == 4);
@@ -76,11 +77,10 @@ void hostGame() {
 
   extern SDL_Color WHITE;
   Text* listening[4] = {
-    createText("Listening", WHITE),
-    createText("Listening.", WHITE),
-    createText("Listening..", WHITE),
-    createText("Listening...", WHITE),
-    };
+    &messages[MSG_LAN_LISTENING0],
+    &messages[MSG_LAN_LISTENING1],
+    &messages[MSG_LAN_LISTENING2],
+    &messages[MSG_LAN_LISTENING3]};
   
   SDL_Event e;
   unsigned frameCount = 0;
@@ -102,7 +102,6 @@ void hostGame() {
   // Clean up after connecting
   SDLNet_TCP_Close(lanServerSocket);
   lanServerSocket = NULL;
-  for (unsigned i = 0; i < 4; i++) destroyText(listening[i]);
 
   blackout();
 
@@ -150,11 +149,11 @@ void joinGame(const char* hostname, Uint16 port) {
 
   extern SDL_Color WHITE;
   Text* connecting[4] = {
-    createText("Connecting", WHITE),
-    createText("Connecting.", WHITE),
-    createText("Connecting..", WHITE),
-    createText("Connecting...", WHITE),
-    };
+    &messages[MSG_LAN_CONNECTING0],
+    &messages[MSG_LAN_CONNECTING1],
+    &messages[MSG_LAN_CONNECTING2],
+    &messages[MSG_LAN_CONNECTING3]
+  };
   
   bool quit = false;
   SDL_Event e;

@@ -25,6 +25,7 @@ extern int renderFrames;
 extern SDL_Color WHITE;
 extern Texture textures[];
 extern Effect effects[];
+extern Text messages[];
 
 extern LinkList animationsList[ANIMATION_LINK_LIST_NUM];
 int cursorPos;
@@ -55,6 +56,20 @@ bool moveCursor(int optsNum) {
           cursorPos = optsNum;
           playAudio(AUDIO_BUTTON1);
           return quit;
+          break;
+        case SDLK_LEFT:
+          if (cursorPos == 3)
+          {
+            changeToLastLanguage();
+            playAudio(AUDIO_BUTTON1);
+          }
+          break;
+        case SDLK_RIGHT:
+          if (cursorPos == 3)
+          {
+            changeToNextLanguage();
+            playAudio(AUDIO_BUTTON1);
+          }
           break;
       }
     }
@@ -99,7 +114,7 @@ bool chooseLevelUi() {
   baseUi(30, 12);
   int optsNum = 3;
   Text** opts = malloc(sizeof(Text*) * optsNum);
-  for (int i = 0; i < optsNum; i++) opts[i] = texts + i + 10;
+  for (int i = 0; i < optsNum; i++) opts[i] = texts + i + 11;
   int opt = chooseOptions(optsNum, opts);
   if (opt != optsNum) setLevel(opt);
   clearRenderer();
@@ -130,9 +145,8 @@ char* inputUi() {
   int retLen = 0;
   memset(ret, 0, MAX_LEN);
 
-  extern SDL_Color WHITE;
   Text* text = NULL;
-  Text* placeholder = createText("Enter IP", WHITE);
+  Text* placeholder = &messages[MSG_LAN_INPUT_IP];
 
   SDL_StartTextInput();
   SDL_Event e;
@@ -173,7 +187,6 @@ char* inputUi() {
   }
 
   SDL_StopTextInput();
-  destroyText(placeholder);
   destroyText(text);
 
   if (quit) {
@@ -307,8 +320,13 @@ void mainUi() {
    AT_BOTTOM_CENTER);
    }
    */
-  int optsNum = 4;
+  int optsNum = 5;
   Text** opts = malloc(sizeof(Text*) * optsNum);
+  if (opts == NULL)
+  {
+      printf("malloc failed!!!");
+      exit(EXIT_FAILURE);
+  }
   for (int i = 0; i < optsNum; i++) opts[i] = texts + i + 6;
   int opt = chooseOptions(optsNum, opts);
   free(opts);
@@ -334,10 +352,15 @@ void mainUi() {
       localRankListUi();
       break;
     case 3:
+      changeToNextLanguage();
+      break;
+    case 4:
+      break;
+    default:
       break;
   }
   if (opt == optsNum) return;
-  if (opt != 3) {
+  if (opt != 4) {
     mainUi();
   }
 }
@@ -347,7 +370,7 @@ void rankListUi(int count, Score** scores) {
   Text** opts = malloc(sizeof(Text*) * count);
   char buf[1 << 8];
   for (int i = 0; i < count; i++) {
-    sprintf(buf, "Score: %-6.0lf Got: %-6d Kill: %-6d Damage: %-6d Stand: %-6d",
+    sprintf(buf, messages[MSG_RANKLISH_FORMAT].text,
             scores[i]->rank, scores[i]->got, scores[i]->killed,
             scores[i]->damage, scores[i]->stand);
     opts[i] = createText(buf, WHITE);
