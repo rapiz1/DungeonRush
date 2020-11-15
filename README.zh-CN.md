@@ -114,3 +114,7 @@ GPL
 |来自 Azureflux 的 BOMB|CC BY-NC-SA 4.0|
 |未知音频|未知|
 |来自 Juhani Junkala 的 The Essential Retro Video Game Sound Effects Collection|CC BY 3.0|
+### 字体
+|名称|版权协议|
+|----|--------|
+|Unifont|GPLv2|

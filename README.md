@@ -115,3 +115,7 @@ GPL
 |BOMB By Azureflux|CC BY-NC-SA 4.0|
 |Unkown BGM|Unkown|
 |The Essential Retro Video Game Sound Effects Collection By Juhani Junkala |CC BY 3.0|
+### Font
+|Name|License|
+|----|-------|
+|Unifont|GPLv2|

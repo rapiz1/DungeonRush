@@ -1,0 +1,18 @@
+DungeonRush
+作者 Rapiz
+PLACEHOLDER
+PLACEHOLDER
+玩家1
+玩家2
+單人遊戲
+多人遊戲
+歷史排名
+< 繁體中文 >
+退出
+正常
+困難
+癲狂
+本地
+局域網
+創建房間
+加入房間
