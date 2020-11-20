@@ -6,12 +6,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// Compatible with more platforms
-#ifdef _WIN32
-#include <Windows.h>
-#else
 #include <unistd.h>
-#endif // _WIN32
+
 #include "ai.h"
 #include "audio.h"
 #include "bullet.h"
@@ -78,10 +74,10 @@ void setLevel(int level) {
   GAME_LUCKY = 1;
   GAME_DROPOUT_YELLOW_FLASKS = 0.3;
   GAME_DROPOUT_WEAPONS = 0.7;
-  GAME_TRAP_RATE = 0.005 * (level + 1.0);
-  GAME_MONSTERS_HP_ADJUST = 1 + level * 0.8 + (double)stage * level * 0.1;
-  GAME_MONSTERS_GEN_FACTOR = 1 + level * 0.5 + (double)stage * level * 0.05;
-  GAME_MONSTERS_WEAPON_BUFF_ADJUST = 1 + level * 0.8 + (double)stage * level * 0.02;
+  GAME_TRAP_RATE = 0.005 * (level + 1);
+  GAME_MONSTERS_HP_ADJUST = 1 + level * 0.8 + stage * level * 0.1;
+  GAME_MONSTERS_GEN_FACTOR = 1 + level * 0.5 + stage * level * 0.05;
+  GAME_MONSTERS_WEAPON_BUFF_ADJUST = 1 + level * 0.8 + stage * level * 0.02;
   AI_LOCK_LIMIT = MAX(1, 7 - level * 2 - stage / 2);
   GAME_WIN_NUM = 10 + level * 5 + stage * 3;
   if (level == 0) {
@@ -105,10 +101,6 @@ void setLevel(int level) {
 
 Score** startGame(int localPlayers, int remotePlayers, bool localFirst) {
   Score** scores = malloc(sizeof(Score*) * localPlayers);
-  if (scores == NULL) {
-    fputs("malloc failed.\n", stderr);
-    return NULL;
-  }
   for (int i = 0; i < localPlayers; i++) {
     scores[i] = createScore();
   }
@@ -132,10 +124,6 @@ void appendSpriteToSnake(
   snake->score->got++;
   // at head
   LinkNode* node = malloc(sizeof(LinkNode));
-  if (node == NULL) {
-      fputs("malloc failed.\n", stderr);
-      return;
-  }
   initLinkNode(node);
 
   // create a sprite
@@ -186,10 +174,6 @@ void initPlayer(int playerType) {
 void generateHeroItem(int x, int y) {
   int heroId = randInt(SPRITE_KNIGHT, SPRITE_LIZARD);
   Animation* ani = malloc(sizeof(Animation));
-  if (ani == NULL) {
-    fputs("malloc failed.\n", stderr);
-    return;
-  }
   itemMap[x][y] = (Item){ITEM_HERO, heroId, 0, ani};
   copyAnimation(commonSprites[heroId].ani, ani);
   x *= UNIT, y *= UNIT;
@@ -476,7 +460,7 @@ void attackUpSprite(Sprite* sprite, int duration) {
   ani->lifeSpan = duration;
 }
 
-void attackUpSnake(Snake* snake, int duration) {
+void attackUpSnkae(Snake* snake, int duration) {
   if (snake->buffs[BUFF_ATTACK]) return;
   snake->buffs[BUFF_ATTACK] += duration;
   for (LinkNode* p = snake->sprites->head; p; p = p->nxt) {
@@ -537,12 +521,7 @@ void destroyGame(int status) {
   Text* text = (status ? &messages[MSG_GAME_OVER] : &messages[MSG_STAGE_CLEAR]);
   renderCenteredText(text, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 2);
   SDL_RenderPresent(renderer);
-  // Compatible with more platforms
-#ifdef _WIN32
-  Sleep(RENDER_GAMEOVER_DURATION * 1000);
-#else
   sleep(RENDER_GAMEOVER_DURATION);
-#endif // _WIN32
   clearRenderer();
 }
 
@@ -647,7 +626,7 @@ void invokeWeaponBuff(Snake* src, Weapon* weapon, Snake* dest, int damage) {
           if (src) shieldSnake(src, weapon->effects[i].duration);
           break;
         case BUFF_ATTACK:
-          if (src) attackUpSnake(src, weapon->effects[i].duration);
+          if (src) attackUpSnkae(src, weapon->effects[i].duration);
           break;
         default:
           break;
@@ -727,10 +706,6 @@ bool makeSnakeCross(Snake* snake) {
     Sprite* sprite = p->element;
     if (sprite->hp <= 0) {
       playAudio(AUDIO_HUMAN_DEATH);
-      if (sprite->ani == NULL) {
-        fputs("sprite->ani is null.\n", stderr);
-        return false;
-      }
       Texture* death = sprite->ani->origin;
       if (isPlayer(snake)) death++;
       dropItem(sprite);
@@ -817,10 +792,6 @@ bool makeBulletCross(Bullet* bullet) {
           SDL_Rect box = getSpriteBoundBox(target);
           if (RectRectCross(&box, &bulletBox)) {
             Animation* ani = malloc(sizeof(Animation));
-            if (ani == NULL) {
-              fputs("malloc failed.\n", stderr);
-              return false;
-            }
             copyAnimation(weapon->deathAni, ani);
             ani->x = bullet->x, ani->y = bullet->y;
             pushAnimationToRender(RENDER_LIST_EFFECT_ID, ani);
@@ -968,10 +939,6 @@ ATTACK_END:
   if (attacked) {
     if (weapon->birthAni) {
       Animation* ani = malloc(sizeof(Animation));
-      if (ani == NULL) {
-        fputs("malloc failed.\n", stderr);
-        return;
-      }
       copyAnimation(weapon->birthAni, ani);
       bindAnimationToSprite(ani, sprite, true);
       ani->at = AT_BOTTOM_CENTER;
@@ -1140,10 +1107,6 @@ int gameLoop() {
     makeCross();
     render();
     updateBuffDuration();
-    if (playersCount < 0) {
-      fputs("playersCount < 0\n", stderr);
-      return 0;
-    }
     for (int i = playersCount; i < spritesCount; i++) {
       if (!spriteSnake[i]->num) {
         destroySnake(spriteSnake[i]);

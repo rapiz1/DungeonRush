@@ -69,11 +69,8 @@ void setText(Text* self, const char* str) {
   initText(self, str, self->color);
 }
 void destroyText(Text* self) {
-  // Fix Issues(#28)
-  if (self != NULL) {
-    SDL_DestroyTexture(self->origin);
-    free(self);
-  }
+  SDL_DestroyTexture(self->origin);
+  free(self);
 }
 void initEffect(Effect* self, int duration, int length, SDL_BlendMode mode) {
   self->keys = malloc(sizeof(SDL_Color) * length);
@@ -86,10 +83,6 @@ void initEffect(Effect* self, int duration, int length, SDL_BlendMode mode) {
 void copyEffect(const Effect* src, Effect* dest) {
   memcpy(dest, src, sizeof(Effect));
   dest->keys = malloc(sizeof(SDL_Color) * src->length);
-  if (dest->keys == NULL) {
-    fputs("malloc failed.", stderr);
-    return;
-  }
   memcpy(dest->keys, src->keys, sizeof(SDL_Color) * src->length);
 }
 void destroyEffect(Effect* self) {
@@ -147,10 +140,6 @@ void initLinkNode(LinkNode* self) {
 }
 LinkNode* createLinkNode(void* element) {
   LinkNode* self = malloc(sizeof(LinkNode));
-  if (self == NULL) {
-    fputs("malloc failed.", stderr);
-    return NULL;
-  }
   initLinkNode(self);
   self->element = element;
   return self;
@@ -241,9 +230,9 @@ void calcScore(Score* self) {
   }
   extern int gameLevel;
   self->rank = (double)self->damage / self->got +
-               (double)self->stand / self->got + self->got * 50.0 +
-               self->killed * 100.0;
-  self->rank *= gameLevel + 1.0;
+               (double)self->stand / self->got + self->got * 50 +
+               self->killed * 100;
+  self->rank *= gameLevel + 1;
 }
 void addScore(Score* a, Score* b) {
   a->got += b->got;

@@ -25,6 +25,4 @@ int main(int argc, char** args) {
     }
   }
   cleanup();
-
-  return EXIT_SUCCESS;
 }
