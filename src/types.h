@@ -55,6 +55,7 @@ void initTexture(Texture* self, SDL_Texture* origin, int width, int height,
 void destroyTexture(Texture* self);
 
 bool initText(Text* self, const char* str, SDL_Color color);
+bool initUnicodeText(Text* self, const char* str, SDL_Color color);
 Text* createText(const char* str, SDL_Color color);
 void destroyText(Text* self);
 

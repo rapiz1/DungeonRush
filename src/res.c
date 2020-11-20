@@ -54,7 +54,7 @@ const char tilesetPath[TILESET_SIZE][PATH_LEN] = {
     "res/drawable/attack_up",
     "res/drawable/powerful_bow"};
 const char fontPath[] = "res/font/m5x7.ttf";
-const char chineseFontPath[] = "res/font/Unifont.ttf";
+const char unifontPath[] = "res/font/Unifont.ttf";
 const char textsetPath[] = "res/text.txt";
 const char simplifiedChineseTextsetPath[] = "res/text.zh-CN.txt";
 const char traditionalChineseTextsetPath[] = "res/text.zh-TW.txt";
@@ -87,6 +87,7 @@ extern Weapon weapons[WEAPONS_SIZE];
 SDL_Window* window;
 SDL_Texture* originTextures[TILESET_SIZE];
 TTF_Font* font;
+TTF_Font* unifont;
 
 Effect effects[EFFECTS_SIZE];
 
@@ -186,9 +187,6 @@ bool loadTextset() {
   bool success = true;
   FILE* file;
   switch (language) {
-    case LANG_ENGLISH:
-      file = fopen(textsetPath, "r");
-      break;
     case LANG_SIMPLIFIED_CHINESE:
       file = fopen(simplifiedChineseTextsetPath, "r");
       break;
@@ -196,7 +194,7 @@ bool loadTextset() {
       file = fopen(traditionalChineseTextsetPath, "r");
       break;
     default:
-      file = NULL;
+      file = fopen(textsetPath, "r");
       break;
   }
   char str[TEXT_LEN];
@@ -206,8 +204,14 @@ bool loadTextset() {
     int n = strlen(str);
     while (n - 1 >= 0 && !iswprint(str[n - 1])) str[--n] = 0;
     if (!n) continue;
-    if (!initText(&texts[textsCount++], str, WHITE)) {
-      success = false;
+    if (textsCount < 19) {
+      if (!initText(&texts[textsCount++], str, WHITE)) {
+        success = false;
+      }
+    } else {
+      if (!initUnicodeText(&texts[textsCount++], str, WHITE)) {
+        success = false;
+      }
     }
 #ifdef DBG
     printf("Texts #%d: %s loaded\n", textsCount - 1, str);
@@ -308,6 +312,11 @@ bool loadMedia() {
     fputs("Failed to load font! SDL_ttf Error: ", stdout);
     puts(TTF_GetError());
     success = false;
+  } else if (!loadUnifont()) {
+    fputs("Failed to load unifont! SDL_ttf Error: ", stderr);
+    fputs(TTF_GetError(), stderr);
+    fputchar('\n', stderr);
+    success = false;
   } else if (!loadTextset()) {
     printf("Failed to load textset!\n");
     success = false;
@@ -330,13 +339,16 @@ bool loadFont() {
   switch (language) {
     case LANG_SIMPLIFIED_CHINESE:
     case LANG_TRADITIONAL_CHINESE:
-      font = TTF_OpenFont(chineseFontPath, CHINESE_FONT_SIZE);
+      font = TTF_OpenFont(unifontPath, UNICODE_FONT_SIZE);
       break;
     default:
       font = TTF_OpenFont(fontPath, FONT_SIZE);
       break;
   }
   return font != NULL;
+}
+bool loadUnifont() {
+  return (unifont = TTF_OpenFont(unifontPath, UNICODE_FONT_SIZE)) != NULL;
 }
 void cleanup() {
   // Deallocate surface
@@ -459,6 +471,23 @@ bool changeToLastLanguage() {
     puts("Failed to load textset!");
     return false;
   } else if (!loadMessage()) {
+    puts("Failde to load messages!");
+    return false;
+  }
+  return true;
+}
+bool setLanguage(int lang) {
+  language = lang;
+  if (!loadFont()) {
+    fputs("Failed to load font! SDL_ttf Error: ", stdout);
+    puts(TTF_GetError());
+    return false;
+  }
+  else if (!loadTextset()) {
+    puts("Failed to load textset!");
+    return false;
+  }
+  else if (!loadMessage()) {
     puts("Failde to load messages!");
     return false;
   }

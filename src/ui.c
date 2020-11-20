@@ -118,7 +118,20 @@ bool chooseLevelUi() {
   clearRenderer();
   return opt != optsNum;
 }
-
+int chooseLanguageUi() {
+  baseUi(30, 12);
+  int optsNum = 3;
+  Text** opts = malloc(sizeof(Text*) * optsNum);
+  if (opts == NULL) {
+    fputs("malloc failed.\n", stderr);
+    return false;
+  }
+  for (int i = 0; i < optsNum; i++) opts[i] = texts + i + 18;
+  int opt = chooseOptions(optsNum, opts) + 1;
+  clearRenderer();
+  extern int language;
+  return (opt != (optsNum + 1) ? opt : -1);
+}
 void launchLocalGame(int localPlayerNum) {
   Score** scores = startGame(localPlayerNum, 0, true);
   rankListUi(localPlayerNum, scores);
@@ -345,7 +358,7 @@ void mainUi() {
       localRankListUi();
       break;
     case 3:
-      changeToNextLanguage();
+      setLanguage(chooseLanguageUi());
       break;
     case 4:
       break;
