@@ -4,12 +4,27 @@
 >My piece of work from C assignment. Hope you like it :)
 
 *I work on the small project on my own so the code lacks of comments.*
+
+## Download
+
+[Windows(64bit)](https://github.com/Rapiz1/DungeonRush/releases/download/v1.1-beta/DungeonRush-v1.1-beta-Windows-x86_64.zip)
+
+[Windows(32bit)](https://github.com/Rapiz1/DungeonRush/releases/download/v1.1-beta/DungeonRush-v1.1-beta-Windows-i686.zip)
+
+[Linux](https://github.com/Rapiz1/DungeonRush/releases/download/v1.1-beta/DungeonRush-v1.1-beta-linux.zip)
+
+AppImage for Linux is also available in release page.
+
+*The game supports macOS but I don't have an Mac to compile for it.*
+
+The executable is called `dungeon_rush`
+
 ## Release Note
 
 ### v1.1-beta
 - Fix bugs
 
-### v1.0-beta
+### v1.1-beta
 - Fix bugs
 - Add Multiplayer / LAN mode
 
@@ -49,21 +64,6 @@ There's a possibility that the attack from one with weapon triggers certain Buff
 - And so on.
 
 For sure, some kinds of monsters have weapons that can put a DeBuff on you! *(Like the troublesome muddy monsters can slow down your movement.)*
-
-
-## Download
-
-[Windows(64bit)](https://github.com/Rapiz1/DungeonRush/releases/download/v1.0-beta/DungeonRush-v1.0-beta-Windows-x86_64.zip)
-
-[Windows(32bit)](https://github.com/Rapiz1/DungeonRush/releases/download/v1.0-beta/DungeonRush-v1.0-beta-Windows-i686.zip)
-
-[Linux](https://github.com/Rapiz1/DungeonRush/releases/download/v1.0-beta/DungeonRush-v1.0-beta-linux.zip)
-
-AppImage for Linux is also available in release page.
-
-*The game supports macOS but I don't have an Mac to compile for it.*
-
-The executable is called `dungeon_rush`
 
 ## Dependencies
 The project requires no more than common SDL2 libraries.
