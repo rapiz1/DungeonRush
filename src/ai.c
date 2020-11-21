@@ -107,7 +107,7 @@ void AiInput(Snake* snake) {
     if (count) {
       int maxValue = choices[0].value;
       int nowChoice = 0;
-      for (int i = 1; i < 4; i++) {
+      for (int i = 0; i < count; i++) {
         if (choices[i].value > maxValue) {
           maxValue = choices[i].value;
           nowChoice = i;
