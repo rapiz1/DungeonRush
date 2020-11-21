@@ -24,7 +24,7 @@ The executable is called `dungeon_rush`
 ### v1.1-beta
 - Fix bugs
 
-### v1.1-beta
+### v1.0-beta
 - Fix bugs
 - Add Multiplayer / LAN mode
 
