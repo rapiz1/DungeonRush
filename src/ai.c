@@ -74,7 +74,7 @@ int testOneMove(Snake* snake, Direction direction) {
   for (int i = 1; i <= AI_PREDICT_STEPS; i++) {
     moveSprite(snakeHead, snake->moveStep * i);
     updateAnimationOfSprite(snakeHead);
-    crush -= crushVerdict(snakeHead, false, true) * 500;
+    crush -= crushVerdict(snakeHead, false, true) * 1000;
     trap -= trapVerdict(snakeHead);
     playerBalance += balanceVerdict(snakeHead, powerful) * 10;
     // revoke position
