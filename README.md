@@ -6,6 +6,9 @@
 *I work on the small project on my own so the code lacks of comments.*
 ## Release Note
 
+### v1.1-beta
+- Fix bugs
+
 ### v1.0-beta
 - Fix bugs
 - Add Multiplayer / LAN mode
