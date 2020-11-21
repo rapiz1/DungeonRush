@@ -36,6 +36,7 @@ int trapVerdict(Sprite* sprite) {
     }
   return ret;
 }
+
 int getPowerfulPlayer() {
   int maxNum = 0, mxCount = 0, id = -1;
   for (int i = 0; i < playersCount; i++) {
@@ -51,6 +52,7 @@ int getPowerfulPlayer() {
              ? (spriteSnake[id]->num >= AI_LOCK_LIMIT ? id : -1)
              : -1;
 }
+
 int balanceVerdict(Sprite* sprite, int id) {
   if (id == -1) return 0;
   if (!spriteSnake[id]->sprites->head) return 0;
@@ -62,6 +64,7 @@ int balanceVerdict(Sprite* sprite, int id) {
   if (player->y < sprite->y && sprite->direction == UP) ret++;
   return ret;
 }
+
 int testOneMove(Snake* snake, Direction direction) {
   Sprite* snakeHead = snake->sprites->head->element;
   Direction recover = snakeHead->direction;
@@ -81,10 +84,12 @@ int testOneMove(Snake* snake, Direction direction) {
   snakeHead->direction = recover;
   return trap + crush + playerBalance;
 }
+
 int compareChoiceByValue(const void* x, const void* y) {
   const Choice *a = x, *b = y;
   return b->value - a->value;
 }
+
 void AiInput(Snake* snake) {
   Sprite* snakeHead = snake->sprites->head->element;
   Direction currentDirection = snakeHead->direction;
