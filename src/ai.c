@@ -113,7 +113,8 @@ void AiInput(Snake* snake) {
           nowChoice = i;
         }
       }
-      changeSpriteDirection(snake->sprites->head, choices[nowChoice].direction);
+      if (maxValue > originValue)
+        changeSpriteDirection(snake->sprites->head, choices[nowChoice].direction);
     }
   }
 }
