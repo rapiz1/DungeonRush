@@ -39,7 +39,7 @@ void destroyGame(int);
 int gameLoop();
 void updateAnimationOfSprite(Sprite* self);
 void updateAnimationOfBlock(Block* self);
-// this shuold only be used to create once or permant animation
+// this should only be used to create once or permant animation
 Animation* createAndPushAnimation(LinkList* list, Texture* texture,
                                   const Effect* effect, LoopType lp,
                                   int duration, int x, int y,
