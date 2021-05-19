@@ -750,10 +750,7 @@ bool makeSnakeCross(Snake* snake) {
         Sprite *prevSprite = q->pre->element, *sprite = q->element;
         sprite->direction = prevSprite->direction;
         sprite->face = prevSprite->face;
-        sprite->bufferSize = prevSprite->bufferSize;
-        if (sprite->bufferSize)
-          memcpy(sprite->buffer, prevSprite->buffer,
-                 sizeof(PositionBuffer) * prevSprite->bufferSize);
+        sprite->posBuffer = prevSprite->posBuffer;
         sprite->x = prevSprite->x;
         sprite->y = prevSprite->y;
       }
@@ -861,12 +858,14 @@ void moveSnake(Snake* snake) {
   for (LinkNode* p = snake->sprites->head; p; p = p->nxt) {
     Sprite* sprite = p->element;
     for (int i = 0; i < step; i++) {
-      while (sprite->bufferSize && sprite->x == sprite->buffer[0].x &&
-             sprite->y == sprite->buffer[0].y) {
-        changeSpriteDirection(p, sprite->buffer[0].direction);
-        sprite->bufferSize--;
-        for (int i = 0; i < sprite->bufferSize; i++)
-          sprite->buffer[i] = sprite->buffer[i + 1];
+      PositionBuffer* b = &sprite->posBuffer;
+      PositionBufferSlot firstSlot = b->buffer[0];
+      while (b->size && sprite->x == firstSlot.x && sprite->y == firstSlot.y) {
+        changeSpriteDirection(p, firstSlot.direction);
+        b->size--;
+        for (int i = 0; i < b->size; i++) b->buffer[i] = b->buffer[i + 1];
+
+        firstSlot = b->buffer[0];
       }
       moveSprite(sprite, 1);
     }

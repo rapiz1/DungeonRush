@@ -8,16 +8,21 @@
 typedef struct {
   int x, y;
   Direction direction;
+} PositionBufferSlot;
+
+typedef struct {
+  PositionBufferSlot buffer[POSITION_BUFFER_SIZE];
+  int size;
 } PositionBuffer;
 
+void pushToPositionBuffer(PositionBuffer* buffer, PositionBufferSlot slot);
 typedef struct {
   int x, y, hp, totalHp;
   Weapon* weapon;
   Animation* ani;
   Direction face;
   Direction direction;
-  PositionBuffer buffer[POSITION_BUFFER_SIZE];
-  int bufferSize;
+  PositionBuffer posBuffer;
   int lastAttack;  // Timestamp of the last attack
   double dropRate;
 } Sprite;

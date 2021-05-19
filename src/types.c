@@ -212,8 +212,8 @@ void changeSpriteDirection(LinkNode* self, Direction newDirection) {
     sprite->face = newDirection;
   if (self->nxt) {
     Sprite* nextSprite = self->nxt->element;
-    nextSprite->buffer[nextSprite->bufferSize++] =
-        (PositionBuffer){sprite->x, sprite->y, sprite->direction};
+    PositionBufferSlot slot = {sprite->x, sprite->y, sprite->direction};
+    pushToPositionBuffer(&nextSprite->posBuffer, slot);
   }
 }
 void initScore(Score* score) { memset(score, 0, sizeof(Score)); }
