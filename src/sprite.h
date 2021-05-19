@@ -1,9 +1,9 @@
 #ifndef SNAKE_SPRITE_H_
 #define SNAKE_SPRITE_H_
 
+#include "adt.h"
 #include "types.h"
 #include "weapon.h"
-#include "adt.h"
 
 typedef struct {
   int x, y;
@@ -18,7 +18,7 @@ typedef struct {
   Direction direction;
   PositionBuffer buffer[POSITION_BUFFER_SIZE];
   int bufferSize;
-  int lastAttack;
+  int lastAttack;  // Timestamp of the last attack
   double dropRate;
 } Sprite;
 
