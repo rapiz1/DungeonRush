@@ -1,9 +1,9 @@
 #include "types.h"
 
 #include <SDL_ttf.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <string.h>
 
 #include "helper.h"
@@ -112,7 +112,7 @@ void initAnimation(Animation* self, Texture* origin, const Effect* effect,
   self->angle = angle;
   self->at = at;
   self->bind = NULL;
-  self->strongBind = false;
+  self->dieWithBind = false;
   self->scaled = true;
   self->lifeSpan = duration;
 }

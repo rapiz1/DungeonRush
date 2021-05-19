@@ -12,7 +12,7 @@ extern bool hasEnemy[MAP_SIZE][MAP_SIZE];
 extern int spikeDamage;
 extern int playersCount;
 extern const int n, m;
-extern const int SCALLING_FACTOR;
+extern const int SCALE_FACTOR;
 
 // Sprite
 extern Snake* spriteSnake[SPRITES_MAX_NUM];
@@ -114,7 +114,8 @@ void AiInput(Snake* snake) {
         }
       }
       if (maxValue > originValue)
-        changeSpriteDirection(snake->sprites->head, choices[nowChoice].direction);
+        changeSpriteDirection(snake->sprites->head,
+                              choices[nowChoice].direction);
     }
   }
 }

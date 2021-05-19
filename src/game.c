@@ -23,7 +23,7 @@
 #ifdef DBG
 #include <assert.h>
 #endif
-extern const int SCALLING_FACTOR;
+extern const int SCALE_FACTOR;
 extern const int n, m;
 
 extern Texture textures[TEXTURES_SIZE];
@@ -129,10 +129,9 @@ void appendSpriteToSnake(
   if (snake->sprites->head) {
     snakeHead = snake->sprites->head->element;
     x = snakeHead->x, y = snakeHead->y;
-    int delta =
-        (snakeHead->ani->origin->width * SCALLING_FACTOR +
-         commonSprites[sprite_id].ani->origin->width * SCALLING_FACTOR) /
-        2;
+    int delta = (snakeHead->ani->origin->width * SCALE_FACTOR +
+                 commonSprites[sprite_id].ani->origin->width * SCALE_FACTOR) /
+                2;
     if (snakeHead->direction == LEFT)
       x -= delta;
     else if (snakeHead->direction == RIGHT)
@@ -778,7 +777,7 @@ bool makeBulletCross(Bullet* bullet) {
   Weapon* weapon = bullet->parent;
   bool hit = false;
   int width = MIN(bullet->ani->origin->width, bullet->ani->origin->height) *
-              (bullet->ani->scaled ? SCALLING_FACTOR : 1) * 0.8;
+              (bullet->ani->scaled ? SCALE_FACTOR : 1) * 0.8;
   SDL_Rect bulletBox = {bullet->x - width / 2, bullet->y - width / 2, width,
                         width};
   if (!hasMap[bullet->x / UNIT][bullet->y / UNIT]) {

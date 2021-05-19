@@ -46,7 +46,7 @@ typedef struct {
   At at;
   void* bind;
   bool scaled;
-  bool strongBind;
+  bool dieWithBind;
   int lifeSpan;
 } Animation;
 
