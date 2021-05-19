@@ -11,7 +11,7 @@ typedef struct {
 } PositionBuffer;
 
 typedef struct {
-  int x, y, hp, totoalHp;
+  int x, y, hp, totalHp;
   Weapon* weapon;
   Animation* ani;
   Direction face;

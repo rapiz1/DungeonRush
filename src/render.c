@@ -312,8 +312,8 @@ void renderAnimationLinkListWithSort(LinkList* list) {
 void renderSnakeHp(Snake* snake) {
   for (LinkNode* p = snake->sprites->head; p; p = p->nxt) {
     Sprite* sprite = p->element;
-    if (sprite->hp == sprite->totoalHp) continue;
-    double percent = (double)sprite->hp / sprite->totoalHp;
+    if (sprite->hp == sprite->totalHp) continue;
+    double percent = (double)sprite->hp / sprite->totalHp;
     for (int i = 0; percent > 1e-8; i++, percent -= 1) {
       int r = 0, g = 0, b = 0;
       if (i == 0) {

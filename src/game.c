@@ -222,9 +222,9 @@ void generateItem(int x, int y, ItemType type) {
 void takeHpMedcine(Snake* snake, int delta, bool extra) {
   for (LinkNode* p = snake->sprites->head; p; p = p->nxt) {
     Sprite* sprite = p->element;
-    if (sprite->hp == sprite->totoalHp && !extra) continue;
-    int addHp = (double)delta * sprite->totoalHp / 100;
-    if (!extra) addHp = MAX(0, MIN(sprite->totoalHp - sprite->hp, addHp));
+    if (sprite->hp == sprite->totalHp && !extra) continue;
+    int addHp = (double)delta * sprite->totalHp / 100;
+    if (!extra) addHp = MAX(0, MIN(sprite->totalHp - sprite->hp, addHp));
     sprite->hp += addHp;
     Animation* ani = createAndPushAnimation(
         &animationsList[RENDER_LIST_EFFECT_ID], &textures[RES_HP_MED], NULL,
@@ -246,7 +246,7 @@ bool takeWeapon(Snake* snake, Item* weaponItem) {
           LOOP_INFI, 3, sprite->x, sprite->y, SDL_FLIP_NONE, 0,
           AT_BOTTOM_CENTER);
       bindAnimationToSprite(ani, sprite, true);
-      sprite->hp += GAME_HP_MEDICINE_EXTRA_DELTA / 100.0 * sprite->totoalHp * 5;
+      sprite->hp += GAME_HP_MEDICINE_EXTRA_DELTA / 100.0 * sprite->totalHp * 5;
       ani = createAndPushAnimation(&animationsList[RENDER_LIST_EFFECT_ID],
                                    &textures[RES_HP_MED], NULL, LOOP_ONCE,
                                    SPRITE_ANIMATION_DURATION, 0, 0,
