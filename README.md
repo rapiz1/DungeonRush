@@ -15,13 +15,13 @@
 
 AppImage for Linux is also available in release page.
 
-[Archlinux AUR](https://aur.archlinux.org/packages/dungeonrush/) 
+[Archlinux AUR](https://aur.archlinux.org/packages/dungeonrush/)
 
-yay or paru -S dungeonrush
+```yay -S dungeonrush```
 
-[Archlinux AUR(git version)](https://aur.archlinux.org/packages/dungeonrush-git/) 
+[Archlinux AUR(git version)](https://aur.archlinux.org/packages/dungeonrush-git/)
 
-yay or paru -S dungeonrush-git
+```yay -S dungeonrush-git```
 
 *The game supports macOS but I don't have an Mac to compile for it.*
 
