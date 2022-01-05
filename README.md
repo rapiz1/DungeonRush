@@ -13,6 +13,8 @@
 
 [Linux](https://github.com/Rapiz1/DungeonRush/releases/download/v1.1-beta/DungeonRush-v1.1-beta-linux.zip)
 
+[Someone port it to android!](https://github.com/imrunning/DungeonRush_Android)
+
 AppImage for Linux is also available in release page.
 
 [Archlinux AUR](https://aur.archlinux.org/packages/dungeonrush/)
