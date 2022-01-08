@@ -1,24 +1,29 @@
 #ifndef SNAKE_SPRITE_H_
 #define SNAKE_SPRITE_H_
 
+#include "adt.h"
 #include "types.h"
 #include "weapon.h"
-#include "adt.h"
 
 typedef struct {
   int x, y;
   Direction direction;
-} PositionBuffer;
+} PositionBufferSlot;
 
 typedef struct {
-  int x, y, hp, totoalHp;
+  PositionBufferSlot buffer[POSITION_BUFFER_SIZE];
+  int size;
+} PositionBuffer;
+
+void pushToPositionBuffer(PositionBuffer* buffer, PositionBufferSlot slot);
+typedef struct {
+  int x, y, hp, totalHp;
   Weapon* weapon;
   Animation* ani;
   Direction face;
   Direction direction;
-  PositionBuffer buffer[POSITION_BUFFER_SIZE];
-  int bufferSize;
-  int lastAttack;
+  PositionBuffer posBuffer;
+  int lastAttack;  // Timestamp of the last attack
   double dropRate;
 } Sprite;
 

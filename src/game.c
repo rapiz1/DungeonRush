@@ -23,7 +23,7 @@
 #ifdef DBG
 #include <assert.h>
 #endif
-extern const int SCALLING_FACTOR;
+extern const int SCALE_FACTOR;
 extern const int n, m;
 
 extern Texture textures[TEXTURES_SIZE];
@@ -131,10 +131,9 @@ void appendSpriteToSnake(
   if (snake->sprites->head) {
     snakeHead = snake->sprites->head->element;
     x = snakeHead->x, y = snakeHead->y;
-    int delta =
-        (snakeHead->ani->origin->width * SCALLING_FACTOR +
-         commonSprites[sprite_id].ani->origin->width * SCALLING_FACTOR) /
-        2;
+    int delta = (snakeHead->ani->origin->width * SCALE_FACTOR +
+                 commonSprites[sprite_id].ani->origin->width * SCALE_FACTOR) /
+                2;
     if (snakeHead->direction == LEFT)
       x -= delta;
     else if (snakeHead->direction == RIGHT)
@@ -225,9 +224,9 @@ void generateItem(int x, int y, ItemType type) {
 void takeHpMedcine(Snake* snake, int delta, bool extra) {
   for (LinkNode* p = snake->sprites->head; p; p = p->nxt) {
     Sprite* sprite = p->element;
-    if (sprite->hp == sprite->totoalHp && !extra) continue;
-    int addHp = (double)delta * sprite->totoalHp / 100;
-    if (!extra) addHp = MAX(0, MIN(sprite->totoalHp - sprite->hp, addHp));
+    if (sprite->hp == sprite->totalHp && !extra) continue;
+    int addHp = (double)delta * sprite->totalHp / 100;
+    if (!extra) addHp = MAX(0, MIN(sprite->totalHp - sprite->hp, addHp));
     sprite->hp += addHp;
     Animation* ani = createAndPushAnimation(
         &animationsList[RENDER_LIST_EFFECT_ID], &textures[RES_HP_MED], NULL,
@@ -249,7 +248,7 @@ bool takeWeapon(Snake* snake, Item* weaponItem) {
           LOOP_INFI, 3, sprite->x, sprite->y, SDL_FLIP_NONE, 0,
           AT_BOTTOM_CENTER);
       bindAnimationToSprite(ani, sprite, true);
-      sprite->hp += GAME_HP_MEDICINE_EXTRA_DELTA / 100.0 * sprite->totoalHp * 5;
+      sprite->hp += GAME_HP_MEDICINE_EXTRA_DELTA / 100.0 * sprite->totalHp * 5;
       ani = createAndPushAnimation(&animationsList[RENDER_LIST_EFFECT_ID],
                                    &textures[RES_HP_MED], NULL, LOOP_ONCE,
                                    SPRITE_ANIMATION_DURATION, 0, 0,
@@ -746,10 +745,7 @@ bool makeSnakeCross(Snake* snake) {
         Sprite *prevSprite = q->pre->element, *sprite = q->element;
         sprite->direction = prevSprite->direction;
         sprite->face = prevSprite->face;
-        sprite->bufferSize = prevSprite->bufferSize;
-        if (sprite->bufferSize)
-          memcpy(sprite->buffer, prevSprite->buffer,
-                 sizeof(PositionBuffer) * prevSprite->bufferSize);
+        sprite->posBuffer = prevSprite->posBuffer;
         sprite->x = prevSprite->x;
         sprite->y = prevSprite->y;
       }
@@ -773,7 +769,7 @@ bool makeBulletCross(Bullet* bullet) {
   Weapon* weapon = bullet->parent;
   bool hit = false;
   int width = MIN(bullet->ani->origin->width, bullet->ani->origin->height) *
-              (bullet->ani->scaled ? SCALLING_FACTOR : 1) * 0.8;
+              (bullet->ani->scaled ? SCALE_FACTOR : 1) * 0.8;
   SDL_Rect bulletBox = {bullet->x - width / 2, bullet->y - width / 2, width,
                         width};
   if (!hasMap[bullet->x / UNIT][bullet->y / UNIT]) {
@@ -857,12 +853,14 @@ void moveSnake(Snake* snake) {
   for (LinkNode* p = snake->sprites->head; p; p = p->nxt) {
     Sprite* sprite = p->element;
     for (int i = 0; i < step; i++) {
-      while (sprite->bufferSize && sprite->x == sprite->buffer[0].x &&
-             sprite->y == sprite->buffer[0].y) {
-        changeSpriteDirection(p, sprite->buffer[0].direction);
-        sprite->bufferSize--;
-        for (int i = 0; i < sprite->bufferSize; i++)
-          sprite->buffer[i] = sprite->buffer[i + 1];
+      PositionBuffer* b = &sprite->posBuffer;
+      PositionBufferSlot firstSlot = b->buffer[0];
+      while (b->size && sprite->x == firstSlot.x && sprite->y == firstSlot.y) {
+        changeSpriteDirection(p, firstSlot.direction);
+        b->size--;
+        for (int i = 0; i < b->size; i++) b->buffer[i] = b->buffer[i + 1];
+
+        firstSlot = b->buffer[0];
       }
       moveSprite(sprite, 1);
     }

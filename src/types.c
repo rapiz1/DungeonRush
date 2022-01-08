@@ -1,9 +1,9 @@
 #include "types.h"
 
 #include <SDL_ttf.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <string.h>
 
 #include "helper.h"
@@ -139,7 +139,7 @@ void initAnimation(Animation* self, Texture* origin, const Effect* effect,
   self->angle = angle;
   self->at = at;
   self->bind = NULL;
-  self->strongBind = false;
+  self->dieWithBind = false;
   self->scaled = true;
   self->lifeSpan = duration;
 }
@@ -239,8 +239,8 @@ void changeSpriteDirection(LinkNode* self, Direction newDirection) {
     sprite->face = newDirection;
   if (self->nxt) {
     Sprite* nextSprite = self->nxt->element;
-    nextSprite->buffer[nextSprite->bufferSize++] =
-        (PositionBuffer){sprite->x, sprite->y, sprite->direction};
+    PositionBufferSlot slot = {sprite->x, sprite->y, sprite->direction};
+    pushToPositionBuffer(&nextSprite->posBuffer, slot);
   }
 }
 void initScore(Score* score) { memset(score, 0, sizeof(Score)); }

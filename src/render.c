@@ -22,7 +22,7 @@ extern Effect effects[];
 extern SDL_Color BLACK;
 extern SDL_Color WHITE;
 
-const int SCALLING_FACTOR = 2;
+const int SCALE_FACTOR = 2;
 extern int texturesCount;
 extern Texture textures[TEXTURES_SIZE];
 extern int textsCount;
@@ -171,7 +171,7 @@ void clearBindInAnimationsList(Sprite* sprite, int id) {
     Animation* ani = p->element;
     if (ani->bind == sprite) {
       ani->bind = NULL;
-      if (ani->strongBind) {
+      if (ani->dieWithBind) {
         removeLinkNode(&animationsList[id], p);
         destroyAnimation(ani);
       }
@@ -180,7 +180,7 @@ void clearBindInAnimationsList(Sprite* sprite, int id) {
 }
 void bindAnimationToSprite(Animation* ani, Sprite* sprite, bool isStrong) {
   ani->bind = sprite;
-  ani->strongBind = isStrong;
+  ani->dieWithBind = isStrong;
   updateAnimationFromBind(ani);
 }
 void updateAnimationFromBind(Animation* ani) {
@@ -198,8 +198,8 @@ void renderAnimation(Animation* ani) {
   int height = ani->origin->height;
   SDL_Point poi = {ani->origin->width, ani->origin->height / 2};
   if (ani->scaled) {
-    width *= SCALLING_FACTOR;
-    height *= SCALLING_FACTOR;
+    width *= SCALE_FACTOR;
+    height *= SCALE_FACTOR;
   }
   SDL_Rect dst = {ani->x - width / 2, ani->y - height, width, height};
   if (ani->at == AT_TOP_LEFT) {
@@ -313,8 +313,8 @@ void renderAnimationLinkListWithSort(LinkList* list) {
 void renderSnakeHp(Snake* snake) {
   for (LinkNode* p = snake->sprites->head; p; p = p->nxt) {
     Sprite* sprite = p->element;
-    if (sprite->hp == sprite->totoalHp) continue;
-    double percent = (double)sprite->hp / sprite->totoalHp;
+    if (sprite->hp == sprite->totalHp) continue;
+    double percent = (double)sprite->hp / sprite->totalHp;
     for (int i = 0; percent > 1e-8; i++, percent -= 1) {
       int r = 0, g = 0, b = 0;
       if (i == 0) {
@@ -329,7 +329,7 @@ void renderSnakeHp(Snake* snake) {
       }
       SDL_SetRenderDrawColor(renderer, r, g, b, 255);
       int width = RENDER_HP_BAR_WIDTH;
-      int spriteHeight = sprite->ani->origin->height * SCALLING_FACTOR;
+      int spriteHeight = sprite->ani->origin->height * SCALE_FACTOR;
       SDL_Rect bar = {sprite->x - UNIT / 2 + (UNIT - width) / 2,
                       sprite->y - spriteHeight - RENDER_HP_BAR_HEIGHT * (i + 1),
                       width * MIN(1, percent), RENDER_HP_BAR_HEIGHT};

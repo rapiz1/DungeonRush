@@ -27,7 +27,7 @@ jobs:
 
     - name: Install Dependencies on Ubuntu
       if: runner.os == 'Linux'
-      run: sudo apt-get install libsdl2-*
+      run: sudo apt-get update && sudo apt-get install libsdl2-*
       
     - name: Install Dependencies on macOS
       if: runner.os == 'macOS'

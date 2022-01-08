@@ -1,5 +1,6 @@
 #ifndef SNAKE_ADT_H_
 #define SNAKE_ADT_H_
+#include "types.h"
 // ADT
 struct _LinkNode {
   void* element;

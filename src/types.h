@@ -43,11 +43,13 @@ typedef struct {
   int x, y;
   double angle;
   SDL_RendererFlip flip;
-  At at;
-  void* bind;
+  At at;       // How this animation should be aligned according to (x, y)
+  void* bind;  // Points to a Sprite struct. The animation should use the
+               // sprite's position
   bool scaled;
-  bool strongBind;
-  int lifeSpan;
+  bool dieWithBind;  // Determines if the animation should be destroyed when the
+                     // sprite dies
+  int lifeSpan;      // How many seconds the animation should play
 } Animation;
 
 void initTexture(Texture* self, SDL_Texture* origin, int width, int height,
@@ -87,15 +89,16 @@ void destroyScore(Score*);
 typedef enum { BLOCK_TRAP, BLOCK_WALL, BLOCK_FLOOR, BLOCK_EXIT } BlockType;
 typedef struct {
   BlockType bp;
-  int x, y, bid;
-  bool enable;
+  int x, y;
+  int bid;      // Block id
+  bool enable;  // Used for trap block
   Animation* ani;
 } Block;
 typedef enum {
   ITEM_NONE,
-  ITEM_HERO,
-  ITEM_HP_MEDCINE,
-  ITEM_HP_EXTRA_MEDCINE,
+  ITEM_HERO,              // Unpicked hero on the floor
+  ITEM_HP_MEDCINE,        // Red meds
+  ITEM_HP_EXTRA_MEDCINE,  // Yellow meds
   ITEM_WEAPON
 } ItemType;
 typedef struct {

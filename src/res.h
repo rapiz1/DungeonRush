@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include "types.h"
 
+#define VERSION_STRING "v1.1(beta)"
 #define PATH_LEN 1024
 #define TILESET_SIZE 1024
 #define TEXTSET_SIZE 1024
