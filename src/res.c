@@ -315,7 +315,7 @@ bool loadMedia() {
   } else if (!loadUnifont()) {
     fputs("Failed to load unifont! SDL_ttf Error: ", stderr);
     fputs(TTF_GetError(), stderr);
-    fputs('\n', stderr);
+    fputchar('\n', stderr);
     success = false;
   } else if (!loadTextset()) {
     printf("Failed to load textset!\n");
