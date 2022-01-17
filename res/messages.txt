@@ -1,0 +1,16 @@
+Stage Clear
+Game Over
+Paused
+Score: %-6.0lf Got: %-6d Kill: %-6d Damage: %-6d Stand: %-6d
+Player%d:%5d
+Stage:%3d
+Find %d more heros!
+Listening
+Listening.
+Listening..
+Listening...
+Connecting
+Connecting.
+Connecting..
+Connecting...
+Enter IP

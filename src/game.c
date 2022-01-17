@@ -36,6 +36,8 @@ extern Weapon weapons[WEAPONS_SIZE];
 extern Sprite commonSprites[COMMON_SPRITE_SIZE];
 
 extern unsigned int renderFrames;
+extern Text messages[];
+
 // Map
 Block map[MAP_SIZE][MAP_SIZE];
 Item itemMap[MAP_SIZE][MAP_SIZE];
@@ -515,15 +517,8 @@ void destroyGame(int status) {
   bullets = NULL;
 
   blackout();
-  char* msg;
-  if (status == 0)
-    msg = "Stage Clear";
-  else
-    msg = "Game Over";
-  extern SDL_Color WHITE;
-  Text* text = createText(msg, WHITE);
+  Text* text = (status ? &messages[MSG_GAME_OVER] : &messages[MSG_STAGE_CLEAR]);
   renderCenteredText(text, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 2);
-  destroyText(text);
   SDL_RenderPresent(renderer);
   sleep(RENDER_GAMEOVER_DURATION);
   clearRenderer();
@@ -979,12 +974,9 @@ void pauseGame() {
   pauseSound();
   playAudio(AUDIO_BUTTON1);
   dim();
-  const char msg[] = "Paused";
-  extern SDL_Color WHITE;
-  Text* text = createText(msg, WHITE);
+  Text* text = &messages[MSG_PAUSED];
   renderCenteredText(text, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 1);
   SDL_RenderPresent(renderer);
-  destroyText(text);
   SDL_Event e;
   for (bool quit = 0; !quit;) {
     while (SDL_PollEvent(&e)) {

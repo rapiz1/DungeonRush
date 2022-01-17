@@ -1,0 +1,21 @@
+DungeonRush
+作者 Rapiz
+PLACEHOLDER
+PLACEHOLDER
+玩家1
+玩家2
+单人游戏
+多人游戏
+历史排名
+界面语言
+退出
+正常
+困难
+疯狂
+本地
+局域网
+创建房间
+加入房间
+English
+简体中文
+繁體中文

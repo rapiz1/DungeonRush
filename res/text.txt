@@ -7,6 +7,7 @@ Player 2
 Singleplayer
 Multiplayers
 Ranklist
+Languages
 Exit
 Normal
 Hard
@@ -15,3 +16,6 @@ Local
 Lan
 Host a game
 Join a game
+English
+繁體中文
+简体中文

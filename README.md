@@ -1,5 +1,6 @@
 # DungeonRush
 ![](screenshot.gif)
+English | [简体中文](README.zh-CN.md) 
 >A game inspired by Snake, in pure C with SDL2.
 >My piece of work from C assignment. Hope you like it :)
 
@@ -111,7 +112,7 @@ $ cmake -B build && cmake --build build
 ## Known issues
 [Game speed too fast with some NVIDIA graphic cards on Linux](https://github.com/Rapiz1/DungeonRush/issues/4)
 ## License and Credits
-DungeonRush has mixed meida with 
+DungeonRush has mixed media with 
 various licenses. Unfortunately I failed to track them all. In other word, there are many stuff excluding code that comes with unknown license. You should not reuse any of audio, bitmaps, font in this project. If you insist, use at your own risk.
 ### Code
 GPL
@@ -127,3 +128,7 @@ GPL
 |BOMB By Azureflux|CC BY-NC-SA 4.0|
 |Unknown BGM|Unknown|
 |The Essential Retro Video Game Sound Effects Collection By Juhani Junkala |CC BY 3.0|
+### Font
+|Name|License|
+|----|-------|
+|Unifont|GPLv2|

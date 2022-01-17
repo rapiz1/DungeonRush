@@ -14,6 +14,7 @@
 #define SCREEN_WIDTH 1440
 #define SCREEN_HEIGHT 960
 #define FONT_SIZE 32
+#define UNICODE_FONT_SIZE 20
 // Resource ID
 // Map Resource
 #define RES_WALL_TOP_LEFT 0
@@ -169,16 +170,48 @@
 #define AUDIO_CLAW_HIT_HEAVY 15
 #define AUDIO_COIN 16
 #define AUDIO_MED 17
+// Language
+#define LANG_COUNT 3
+#define LANG_ENGLISH 1
+#define LANG_TRADITIONAL_CHINESE 2
+#define LANG_SIMPLIFIED_CHINESE 3
+// Message
+#define MSG_LEN 1024
+#define MSG_COUNT 16
+#define MSG_STAGE_CLEAR 0
+#define MSG_GAME_OVER 1
+#define MSG_PAUSED 2
+#define MSG_RANKLISH_FORMAT 3
+#define MSG_INFO_PLAYER_FORMAT 4
+#define MSG_INFO_STAGE_FORMAT 5
+#define MSG_INFO_FIND_HEROS 6
+#define MSG_LAN_LISTENING0 7
+#define MSG_LAN_LISTENING1 8
+#define MSG_LAN_LISTENING2 9
+#define MSG_LAN_LISTENING3 10
+#define MSG_LAN_CONNECTING0 11
+#define MSG_LAN_CONNECTING1 12
+#define MSG_LAN_CONNECTING2 13
+#define MSG_LAN_CONNECTING3 14
+#define MSG_LAN_INPUT_IP 15
 
 bool init();
 void cleanup();
 bool loadMedia();
+bool loadFont();
+bool loadUnifont();
 SDL_Texture* loadSDLTexture(const char* path);
 bool loadTileset(const char* path, SDL_Texture* origin);
 bool loadTextset();
+bool loadMessage();
 void initCommonEffects();
 void initCommonAnimations();
 void initCommonSprites();
+void nextLanguage();
+void lastLanguage();
+bool changeToNextLanguage();
+bool changeToLastLanguage();
+bool setLanguage(int language);
 
 extern SDL_Renderer* renderer;
 #endif

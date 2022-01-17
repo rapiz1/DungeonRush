@@ -8,6 +8,7 @@
 
 #include "helper.h"
 #include "render.h"
+#include "res.h"
 
 #ifdef DBG
 #include <assert.h>
@@ -15,6 +16,7 @@
 
 extern LinkList animationsList[];
 extern TTF_Font* font;
+extern TTF_Font* unifont;
 extern SDL_Renderer* renderer;
 SDL_Color BLACK = {0, 0, 0, 255};
 SDL_Color WHITE = {255, 255, 255, 255};
@@ -38,7 +40,7 @@ bool initText(Text* self, const char* str, SDL_Color color) {
   self->color = color;
   strcpy(self->text, str);
   // Render text surface
-  SDL_Surface* textSurface = TTF_RenderText_Solid(font, str, color);
+  SDL_Surface* textSurface = TTF_RenderUTF8_Solid(font, str, color);
   if (textSurface == NULL) {
     printf("Unable to render text surface! SDL_ttf Error: %s\n",
            TTF_GetError());
@@ -52,6 +54,31 @@ bool initText(Text* self, const char* str, SDL_Color color) {
       printf("Unable to create texture from rendered text! SDL Error: %s\n",
              SDL_GetError());
     } else {
+      self->origin = texture;
+      return true;
+    }
+  }
+  return false;
+}
+bool initUnicodeText(Text* self, const char* str, SDL_Color color) {
+  self->color = color;
+  strcpy(self->text, str);
+  // Render text surface
+  SDL_Surface* textSurface = TTF_RenderUTF8_Solid(unifont, str, color);
+  if (textSurface == NULL) {
+    printf("Unable to render text surface! SDL_ttf Error: %s\n",
+        TTF_GetError());
+  } else {
+    // Create texture from surface pixels
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, textSurface);
+    self->width = textSurface->w;
+    self->height = textSurface->h;
+    SDL_FreeSurface(textSurface);
+    if (texture == NULL) {
+      printf("Unable to create texture from rendered text! SDL Error: %s\n",
+          SDL_GetError());
+    }
+    else {
       self->origin = texture;
       return true;
     }
